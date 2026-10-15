@@ -4,6 +4,7 @@ import { toast } from "sonner";
 import { UserAvatar } from "@/components/shared/UserAvatar";
 import { Button } from "@/components/ui/button";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
+import { USE_MOCKS } from "@/api/client";
 import { Logo } from "./Logo";
 import { DemoPanel } from "./DemoPanel";
 import { useAuth } from "@/auth/AuthContext";
@@ -46,7 +47,7 @@ export function TopBar() {
         </form>
 
         <div className="ml-auto flex items-center gap-1 sm:gap-2 md:ml-0">
-          <DemoPanel />
+          {USE_MOCKS && <DemoPanel />}
 
           <Button variant="ghost" size="icon" className="relative" aria-label={t("topbar.notifications.count", { count: UNREAD_NOTIFICATIONS })}>
             <Bell className="size-5" aria-hidden="true" />

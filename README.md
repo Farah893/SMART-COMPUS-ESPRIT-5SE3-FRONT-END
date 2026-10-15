@@ -103,6 +103,39 @@ Règles d'équipe :
 
 Plan détaillé des modules : [`architecture.md`](./architecture.md).
 
+## Git : branche `main` protégée (Rulesets)
+
+**Personne ne pousse directement sur `main`**, pas même un membre du groupe. Tout passe par une branche et une Pull Request (PR).
+
+**Workflow**
+
+```bash
+git switch main && git pull                 # partir d'un main à jour
+git switch -c feature/<module>-<sujet>      # ex. feature/library-emprunts
+# ... modifier, puis vérifier :
+npm run typecheck && npm run build
+git add . && git commit -m "library: ajoute la page des emprunts"
+git push -u origin feature/<module>-<sujet>
+```
+
+Ensuite, ouvrir une **Pull Request** vers `main` sur GitHub ; un autre membre la relit et l'approuve avant la fusion (*Merge*).
+
+**Mettre en place la protection (une seule fois, par le propriétaire du dépôt)**
+
+GitHub → *Settings* → *Rules* → *Rulesets* → *New ruleset* → *New branch ruleset* :
+
+1. **Ruleset name** : `protect-main` · **Enforcement status** : `Active`.
+2. **Target branches** → *Add target* → *Include default branch* (`main`).
+3. Cocher :
+   - **Restrict deletions** : `main` ne peut pas être supprimée ;
+   - **Block force pushes** : pas de `git push --force` ;
+   - **Require a pull request before merging** : 1 approbation minimum, et *Dismiss stale approvals* ;
+   - **Require status checks to pass** (si une CI `typecheck` / `build` existe).
+4. **Bypass list** : laisser vide pour que la règle s'applique à tous.
+5. *Create*.
+
+Résultat : un `git push origin main` direct est refusé ; seule la fusion d'une PR approuvée modifie `main`.
+
 ## Brancher le vrai back-end (plus tard)
 
 Chaque fonction d'`api/` appelle l'API Gateway et fournit son `mock`. Quand un microservice est prêt : mettre `VITE_USE_MOCKS=false` et l'adresse de la Gateway dans `VITE_API_BASE_URL`. Les routes, formats, erreurs et événements attendus de chaque service sont décrits dans le `README.md` du module concerné.

@@ -1,5 +1,5 @@
 import { createContext, useCallback, useContext, useEffect, useMemo, useState, type ReactNode } from "react";
-import { tokenStore } from "@/api/client";
+import { tokenStore, USE_MOCKS } from "@/api/client";
 import { fakeJwt } from "@/auth/jwt";
 import { DEMO_USERS, ROLES, type Role, type User } from "@/auth/roles";
 import { storedAvatar } from "../mocks";
@@ -45,9 +45,10 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const user = session ?? DEMO_USERS.student;
 
   // Garde le JWT envoyé par l'intercepteur synchronisé avec la session.
+  // Avec le vrai back-end, le jeton signé reçu à la connexion ne doit jamais être remplacé par un faux.
   useEffect(() => {
-    if (session) tokenStore.set(fakeJwt(session));
-    else tokenStore.clear();
+    if (!session) tokenStore.clear();
+    else if (USE_MOCKS) tokenStore.set(fakeJwt(session));
   }, [session]);
 
   const open = useCallback((u: User) => {

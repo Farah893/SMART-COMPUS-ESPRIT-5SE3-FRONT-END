@@ -11,6 +11,17 @@ import { ApiError } from "./errors";
 export const API_BASE_URL = import.meta.env.VITE_API_BASE_URL ?? "http://localhost:8080/api";
 export const USE_MOCKS = import.meta.env.VITE_USE_MOCKS !== "false";
 
+/**
+ * Routes servies par un vrai microservice quand VITE_USE_MOCKS=false (préfixes séparés par des virgules).
+ * Toute autre route garde son mock tant que son service n'existe pas : on branche les modules un par un
+ * en ajoutant leurs préfixes ici (ex. « /courses,/enrollments » pour academic). Défaut : user-service.
+ */
+const REAL_PREFIXES = (import.meta.env.VITE_REAL_API_PREFIXES ?? "/auth,/users,/roles,/login-history")
+  .split(",")
+  .map((p: string) => p.trim())
+  .filter(Boolean);
+const isRealRoute = (path: string) => REAL_PREFIXES.some((p: string) => path === p || path.startsWith(`${p}/`) || path.startsWith(`${p}?`));
+
 const TOKEN_KEY = "smartcampus.jwt";
 export const tokenStore = {
   get: () => {
@@ -74,7 +85,7 @@ const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
 
 async function request<T>(method: RequestConfig["method"], path: string, opts: CallOptions<T> = {}): Promise<T> {
   try {
-    if (USE_MOCKS) {
+    if (USE_MOCKS || (opts.mock && !isRealRoute(path))) {
       if (!opts.mock) throw new ApiError(404, `Aucun mock pour ${method} ${path}`);
       await sleep(opts.latency ?? 350 + Math.random() * 250);
       if (opts.signal?.aborted) throw new DOMException("Aborted", "AbortError");
