@@ -2,6 +2,7 @@ import { useRef, useState, type FormEvent } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
+import { USE_MOCKS } from "@/api/client";
 import { isApiError } from "@/api/errors";
 import { useMutation } from "@/api/useMutation";
 import { DEMO_USERS, ROLES, ROLE_LABEL } from "@/auth/roles";
@@ -64,6 +65,7 @@ export default function LoginPage() {
       title={t("users.login.title")}
       description={t("users.login.description")}
       footer={
+        USE_MOCKS && (
         <section aria-labelledby="demo-login" className="rounded-xl border border-dashed border-amber-400 bg-amber-50 p-4">
           <h2 id="demo-login" className="text-sm font-semibold text-amber-950">
             {t("users.login.demo")}
@@ -88,6 +90,7 @@ export default function LoginPage() {
           <p className="mt-3 text-xs text-amber-950">{t("users.login.demoHint", { password: DEMO_PASSWORD })}</p>
           <p className="text-xs text-amber-950">{t("users.login.demoEmails", { email: DEMO_USERS.student.email })}</p>
         </section>
+        )
       }
     >
       <form ref={formRef} onSubmit={(e) => void submit(e)} noValidate method="post" className="space-y-1">

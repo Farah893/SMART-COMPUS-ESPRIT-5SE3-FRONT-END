@@ -1,3 +1,4 @@
+import { USE_MOCKS } from "@/api/client";
 import { useCallback, useState } from "react";
 import { Link, Navigate, useNavigate, useSearchParams } from "react-router-dom";
 import { Mail } from "lucide-react";
@@ -93,7 +94,11 @@ export default function VerifyEmailPage() {
           <p id="otp-error" role="alert" className="mt-2 min-h-5 text-sm text-red-700">
             {error}
           </p>
-          <p className="mt-2 rounded-lg border border-dashed border-amber-400 bg-amber-50 px-3 py-2 text-sm font-medium text-amber-950">{t("users.verify.demoHint", { code: DEMO_CODE })}</p>
+          {USE_MOCKS && (
+
+            <p className="mt-2 rounded-lg border border-dashed border-amber-400 bg-amber-50 px-3 py-2 text-sm font-medium text-amber-950">{t("users.verify.demoHint", { code: DEMO_CODE })}</p>
+
+          )}
         </div>
       </div>
     </AuthShell>

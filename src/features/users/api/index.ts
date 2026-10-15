@@ -97,9 +97,15 @@ export const createUserByAdmin = (input: AdminCreateInput) =>
     },
   });
 
+/** Construit une query string en ignorant les valeurs vides. */
+const query = (params: Record<string, string | undefined>) => {
+  const qs = new URLSearchParams(Object.entries(params).filter(([, v]) => v) as [string, string][]).toString();
+  return qs ? `?${qs}` : "";
+};
+
 /** GET /users?q=&role=&status= */
 export const listUsers = (filters: UserFilters, signal?: AbortSignal) =>
-  api.get<UserList>("/users", {
+  api.get<UserList>(`/users${query({ q: filters.q?.trim(), role: filters.role, status: filters.status })}`, {
     signal,
     mock: () => {
       svc();
@@ -232,7 +238,7 @@ export const setPermission = (role: Role, key: string, granted: boolean) =>
 
 /** GET /users/{id}/login-history (ou /login-history pour tous, admin) */
 export const getLoginHistory = (filters: LoginHistoryFilters, signal?: AbortSignal) =>
-  api.get<LoginEvent[]>(filters.userId ? `/users/${filters.userId}/login-history` : "/login-history", {
+  api.get<LoginEvent[]>(`${filters.userId ? `/users/${filters.userId}/login-history` : "/login-history"}${query({ result: filters.result })}`, {
     signal,
     mock: () => {
       svc();
