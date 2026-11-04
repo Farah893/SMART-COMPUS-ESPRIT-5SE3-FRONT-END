@@ -1,10 +1,10 @@
 import { Link } from "react-router-dom";
 import { Clock, GraduationCap, User } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { Card } from "@/components/ui/card";
-import { CapacityGauge } from "@/components/shared/CapacityGauge";
-import { StatusPill } from "@/components/shared/StatusPill";
-import { useT } from "@/i18n";
+import { Button } from "@/shared/components/ui/button";
+import { Card } from "@/shared/components/ui/card";
+import { CapacityGauge } from "@/shared/components/common/CapacityGauge";
+import { StatusPill } from "@/shared/components/common/StatusPill";
+import { useT } from "@/shared/i18n";
 import type { CourseView } from "../types";
 
 interface CourseCardProps {

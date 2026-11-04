@@ -1,4 +1,4 @@
-import type { Role } from "@/auth/roles";
+import type { Role } from "@/shared/auth/roles";
 
 export const BOOK_CATEGORIES = ["Informatique", "Sciences", "Gestion", "Langues", "Littérature"] as const;
 export type BookCategory = (typeof BOOK_CATEGORIES)[number];

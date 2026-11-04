@@ -1,6 +1,6 @@
 import { Check } from "lucide-react";
-import { useT } from "@/i18n";
-import { cn } from "@/lib/utils";
+import { useT } from "@/shared/i18n";
+import { cn } from "@/shared/lib/utils";
 import type { Equipment } from "../types";
 
 /** Équipements d'une salle (texte + icône : l'information ne repose pas sur la couleur). */

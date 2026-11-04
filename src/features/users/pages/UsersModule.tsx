@@ -1,9 +1,9 @@
 import { Suspense } from "react";
 import { NavLink, Route, Routes } from "react-router-dom";
-import { PageHeader } from "@/components/shared/PageHeader";
-import { NotFoundView } from "@/components/shared/ErrorViews";
-import { useT } from "@/i18n";
-import { cn } from "@/lib/utils";
+import { PageHeader } from "@/shared/components/common/PageHeader";
+import { NotFoundView } from "@/shared/components/common/ErrorViews";
+import { useT } from "@/shared/i18n";
+import { cn } from "@/shared/lib/utils";
 import UsersListPage from "./UsersListPage";
 import RolesMatrixPage from "./RolesMatrixPage";
 import LoginHistoryPage from "./LoginHistoryPage";

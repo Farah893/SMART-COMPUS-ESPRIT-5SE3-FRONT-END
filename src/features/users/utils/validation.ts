@@ -1,4 +1,4 @@
-import { EMAIL_DOMAIN } from "@/lib/config";
+import { EMAIL_DOMAIN } from "@/shared/config/env";
 
 export const INSTITUTIONAL_DOMAIN = EMAIL_DOMAIN;
 export const MAX_ATTEMPTS = 5;

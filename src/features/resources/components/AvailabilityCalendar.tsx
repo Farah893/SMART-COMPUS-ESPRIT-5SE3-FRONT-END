@@ -1,7 +1,7 @@
-import { QueryBoundary } from "@/components/shared/QueryBoundary";
-import { Skeleton } from "@/components/ui/skeleton";
-import { useT } from "@/i18n";
-import { cn } from "@/lib/utils";
+import { QueryBoundary } from "@/shared/components/common/QueryBoundary";
+import { Skeleton } from "@/shared/components/ui/skeleton";
+import { useT } from "@/shared/i18n";
+import { cn } from "@/shared/lib/utils";
 import { useAvailability } from "../hooks";
 import { formatDay, fromMinutes, overlaps } from "../utils/time";
 import { CLOSE_HOUR, OPEN_HOUR, type BusySlot } from "../types";

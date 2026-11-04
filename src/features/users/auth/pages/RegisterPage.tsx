@@ -1,9 +1,9 @@
 import { useRef, useState, type FormEvent } from "react";
 import { Link, useNavigate, useSearchParams } from "react-router-dom";
-import { Button } from "@/components/ui/button";
-import { isApiError } from "@/api/errors";
-import { useMutation } from "@/api/useMutation";
-import { useT } from "@/i18n";
+import { Button } from "@/shared/components/ui/button";
+import { isApiError } from "@/shared/api/errors";
+import { useMutation } from "@/shared/api/useMutation";
+import { useT } from "@/shared/i18n";
 import { focusFirstInvalid, INSTITUTIONAL_DOMAIN } from "../../utils/validation";
 import { register } from "../api.mock";
 import { AttemptAlert } from "../components/AttemptAlert";

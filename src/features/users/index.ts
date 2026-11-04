@@ -1,6 +1,6 @@
 import { lazy } from "react";
 import { Users } from "lucide-react";
-import type { ModuleDef } from "../types";
+import type { ModuleDef } from "@/shared/types/module";
 import "./i18n";
 
 export const usersModule: ModuleDef = {
@@ -13,3 +13,7 @@ export const usersModule: ModuleDef = {
   tone: "navy",
   Page: lazy(() => import("./pages/UsersModule")),
 };
+
+/** API publique du module Utilisateurs : seul point d'entrée autorisé pour les autres couches. */
+export { AuthProvider } from "./auth/AuthProvider";
+export * from "./routes";

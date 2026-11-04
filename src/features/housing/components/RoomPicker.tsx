@@ -1,8 +1,8 @@
 import { BedDouble } from "lucide-react";
-import { EmptyState } from "@/components/shared/EmptyState";
-import { QueryBoundary } from "@/components/shared/QueryBoundary";
-import { useT } from "@/i18n";
-import { cn } from "@/lib/utils";
+import { EmptyState } from "@/shared/components/common/EmptyState";
+import { QueryBoundary } from "@/shared/components/common/QueryBoundary";
+import { useT } from "@/shared/i18n";
+import { cn } from "@/shared/lib/utils";
 import { useAvailableRooms } from "../hooks";
 import type { RoomType } from "../types";
 

@@ -7,7 +7,7 @@
 ```
 users/
 ├─ index.ts          ModuleDef (route /utilisateurs, rôle admin)
-├─ routes.ts         pages exposées hors du module (connexion, inscription, profil…) branchées dans App.tsx
+├─ routes.ts         pages exposées hors du module (connexion, inscription, profil…) branchées dans app/router
 ├─ api/              fonctions d'API du user-service (+ mock de chaque route)
 ├─ mocks/            comptes fictifs, mots de passe, historique, base en mémoire
 ├─ hooks/            useUsers, useUser, useLoginHistory, usePermissions

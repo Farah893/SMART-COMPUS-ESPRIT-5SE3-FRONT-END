@@ -1,53 +1,55 @@
 # SmartCampus — Architecture frontend et plan des 6 modules
 
 ## 1. Principes
-1. **Un module = un dossier autonome** dans `src/features/<module>/`. Un module n'importe jamais un autre module : il ne dépend que de `src/api`, `src/auth`, `src/components`, `src/i18n`, `src/lib`.
-2. **Le shell ne connaît pas le contenu des modules** : il lit seulement `features/registry.ts` (route, icône, rôles autorisés). Ajouter un module = remplir son dossier, rien d'autre à toucher.
-3. **Tout appel réseau passe par `src/api/client.ts`** (API Gateway + JWT). Chaque fonction d'API d'un module fournit son `mock`, donc l'app tourne sans backend (`VITE_USE_MOCKS=true`).
-4. **Les textes** vivent dans `<module>/i18n.ts` (`registerMessages`). Aucune chaîne en dur dans les composants.
-5. **Rôles : 3 seulement** — `student` (Étudiant), `teacher` (Enseignant), `admin` (Administrateur). Les droits fins se règlent par permission (matrice du module 1), pas par de nouveaux rôles.
-6. **Chaque module a ses dossiers dédiés et son `README.md`** (rôle, pages, routes d'API, événements, règles métier, checklist back-end). Le back-end est en microservices ; le front est **une seule application React**.
+1. **Monolithe modulaire par fonctionnalités** (_feature-based modulith_) : une seule application React, découpée en **6 modules métier** autonomes, un par micro-service du back-end.
+2. **Dépendances à sens unique : `app → pages → features → shared`.** Une couche n'importe que celles qui sont à sa droite. **Une feature ne dépend jamais d'une autre feature** : le code commun descend dans `shared`.
+3. **Séparation des responsabilités** : UI (`components/`, `pages/`), logique d'usage (`hooks/`), accès aux données (`api/` + `mocks/`), état global (session et registre des modules, exposés par `shared` et fournis par `app`).
+4. **Inversion de dépendance pour le transverse** : `shared/auth/AuthContext` définit le contrat de session et `shared/modules/ModulesContext` celui du registre des modules ; le module Utilisateurs fournit la session, `app` fournit la liste des modules. Ainsi `shared` et les pages ne connaissent ni l'un ni l'autre.
+5. **Tout appel réseau passe par `shared/api/client.ts`** (API Gateway + JWT). Chaque fonction d'API d'un module fournit son `mock`, donc l'app tourne sans backend (`VITE_USE_MOCKS=true`).
+6. **Les textes** vivent dans `<module>/i18n` (`registerMessages`). Aucune chaîne en dur dans les composants.
+7. **Rôles : 3 seulement** — `student`, `teacher`, `admin`. Les droits fins se règlent par permission, pas par de nouveaux rôles.
+8. **Qualité automatisée** : TypeScript strict, ESLint (accessibilité, hooks, **frontières de couches**), Prettier, tests unitaires/composants (Vitest), test d'architecture, tests de bout en bout (Playwright). `npm run check` enchaîne le tout.
 
 ## 2. Structure globale
 ```
 src/
-├─ api/            client.ts (gateway + JWT) · errors.ts · useQuery.ts · useMutation.ts
-├─ auth/           roles.ts (3 rôles) · jwt.ts · RequireSession.tsx · AuthContext (ré-export)
-├─ components/
-│  ├─ ui/          primitives shadcn (button, card, dialog, select, switch…)
-│  └─ shared/      StatCard, StatusPill, DataTable, ConfirmDialog, EmptyState, Stepper,
-│                  Timeline, CapacityGauge, ConflictAlert, ErrorViews, ModuleBoundary…
-├─ i18n/           fr.ts (socle) · index.tsx (registerMessages)
-├─ layout/         AppShell, TopBar, Sidebar, MobileNav, DemoPanel
-├─ lib/            utils, format, tones
-└─ features/
-   ├─ registry.ts  liste des 6 modules (ordre de la sidebar)
-   ├─ types.ts     contrat ModuleDef
-   ├─ _shared/     serviceHealth (panne simulée par module)
-   ├─ dashboard/   tableau de bord après connexion (hors modules)
-   ├─ home/        page d'accueil publique (« / » sans session)
-   └─ users | academic | resources | housing | student-life | library
+├─ app/            Assemblage : seule couche qui connaît tous les modules
+│  ├─ App.tsx · modules.ts (liste des 6 modules)
+│  ├─ providers/   AppProviders (langue → session → registre → routeur → notifications)
+│  ├─ router/      index.tsx (routes) · ProtectedRoute.tsx · routes.ts (chemins)
+│  ├─ layout/      AppShell, Sidebar, TopBar, MobileNav, NavItems, DemoPanel
+│  └─ styles/      globals.css · tokens.css (design tokens)
+├─ pages/          Écrans qui composent plusieurs modules
+│  └─ LandingPage · DashboardPage · ShowcasePage · ConflictDemoPage
+├─ features/       Les 6 modules métier autonomes
+│  └─ users | academic | resources | housing | student-life | library
+├─ shared/         Transverse, sans logique métier, ne dépend de rien d'autre
+│  ├─ api/         client.ts · errors.ts · useQuery.ts · useMutation.ts
+│  ├─ auth/        roles.ts · jwt.ts · AuthContext.tsx (contrat de session)
+│  ├─ modules/     ModulesContext.tsx (contrat du registre)
+│  ├─ components/  ui/ (primitives shadcn) · common/ (StatCard, DataTable, EmptyState…) · Logo.tsx
+│  ├─ config/ · events/ · services/ · types/ · i18n/ · lib/
+├─ test/           setup.ts · test-utils.tsx · architecture.test.ts
+└─ main.tsx        Point d'entrée
+e2e/               Tests Playwright (desktop + téléphone)
 ```
+Le détail fichier par fichier est dans `FICHIERS.md`.
 
 ## 3. Gabarit d'un module (identique pour les 6)
 ```
 features/<module>/
-├─ README.md       fiche du module : rôles, pages, routes d'API, événements, règles, checklist back-end
-├─ index.ts        ModuleDef : id, path, icône, rôles, Page (lazy)
-├─ api/            fonctions d'API + mock (une fonction = une route du microservice)
+├─ index.ts        API publique : ModuleDef (id, path, icône, rôles, Page lazy)
+├─ README.md       fiche du module : rôles, pages, routes d'API, événements, règles
+├─ api/            accès aux données : une fonction = une route du microservice (+ son mock)
 ├─ mocks/          données fictives typées + « base » en mémoire
 ├─ hooks/          useXxx() = useQuery/useMutation autour de api/
-├─ types/          entités, DTO, filtres, constantes de domaine
-├─ schemas/        validation (zod) des formulaires
-├─ utils/          fonctions pures du module (dates, validation…)
-├─ i18n/           messages français du module
+├─ types/ schemas/ utils/ i18n/
 ├─ components/     composants propres au module
-└─ pages/
-   ├─ <Module>Module.tsx   sous-routes + onglets du module
-   └─ XxxPage.tsx          une page = un écran
+└─ pages/          <Module>Module.tsx (sous-routes, onglets) + une page par écran
 ```
-Chaque dossier se termine par un `index.ts` : on importe donc `../api`, `../hooks`, `../types`… sans connaître les fichiers à l'intérieur.
-Règles : une page ne contient que de la composition (données via hooks, UI via composants) ; chaque page gère les états **chargement (skeleton) / vide (EmptyState) / erreur (503 → ServiceUnavailableView, 403, 409)** ; les événements de domaine s'affichent en toast. Un dossier vide ou inutile n'est pas créé (ex. `schemas/` absent si le module n'a pas de formulaire).
+Règles : une page ne contient que de la composition (données via hooks, UI via composants) ; chaque page gère les états **chargement (skeleton) / vide (EmptyState) / erreur (503 → ServiceUnavailableView, 403, 409)** ; les événements de domaine s'affichent en toast. Un dossier vide ou inutile n'est pas créé.
+
+**Frontières appliquées automatiquement** : `eslint.config.js` (règle `no-restricted-imports` par couche et par module) et `src/test/architecture.test.ts` (lit tous les imports, alias et relatifs). Une violation fait échouer `npm run check`.
 
 ## 4. Ordre de construction et contenu des modules
 
@@ -65,7 +67,7 @@ Règles : une page ne contient que de la composition (données via hooks, UI via
 users/
 ├─ index.ts · README.md · routes.ts · api/ · mocks/ · hooks/ · types/ · utils/ · i18n/
 ├─ auth/            (pages publiques)
-│  ├─ AuthContext.tsx · schemas.ts · api.mock.ts
+│  ├─ AuthProvider.tsx · schemas.ts · api.mock.ts
 │  ├─ components/   AuthShell, EmailField, PasswordInput, PasswordStrength, AttemptAlert,
 │  │                CountdownButton, OtpInput, Field
 │  └─ pages/        LoginPage, RegisterPage, ForgotPasswordPage, ResetPasswordPage, VerifyEmailPage
@@ -160,4 +162,4 @@ Types : `Book`, `Loan`, `Reservation`. Endpoints : `GET /books`, `POST /loans`, 
 - Mocks cohérents (base en mémoire) et endpoints typés dans `api.ts`.
 - Textes dans `i18n.ts`, validation dans `schemas.ts`.
 - Accessibilité : labels visibles, navigation clavier, contraste AA, focus visible.
-- `npx tsc -b --noEmit` et `npx vite build` sans erreur ; aucune modification des autres modules.
+- `npm run check` (types, lint, format, tests) et `npm run build` sans erreur ; aucune modification des autres modules, aucun import vers une autre feature.

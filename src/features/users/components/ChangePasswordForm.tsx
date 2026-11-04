@@ -1,10 +1,10 @@
 import { useRef, useState, type FormEvent } from "react";
 import { toast } from "sonner";
-import { Button } from "@/components/ui/button";
-import { isApiError } from "@/api/errors";
-import { useMutation } from "@/api/useMutation";
-import { useAuth } from "@/auth/AuthContext";
-import { useT } from "@/i18n";
+import { Button } from "@/shared/components/ui/button";
+import { isApiError } from "@/shared/api/errors";
+import { useMutation } from "@/shared/api/useMutation";
+import { useAuth } from "@/shared/auth/AuthContext";
+import { useT } from "@/shared/i18n";
 import { changePassword } from "../api";
 import { PasswordInput } from "../auth/components/PasswordInput";
 import { focusFirstInvalid, passwordError } from "../utils/validation";

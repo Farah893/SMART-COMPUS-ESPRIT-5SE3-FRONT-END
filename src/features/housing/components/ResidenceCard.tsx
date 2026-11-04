@@ -1,9 +1,9 @@
 import { Link } from "react-router-dom";
 import { Footprints, MapPin, Wallet } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { Card } from "@/components/ui/card";
-import { CapacityGauge } from "@/components/shared/CapacityGauge";
-import { useT } from "@/i18n";
+import { Button } from "@/shared/components/ui/button";
+import { Card } from "@/shared/components/ui/card";
+import { CapacityGauge } from "@/shared/components/common/CapacityGauge";
+import { useT } from "@/shared/i18n";
 import type { Residence } from "../types";
 
 interface ResidenceCardProps {

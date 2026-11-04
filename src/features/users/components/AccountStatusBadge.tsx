@@ -1,5 +1,5 @@
-import { cn } from "@/lib/utils";
-import { useT } from "@/i18n";
+import { cn } from "@/shared/lib/utils";
+import { useT } from "@/shared/i18n";
 import type { AccountStatus } from "../types";
 
 const STYLES: Record<AccountStatus, string> = {

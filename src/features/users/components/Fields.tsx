@@ -1,10 +1,10 @@
 import type { InputHTMLAttributes, ReactNode } from "react";
 import { AlertCircle } from "lucide-react";
-import { Input } from "@/components/ui/input";
-import { Select } from "@/components/ui/select";
-import { ROLE_LABEL, type Role } from "@/auth/roles";
-import { useT } from "@/i18n";
-import { cn } from "@/lib/utils";
+import { Input } from "@/shared/components/ui/input";
+import { Select } from "@/shared/components/ui/select";
+import { ROLE_LABEL, type Role } from "@/shared/auth/roles";
+import { useT } from "@/shared/i18n";
+import { cn } from "@/shared/lib/utils";
 
 interface TextFieldProps extends Omit<InputHTMLAttributes<HTMLInputElement>, "id"> {
   id: string;

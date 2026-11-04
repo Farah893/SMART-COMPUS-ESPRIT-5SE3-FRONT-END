@@ -1,10 +1,10 @@
 import { toast } from "sonner";
-import { api } from "@/api/client";
-import { ApiError } from "@/api/errors";
-import { ROLE_LABEL, type Role } from "@/auth/roles";
-import { fr } from "@/i18n/fr";
-import { normalize } from "@/lib/format";
-import { assertAvailable } from "../../_shared/serviceHealth";
+import { api } from "@/shared/api/client";
+import { ApiError } from "@/shared/api/errors";
+import { ROLE_LABEL, type Role } from "@/shared/auth/roles";
+import { fr } from "@/shared/i18n/fr";
+import { normalize } from "@/shared/lib/format";
+import { assertAvailable } from "@/shared/services/serviceHealth";
 import { db, DEMO_PASSWORD, PERMISSIONS, saveAvatar } from "../mocks";
 import { generateTemporaryPassword, INSTITUTIONAL_DOMAIN, isInstitutionalEmail, passwordError } from "../utils/validation";
 import {

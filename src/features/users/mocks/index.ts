@@ -1,6 +1,6 @@
-import type { Role } from "@/auth/roles";
-import { ROLES } from "@/auth/roles";
-import { normalize } from "@/lib/format";
+import type { Role } from "@/shared/auth/roles";
+import { ROLES } from "@/shared/auth/roles";
+import { normalize } from "@/shared/lib/format";
 import { INSTITUTIONAL_DOMAIN, MAX_ATTEMPTS } from "../utils/validation";
 import type { AccountStatus, LoginEvent, PermissionDef, PermissionMatrix, UserAccount } from "../types";
 

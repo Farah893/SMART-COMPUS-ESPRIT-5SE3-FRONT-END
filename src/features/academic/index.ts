@@ -1,6 +1,6 @@
 import { lazy } from "react";
 import { BookOpen } from "lucide-react";
-import type { ModuleDef } from "../types";
+import type { ModuleDef } from "@/shared/types/module";
 import "./i18n";
 
 export const academicModule: ModuleDef = {

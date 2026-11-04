@@ -1,6 +1,6 @@
 import { useRef, type ClipboardEvent, type KeyboardEvent } from "react";
-import { cn } from "@/lib/utils";
-import { useT } from "@/i18n";
+import { cn } from "@/shared/lib/utils";
+import { useT } from "@/shared/i18n";
 
 interface OtpInputProps {
   value: string;

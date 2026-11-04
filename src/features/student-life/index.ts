@@ -1,6 +1,6 @@
 import { lazy } from "react";
 import { Sparkles } from "lucide-react";
-import type { ModuleDef } from "../types";
+import type { ModuleDef } from "@/shared/types/module";
 import "./i18n";
 
 export const studentLifeModule: ModuleDef = {

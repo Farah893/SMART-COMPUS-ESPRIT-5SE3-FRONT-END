@@ -1,11 +1,11 @@
-import { USE_MOCKS } from "@/api/client";
+import { USE_MOCKS } from "@/shared/api/client";
 import { useCallback, useState } from "react";
 import { Link, Navigate, useNavigate, useSearchParams } from "react-router-dom";
 import { Mail } from "lucide-react";
 import { toast } from "sonner";
-import { Button } from "@/components/ui/button";
-import { isApiError } from "@/api/errors";
-import { useT } from "@/i18n";
+import { Button } from "@/shared/components/ui/button";
+import { isApiError } from "@/shared/api/errors";
+import { useT } from "@/shared/i18n";
 import { DEMO_CODE } from "../../mocks";
 import { resendActivation, verifyEmail } from "../api.mock";
 import { AuthShell } from "../components/AuthShell";

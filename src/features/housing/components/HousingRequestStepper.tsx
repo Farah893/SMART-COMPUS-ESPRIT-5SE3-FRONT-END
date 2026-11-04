@@ -1,17 +1,17 @@
 import { useRef, useState, type ReactNode } from "react";
 import { AlertCircle } from "lucide-react";
 import { toast } from "sonner";
-import { Button } from "@/components/ui/button";
-import { Card } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
-import { Select } from "@/components/ui/select";
-import { CapacityGauge } from "@/components/shared/CapacityGauge";
-import { ConflictAlert } from "@/components/shared/ConflictAlert";
-import { Stepper } from "@/components/shared/Stepper";
-import { isApiError } from "@/api/errors";
-import { useMutation } from "@/api/useMutation";
-import { useT } from "@/i18n";
-import { cn } from "@/lib/utils";
+import { Button } from "@/shared/components/ui/button";
+import { Card } from "@/shared/components/ui/card";
+import { Input } from "@/shared/components/ui/input";
+import { Select } from "@/shared/components/ui/select";
+import { CapacityGauge } from "@/shared/components/common/CapacityGauge";
+import { ConflictAlert } from "@/shared/components/common/ConflictAlert";
+import { Stepper } from "@/shared/components/common/Stepper";
+import { isApiError } from "@/shared/api/errors";
+import { useMutation } from "@/shared/api/useMutation";
+import { useT } from "@/shared/i18n";
+import { cn } from "@/shared/lib/utils";
 import { createRequest } from "../api";
 import { useViewer } from "../hooks";
 import { detailsStepSchema, fieldErrors, residenceStepSchema, roomStepSchema } from "../schemas";
@@ -175,6 +175,7 @@ export function HousingRequestStepper({ residences, initialResidenceId, onDone }
                       selected && "border-navy bg-blue-50",
                     )}
                   >
+                    {/* eslint-disable-next-line jsx-a11y/role-supports-aria-props -- aria-invalid signale l'erreur du groupe de choix aux lecteurs d'écran */}
                     <input type="radio" name="residence" className="sr-only" disabled={full} checked={selected} onChange={() => set("residenceId", r.id)} aria-invalid={errors.residenceId ? true : undefined} />
                     <span className="flex items-start justify-between gap-2">
                       <span className="font-semibold">{r.name}</span>

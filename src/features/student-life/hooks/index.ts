@@ -1,6 +1,6 @@
 import { useMemo } from "react";
-import { useQuery } from "@/api/useQuery";
-import { useAuth } from "@/auth/AuthContext";
+import { useQuery } from "@/shared/api/useQuery";
+import { useAuth } from "@/shared/auth/AuthContext";
 import { getClub, listClubs, listEvents, listMemberships, type Viewer } from "../api";
 import type { ClubFilters, EventFilters } from "../types";
 

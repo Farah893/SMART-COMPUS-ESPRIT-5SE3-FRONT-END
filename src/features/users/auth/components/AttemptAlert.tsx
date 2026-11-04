@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
 import { CircleAlert, Lock, ShieldAlert } from "lucide-react";
-import { useT } from "@/i18n";
-import { cn } from "@/lib/utils";
+import { useT } from "@/shared/i18n";
+import { cn } from "@/shared/lib/utils";
 
 type AttemptAlertProps =
   | { kind: "error"; message: string }

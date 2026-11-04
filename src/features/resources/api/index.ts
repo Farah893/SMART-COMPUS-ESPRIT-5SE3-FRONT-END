@@ -1,9 +1,9 @@
-import { api } from "@/api/client";
-import { ApiError } from "@/api/errors";
-import type { Role } from "@/auth/roles";
-import { normalize } from "@/lib/format";
-import { assertAvailable } from "../../_shared/serviceHealth";
-import { publishDomainEvent } from "../../_shared/domainEvents";
+import { api } from "@/shared/api/client";
+import { ApiError } from "@/shared/api/errors";
+import type { Role } from "@/shared/auth/roles";
+import { normalize } from "@/shared/lib/format";
+import { assertAvailable } from "@/shared/services/serviceHealth";
+import { publishDomainEvent } from "@/shared/events/domainEvents";
 import { db } from "../mocks";
 import { overlaps, toMinutes, todayISO } from "../utils/time";
 import { CLOSE_HOUR, OPEN_HOUR, OPEN_HOURS } from "../types";

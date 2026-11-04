@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from "react";
-import { Button, type ButtonProps } from "@/components/ui/button";
+import { Button, type ButtonProps } from "@/shared/components/ui/button";
 
 interface CountdownButtonProps extends Omit<ButtonProps, "onClick" | "children"> {
   /** Durée de l'attente entre deux envois (s). */

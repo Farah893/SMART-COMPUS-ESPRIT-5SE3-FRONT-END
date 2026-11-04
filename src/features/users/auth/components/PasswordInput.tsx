@@ -1,6 +1,6 @@
 import { useState, type ReactNode } from "react";
 import { Eye, EyeOff, TriangleAlert } from "lucide-react";
-import { useT } from "@/i18n";
+import { useT } from "@/shared/i18n";
 import { Field, inputClass, messageId } from "./Field";
 import { PasswordStrength } from "./PasswordStrength";
 
@@ -49,6 +49,7 @@ export function PasswordInput({ id, label, value, onChange, autoComplete, error,
             autoCapitalize="none"
             autoCorrect="off"
             spellCheck={false}
+            // eslint-disable-next-line jsx-a11y/no-autofocus -- le focus est demandé explicitement par la page appelante
             autoFocus={autoFocus}
             disabled={disabled}
             required={required}

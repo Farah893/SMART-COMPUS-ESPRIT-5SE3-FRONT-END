@@ -1,6 +1,6 @@
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { useT } from "@/i18n";
-import { cn } from "@/lib/utils";
+import { Card, CardContent, CardHeader, CardTitle } from "@/shared/components/ui/card";
+import { useT } from "@/shared/i18n";
+import { cn } from "@/shared/lib/utils";
 import type { Residence } from "../types";
 
 /** Occupation par résidence : barres horizontales, valeurs toujours écrites (pas seulement la couleur). */

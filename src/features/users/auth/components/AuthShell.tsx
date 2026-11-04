@@ -1,8 +1,8 @@
 import type { ReactNode } from "react";
 import { Link } from "react-router-dom";
 import { BookOpenCheck, Building2, GraduationCap, KeyRound } from "lucide-react";
-import { Logo } from "@/layout/Logo";
-import { useT } from "@/i18n";
+import { Logo } from "@/shared/components/Logo";
+import { useT } from "@/shared/i18n";
 
 const HIGHLIGHTS = [
   { icon: BookOpenCheck, title: "users.shell.card1.title", text: "users.shell.card1.text" },

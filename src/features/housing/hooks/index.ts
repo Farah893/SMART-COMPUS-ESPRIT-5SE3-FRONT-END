@@ -1,6 +1,6 @@
 import { useMemo } from "react";
-import { useQuery } from "@/api/useQuery";
-import { useAuth } from "@/auth/AuthContext";
+import { useQuery } from "@/shared/api/useQuery";
+import { useAuth } from "@/shared/auth/AuthContext";
 import { getMyRequest, listAvailableRooms, listRequests, listResidences, listTickets, type Viewer } from "../api";
 import type { RoomType } from "../types";
 

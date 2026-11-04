@@ -1,4 +1,4 @@
-import { registerMessages } from "@/i18n";
+import { registerMessages } from "@/shared/i18n";
 
 /** Messages français du module Académique. */
 registerMessages("fr", {

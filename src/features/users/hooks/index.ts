@@ -1,4 +1,4 @@
-import { useQuery } from "@/api/useQuery";
+import { useQuery } from "@/shared/api/useQuery";
 import { getLoginHistory, getPermissions, getUser, listUsers } from "../api";
 import type { LoginHistoryFilters, UserFilters } from "../types";
 

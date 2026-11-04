@@ -1,4 +1,4 @@
-import type { Role } from "@/auth/roles";
+import type { Role } from "@/shared/auth/roles";
 
 export type AccountStatus = "active" | "inactive" | "suspended";
 

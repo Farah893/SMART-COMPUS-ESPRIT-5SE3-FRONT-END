@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
-import { Button } from "@/components/ui/button";
-import { Card } from "@/components/ui/card";
-import { useT } from "@/i18n";
+import { Button } from "@/shared/components/ui/button";
+import { Card } from "@/shared/components/ui/card";
+import { useT } from "@/shared/i18n";
 import type { BookView } from "../types";
 import { AvailabilityBadge } from "./AvailabilityBadge";
 import { BookActions } from "./BookActions";

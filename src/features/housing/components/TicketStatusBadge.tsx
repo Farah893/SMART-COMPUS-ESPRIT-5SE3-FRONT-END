@@ -1,5 +1,5 @@
-import { useT } from "@/i18n";
-import { cn } from "@/lib/utils";
+import { useT } from "@/shared/i18n";
+import { cn } from "@/shared/lib/utils";
 import type { TicketStatus } from "../types";
 
 const STYLE: Record<TicketStatus, string> = {

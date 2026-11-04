@@ -1,10 +1,10 @@
 import { useState } from "react";
-import { Button } from "@/components/ui/button";
-import { Card } from "@/components/ui/card";
-import { Select } from "@/components/ui/select";
-import { EmptyState } from "@/components/shared/EmptyState";
-import { ServiceUnavailableView } from "@/components/shared/ErrorViews";
-import { useT } from "@/i18n";
+import { Button } from "@/shared/components/ui/button";
+import { Card } from "@/shared/components/ui/card";
+import { Select } from "@/shared/components/ui/select";
+import { EmptyState } from "@/shared/components/common/EmptyState";
+import { ServiceUnavailableView } from "@/shared/components/common/ErrorViews";
+import { useT } from "@/shared/i18n";
 import { LoginHistoryTable } from "../components/LoginHistoryTable";
 import { useLoginHistory, useUsers } from "../hooks";
 import { fullName, type LoginHistoryFilters } from "../types";

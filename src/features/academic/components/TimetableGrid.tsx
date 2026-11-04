@@ -1,6 +1,6 @@
 import { MapPin } from "lucide-react";
-import { useT } from "@/i18n";
-import { cn } from "@/lib/utils";
+import { useT } from "@/shared/i18n";
+import { cn } from "@/shared/lib/utils";
 import { DAY_LABELS, type Day, type SessionKind, type TimetableEntry } from "../types";
 
 const KIND_STYLE: Record<SessionKind, string> = {

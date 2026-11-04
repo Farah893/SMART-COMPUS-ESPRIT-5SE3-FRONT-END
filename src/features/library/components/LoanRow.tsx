@@ -1,9 +1,9 @@
 import { Link } from "react-router-dom";
 import { RefreshCw } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { Card } from "@/components/ui/card";
-import { useT } from "@/i18n";
-import { cn } from "@/lib/utils";
+import { Button } from "@/shared/components/ui/button";
+import { Card } from "@/shared/components/ui/card";
+import { useT } from "@/shared/i18n";
+import { cn } from "@/shared/lib/utils";
 import { diffDays, formatDay, todayISO } from "../utils/time";
 import { MAX_RENEWALS, type Loan, type LoanStatus } from "../types";
 

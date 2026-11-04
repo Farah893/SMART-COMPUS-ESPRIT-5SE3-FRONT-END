@@ -1,12 +1,12 @@
 import { useRef, useState } from "react";
 import { Camera, Trash2 } from "lucide-react";
 import { toast } from "sonner";
-import { Button } from "@/components/ui/button";
-import { UserAvatar } from "@/components/shared/UserAvatar";
-import { isApiError } from "@/api/errors";
-import { useAuth } from "@/auth/AuthContext";
-import { useT } from "@/i18n";
-import { ImageError, imageToAvatarDataUrl } from "@/lib/image";
+import { Button } from "@/shared/components/ui/button";
+import { UserAvatar } from "@/shared/components/common/UserAvatar";
+import { isApiError } from "@/shared/api/errors";
+import { useAuth } from "@/shared/auth/AuthContext";
+import { useT } from "@/shared/i18n";
+import { ImageError, imageToAvatarDataUrl } from "@/shared/lib/image";
 import { updateAvatar } from "../api";
 import { fullName, type UserAccount } from "../types";
 

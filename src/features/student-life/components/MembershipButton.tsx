@@ -1,6 +1,6 @@
-import { Button } from "@/components/ui/button";
-import { useAuth } from "@/auth/AuthContext";
-import { useT } from "@/i18n";
+import { Button } from "@/shared/components/ui/button";
+import { useAuth } from "@/shared/auth/AuthContext";
+import { useT } from "@/shared/i18n";
 import type { ClubView } from "../types";
 
 interface MembershipButtonProps {

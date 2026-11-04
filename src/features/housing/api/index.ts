@@ -1,8 +1,8 @@
-import { api } from "@/api/client";
-import { ApiError } from "@/api/errors";
-import type { Role } from "@/auth/roles";
-import { assertAvailable } from "../../_shared/serviceHealth";
-import { publishDomainEvent } from "../../_shared/domainEvents";
+import { api } from "@/shared/api/client";
+import { ApiError } from "@/shared/api/errors";
+import type { Role } from "@/shared/auth/roles";
+import { assertAvailable } from "@/shared/services/serviceHealth";
+import { publishDomainEvent } from "@/shared/events/domainEvents";
 import { db } from "../mocks";
 import { todayISO } from "../utils/time";
 import type { HousingRequest, HousingRequestInput, HousingRoom, Residence, RequestStatus, RoomType, Ticket, TicketInput, TicketStatus } from "../types";

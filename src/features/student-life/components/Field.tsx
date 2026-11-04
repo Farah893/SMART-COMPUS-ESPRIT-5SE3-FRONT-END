@@ -1,6 +1,6 @@
 import type { ReactNode } from "react";
 import { AlertCircle } from "lucide-react";
-import { useT } from "@/i18n";
+import { useT } from "@/shared/i18n";
 
 interface FieldProps {
   id: string;

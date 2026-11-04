@@ -1,8 +1,8 @@
 import { CheckCircle2, XCircle } from "lucide-react";
-import { DataTable, type Column } from "@/components/shared/DataTable";
-import { useT } from "@/i18n";
-import { formatDateTime } from "@/lib/format";
-import { cn } from "@/lib/utils";
+import { DataTable, type Column } from "@/shared/components/common/DataTable";
+import { useT } from "@/shared/i18n";
+import { formatDateTime } from "@/shared/lib/format";
+import { cn } from "@/shared/lib/utils";
 import type { LoginEvent } from "../types";
 
 interface Props {

@@ -1,8 +1,8 @@
 import { Copy, MailCheck } from "lucide-react";
 import { toast } from "sonner";
-import { Button } from "@/components/ui/button";
-import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogTitle } from "@/components/ui/dialog";
-import { useT } from "@/i18n";
+import { Button } from "@/shared/components/ui/button";
+import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogTitle } from "@/shared/components/ui/dialog";
+import { useT } from "@/shared/i18n";
 import { fullName, type AdminCreateResult } from "../types";
 
 /** Confirmation après la création d'un compte : e-mail envoyé et, en démo seulement, le mot de passe temporaire. */

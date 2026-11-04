@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
 import { Clock, MapPin } from "lucide-react";
-import { Card } from "@/components/ui/card";
-import { useT } from "@/i18n";
+import { Card } from "@/shared/components/ui/card";
+import { useT } from "@/shared/i18n";
 import { formatDay } from "../utils/time";
 import type { CampusEvent } from "../types";
 

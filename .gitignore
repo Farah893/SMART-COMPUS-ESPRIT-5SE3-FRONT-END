@@ -45,3 +45,7 @@ $RECYCLE.BIN/
 *.local
 # Playwright CLI output (may contain credentials)
 .playwright-cli/
+
+# --- Sorties de tests
+playwright-report/
+test-results/

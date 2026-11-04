@@ -1,7 +1,7 @@
 import { useNavigate } from "react-router-dom";
-import { Button } from "@/components/ui/button";
-import { useAuth } from "@/auth/AuthContext";
-import { useT } from "@/i18n";
+import { Button } from "@/shared/components/ui/button";
+import { useAuth } from "@/shared/auth/AuthContext";
+import { useT } from "@/shared/i18n";
 import { ChangePasswordForm } from "../../components/ChangePasswordForm";
 import { AuthShell } from "../components/AuthShell";
 

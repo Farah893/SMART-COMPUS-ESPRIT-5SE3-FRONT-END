@@ -1,11 +1,11 @@
 import { Suspense } from "react";
 import { NavLink, Route, Routes } from "react-router-dom";
-import type { Role } from "@/auth/roles";
-import { useAuth } from "@/auth/AuthContext";
-import { ForbiddenView, NotFoundView } from "@/components/shared/ErrorViews";
-import { PageHeader } from "@/components/shared/PageHeader";
-import { useT } from "@/i18n";
-import { cn } from "@/lib/utils";
+import type { Role } from "@/shared/auth/roles";
+import { useAuth } from "@/shared/auth/AuthContext";
+import { ForbiddenView, NotFoundView } from "@/shared/components/common/ErrorViews";
+import { PageHeader } from "@/shared/components/common/PageHeader";
+import { useT } from "@/shared/i18n";
+import { cn } from "@/shared/lib/utils";
 import ApprovalsPage from "./ApprovalsPage";
 import ReservationRequestPage from "./ReservationRequestPage";
 import ReservationsPage from "./ReservationsPage";

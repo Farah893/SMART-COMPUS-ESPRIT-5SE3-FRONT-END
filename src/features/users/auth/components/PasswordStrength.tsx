@@ -1,5 +1,5 @@
-import { useT } from "@/i18n";
-import { cn } from "@/lib/utils";
+import { useT } from "@/shared/i18n";
+import { cn } from "@/shared/lib/utils";
 
 /** Score 0–4 : longueur, casse mixte, chiffre, symbole / longueur ≥ 12. */
 export function scorePassword(pw: string): 0 | 1 | 2 | 3 | 4 {

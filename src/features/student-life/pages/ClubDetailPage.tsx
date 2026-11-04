@@ -1,11 +1,11 @@
 import { Link, useParams } from "react-router-dom";
 import { ArrowLeft, MapPin, Users } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { Card } from "@/components/ui/card";
-import { Skeleton } from "@/components/ui/skeleton";
-import { CapacityGauge } from "@/components/shared/CapacityGauge";
-import { QueryBoundary } from "@/components/shared/QueryBoundary";
-import { useT } from "@/i18n";
+import { Button } from "@/shared/components/ui/button";
+import { Card } from "@/shared/components/ui/card";
+import { Skeleton } from "@/shared/components/ui/skeleton";
+import { CapacityGauge } from "@/shared/components/common/CapacityGauge";
+import { QueryBoundary } from "@/shared/components/common/QueryBoundary";
+import { useT } from "@/shared/i18n";
 import { EventCard } from "../components/EventCard";
 import { MembershipButton } from "../components/MembershipButton";
 import { useMembership } from "../components/useMembership";

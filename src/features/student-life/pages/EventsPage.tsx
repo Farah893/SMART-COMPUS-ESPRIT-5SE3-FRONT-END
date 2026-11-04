@@ -1,11 +1,11 @@
 import { useState } from "react";
 import { CalendarX } from "lucide-react";
-import { Card } from "@/components/ui/card";
-import { Select } from "@/components/ui/select";
-import { Skeleton } from "@/components/ui/skeleton";
-import { EmptyState } from "@/components/shared/EmptyState";
-import { QueryBoundary } from "@/components/shared/QueryBoundary";
-import { useT } from "@/i18n";
+import { Card } from "@/shared/components/ui/card";
+import { Select } from "@/shared/components/ui/select";
+import { Skeleton } from "@/shared/components/ui/skeleton";
+import { EmptyState } from "@/shared/components/common/EmptyState";
+import { QueryBoundary } from "@/shared/components/common/QueryBoundary";
+import { useT } from "@/shared/i18n";
 import { EventCard } from "../components/EventCard";
 import { useClubs, useEvents } from "../hooks";
 import { formatDay } from "../utils/time";

@@ -1,4 +1,4 @@
-import type { Role } from "@/auth/roles";
+import type { Role } from "@/shared/auth/roles";
 import { addDays } from "../utils/time";
 import type { Book, BookCategory, BookReservation, ReservationStatus } from "../types";
 

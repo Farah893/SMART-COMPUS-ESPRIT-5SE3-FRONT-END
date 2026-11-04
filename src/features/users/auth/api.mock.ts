@@ -1,6 +1,6 @@
-import { api } from "@/api/client";
-import { ApiError } from "@/api/errors";
-import { fakeJwt } from "@/auth/jwt";
+import { api } from "@/shared/api/client";
+import { ApiError } from "@/shared/api/errors";
+import { fakeJwt } from "@/shared/auth/jwt";
 import { byEmail, logLogin, registerAccount, svc } from "../api";
 import { db, DEMO_CODE, DEMO_PASSWORD } from "../mocks";
 import { fullName, type LoginResult, type RegisterInput, type UserAccount } from "../types";

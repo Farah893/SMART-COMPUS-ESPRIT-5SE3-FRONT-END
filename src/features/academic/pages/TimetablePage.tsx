@@ -1,10 +1,10 @@
 import { CalendarX } from "lucide-react";
-import { Card } from "@/components/ui/card";
-import { Skeleton } from "@/components/ui/skeleton";
-import { EmptyState } from "@/components/shared/EmptyState";
-import { QueryBoundary } from "@/components/shared/QueryBoundary";
-import { useAuth } from "@/auth/AuthContext";
-import { useT } from "@/i18n";
+import { Card } from "@/shared/components/ui/card";
+import { Skeleton } from "@/shared/components/ui/skeleton";
+import { EmptyState } from "@/shared/components/common/EmptyState";
+import { QueryBoundary } from "@/shared/components/common/QueryBoundary";
+import { useAuth } from "@/shared/auth/AuthContext";
+import { useT } from "@/shared/i18n";
 import { TimetableGrid } from "../components/TimetableGrid";
 import { useTimetable } from "../hooks";
 

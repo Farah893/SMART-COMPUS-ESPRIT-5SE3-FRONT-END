@@ -1,9 +1,9 @@
 import { useState } from "react";
 import { toast } from "sonner";
-import { ConfirmDialog } from "@/components/shared/ConfirmDialog";
-import { ConflictAlert } from "@/components/shared/ConflictAlert";
-import { isApiError } from "@/api/errors";
-import { useT } from "@/i18n";
+import { ConfirmDialog } from "@/shared/components/common/ConfirmDialog";
+import { ConflictAlert } from "@/shared/components/common/ConflictAlert";
+import { isApiError } from "@/shared/api/errors";
+import { useT } from "@/shared/i18n";
 import { leaveClub, requestMembership } from "../api";
 import { useViewer } from "../hooks";
 import type { Club } from "../types";

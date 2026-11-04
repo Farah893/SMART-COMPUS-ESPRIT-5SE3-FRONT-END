@@ -1,10 +1,10 @@
 import { useRef, useState, type FormEvent, type ReactNode } from "react";
 import { Info } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import type { Role } from "@/auth/roles";
-import { useT } from "@/i18n";
-import { isApiError } from "@/api/errors";
-import { useMutation } from "@/api/useMutation";
+import { Button } from "@/shared/components/ui/button";
+import type { Role } from "@/shared/auth/roles";
+import { useT } from "@/shared/i18n";
+import { isApiError } from "@/shared/api/errors";
+import { useMutation } from "@/shared/api/useMutation";
 import { createUserByAdmin } from "../api";
 import { focusFirstInvalid, INSTITUTIONAL_DOMAIN, isInstitutionalEmail } from "../utils/validation";
 import type { AdminCreateResult } from "../types";

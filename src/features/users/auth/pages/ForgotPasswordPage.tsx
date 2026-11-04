@@ -1,10 +1,10 @@
 import { useRef, useState, type FormEvent } from "react";
 import { Link } from "react-router-dom";
 import { MailCheck } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { isApiError } from "@/api/errors";
-import { useMutation } from "@/api/useMutation";
-import { useT } from "@/i18n";
+import { Button } from "@/shared/components/ui/button";
+import { isApiError } from "@/shared/api/errors";
+import { useMutation } from "@/shared/api/useMutation";
+import { useT } from "@/shared/i18n";
 import { focusFirstInvalid, INSTITUTIONAL_DOMAIN } from "../../utils/validation";
 import { forgotPassword } from "../api.mock";
 import { AttemptAlert } from "../components/AttemptAlert";

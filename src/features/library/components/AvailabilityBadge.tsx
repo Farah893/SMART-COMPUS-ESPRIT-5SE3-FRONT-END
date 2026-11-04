@@ -1,5 +1,5 @@
-import { useT } from "@/i18n";
-import { cn } from "@/lib/utils";
+import { useT } from "@/shared/i18n";
+import { cn } from "@/shared/lib/utils";
 import type { BookView } from "../types";
 
 /** Disponibilité d'un ouvrage, toujours écrite en toutes lettres (pas seulement la couleur). */

@@ -1,8 +1,8 @@
 import { useState } from "react";
 import { toast } from "sonner";
-import { ConflictAlert } from "@/components/shared/ConflictAlert";
-import { isApiError } from "@/api/errors";
-import { useT } from "@/i18n";
+import { ConflictAlert } from "@/shared/components/common/ConflictAlert";
+import { isApiError } from "@/shared/api/errors";
+import { useT } from "@/shared/i18n";
 import { borrowBook, cancelReservation, reserveBook } from "../api";
 import { useViewer } from "../hooks";
 import { formatDay } from "../utils/time";
