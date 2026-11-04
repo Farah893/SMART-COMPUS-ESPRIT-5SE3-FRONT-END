@@ -1,9 +1,8 @@
 import { useEffect, useState } from "react";
-import { Search, Sparkles } from "lucide-react";
+import { Search, Drama } from "lucide-react";
 import { Card } from "@/shared/components/ui/card";
 import { Input } from "@/shared/components/ui/input";
 import { Select } from "@/shared/components/ui/select";
-import { Skeleton } from "@/shared/components/ui/skeleton";
 import { EmptyState } from "@/shared/components/common/EmptyState";
 import { QueryBoundary } from "@/shared/components/common/QueryBoundary";
 import { useT } from "@/shared/i18n";
@@ -11,6 +10,7 @@ import { ClubCard } from "../components/ClubCard";
 import { useMembership } from "../components/useMembership";
 import { useClubs } from "../hooks";
 import { CATEGORIES } from "../types";
+import { CatalogList, CatalogListSkeleton } from "@/shared/components/common/CatalogRow";
 
 /** Annuaire des clubs : recherche, filtre par catégorie et adhésion. */
 export default function ClubsPage() {
@@ -67,28 +67,18 @@ export default function ClubsPage() {
 
       {alert}
 
-      <QueryBoundary
-        query={query}
-        moduleName={t("module.student-life")}
-        skeleton={
-          <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
-            {Array.from({ length: 6 }, (_, i) => (
-              <Skeleton key={i} className="h-60 rounded-xl" />
-            ))}
-          </div>
-        }
-      >
+      <QueryBoundary query={query} moduleName={t("module.student-life")} skeleton={<CatalogListSkeleton count={6} />}>
         {(clubs) =>
           clubs.length === 0 ? (
             <Card>
-              <EmptyState icon={Sparkles} title={filtered ? t("life.empty.noMatch") : t("life.empty.clubs")} />
+              <EmptyState icon={Drama} title={filtered ? t("life.empty.noMatch") : t("life.empty.clubs")} />
             </Card>
           ) : (
             <>
               <p aria-live="polite" className="text-sm text-muted-foreground">
                 {t("life.clubs.count", { count: clubs.length })}
               </p>
-              <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
+              <CatalogList>
                 {clubs.map((c) => (
                   <ClubCard
                     key={c.id}
@@ -99,7 +89,7 @@ export default function ClubsPage() {
                     onLeave={askLeave}
                   />
                 ))}
-              </div>
+              </CatalogList>
             </>
           )
         }

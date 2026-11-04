@@ -3,7 +3,6 @@ import { BookX, Search } from "lucide-react";
 import { Card } from "@/shared/components/ui/card";
 import { Input } from "@/shared/components/ui/input";
 import { Select } from "@/shared/components/ui/select";
-import { Skeleton } from "@/shared/components/ui/skeleton";
 import { EmptyState } from "@/shared/components/common/EmptyState";
 import { QueryBoundary } from "@/shared/components/common/QueryBoundary";
 import { useT } from "@/shared/i18n";
@@ -11,6 +10,7 @@ import { BookCard } from "../components/BookCard";
 import { useBookActions } from "../components/useBookActions";
 import { useBooks } from "../hooks";
 import { BOOK_CATEGORIES } from "../types";
+import { CatalogList, CatalogListSkeleton } from "@/shared/components/common/CatalogRow";
 
 /** Catalogue : recherche, filtres (catégorie, disponibilité) et actions d'emprunt ou de réservation. */
 export default function CatalogPage() {
@@ -77,17 +77,7 @@ export default function CatalogPage() {
 
       {alert}
 
-      <QueryBoundary
-        query={query}
-        moduleName={t("module.library")}
-        skeleton={
-          <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
-            {Array.from({ length: 6 }, (_, i) => (
-              <Skeleton key={i} className="h-44 rounded-xl" />
-            ))}
-          </div>
-        }
-      >
+      <QueryBoundary query={query} moduleName={t("module.library")} skeleton={<CatalogListSkeleton count={6} />}>
         {(books) =>
           books.length === 0 ? (
             <Card>
@@ -98,7 +88,7 @@ export default function CatalogPage() {
               <p aria-live="polite" className="text-sm text-muted-foreground">
                 {t("lib.books.count", { count: books.length })}
               </p>
-              <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
+              <CatalogList>
                 {books.map((b) => (
                   <BookCard
                     key={b.id}
@@ -109,7 +99,7 @@ export default function CatalogPage() {
                     onCancel={(x) => void cancel(x)}
                   />
                 ))}
-              </div>
+              </CatalogList>
             </>
           )
         }

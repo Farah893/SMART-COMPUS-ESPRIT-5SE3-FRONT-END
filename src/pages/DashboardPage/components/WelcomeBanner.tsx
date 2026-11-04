@@ -1,47 +1,45 @@
 import { TrendingUp } from "lucide-react";
-import type { DashboardData } from "../types";
 import { useT } from "@/shared/i18n";
+import type { DashboardData } from "../types";
 
+/** En-tête du tableau de bord : salutation, puis deux indicateurs sobres (sans bandeau ni cartes imbriquées). */
 export function WelcomeBanner({ name, data }: { name: string; data: DashboardData }) {
   const t = useT();
   const { progress, kpi } = data;
   return (
-    <section
-      aria-labelledby="welcome-title"
-      className="grid gap-6 rounded-xl bg-navy p-6 text-white shadow-card md:grid-cols-[1fr_auto] md:items-center lg:p-8"
-    >
-      <div>
-        <h1 id="welcome-title" className="text-3xl lg:text-4xl">
-          {t("dashboard.welcome", { name: name.split(" ")[0]! })}
-        </h1>
-        <p className="mt-2 max-w-md text-blue-50">{data.subtitle}</p>
-      </div>
+    <section aria-labelledby="welcome-title" className="border-b pb-6">
+      <h1 id="welcome-title" className="text-3xl lg:text-4xl">
+        {t("dashboard.welcome", { name: name.split(" ")[0]! })}
+      </h1>
+      <p className="mt-2 max-w-[58ch] text-muted-foreground">{data.subtitle}</p>
 
-      <div className="grid gap-3 sm:grid-cols-2 md:w-[26rem]">
-        <div className="rounded-xl bg-white p-4 text-slate-900 shadow-sm">
-          <p className="text-sm font-medium text-muted-foreground">{progress.title}</p>
-          <p className="mt-1 text-2xl font-semibold tabular text-navy">{progress.value} %</p>
-          <div
-            role="progressbar"
-            aria-valuenow={progress.value}
-            aria-valuemin={0}
-            aria-valuemax={100}
-            aria-label={progress.title}
-            className="mt-2 h-2 overflow-hidden rounded-full bg-slate-200"
-          >
-            <div className="h-full rounded-full bg-navy" style={{ width: `${progress.value}%` }} />
-          </div>
-          <p className="mt-2 text-xs text-muted-foreground">{progress.caption}</p>
+      <dl className="mt-6 grid max-w-2xl gap-x-12 gap-y-5 sm:grid-cols-2">
+        <div>
+          <dt className="text-sm text-muted-foreground">{progress.title}</dt>
+          <dd className="mt-1 text-xl font-semibold tabular text-navy">{progress.value} %</dd>
+          <dd>
+            <div
+              role="progressbar"
+              aria-valuenow={progress.value}
+              aria-valuemin={0}
+              aria-valuemax={100}
+              aria-label={progress.title}
+              className="mt-2 h-1.5 overflow-hidden rounded-full bg-slate-200"
+            >
+              <div className="h-full rounded-full bg-navy" style={{ width: `${progress.value}%` }} />
+            </div>
+            <span className="mt-1.5 block text-sm text-muted-foreground">{progress.caption}</span>
+          </dd>
         </div>
-        <div className="rounded-xl bg-white p-4 text-slate-900 shadow-sm">
-          <p className="text-sm font-medium text-muted-foreground">{kpi.label}</p>
-          <p className="mt-1 text-2xl font-semibold tabular text-navy">{kpi.value}</p>
-          <p className="mt-2 flex items-center gap-1 text-xs font-medium text-green-700">
-            <TrendingUp className="size-3.5" aria-hidden="true" />
+        <div>
+          <dt className="text-sm text-muted-foreground">{kpi.label}</dt>
+          <dd className="mt-1 text-xl font-semibold tabular text-navy">{kpi.value}</dd>
+          <dd className="mt-2 flex items-center gap-1.5 text-sm font-medium text-green-800">
+            <TrendingUp className="size-4" aria-hidden="true" />
             {kpi.hint}
-          </p>
+          </dd>
         </div>
-      </div>
+      </dl>
     </section>
   );
 }

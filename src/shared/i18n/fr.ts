@@ -63,7 +63,7 @@ export const fr = {
   "status.confirmed": "Confirmé",
   "status.refused": "Refusé",
 
-  "dashboard.welcome": "Bonjour, {name} 👋",
+  "dashboard.welcome": "Bonjour, {name}",
   "dashboard.quickAccess": "Accès rapide",
   "dashboard.quickActions": "Actions rapides",
   "dashboard.upcoming": "À venir",

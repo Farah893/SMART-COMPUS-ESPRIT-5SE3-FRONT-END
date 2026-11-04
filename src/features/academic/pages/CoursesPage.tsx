@@ -3,7 +3,6 @@ import { BookOpen, Search } from "lucide-react";
 import { Card } from "@/shared/components/ui/card";
 import { Input } from "@/shared/components/ui/input";
 import { Select } from "@/shared/components/ui/select";
-import { Skeleton } from "@/shared/components/ui/skeleton";
 import { EmptyState } from "@/shared/components/common/EmptyState";
 import { QueryBoundary } from "@/shared/components/common/QueryBoundary";
 import { useAuth } from "@/shared/auth/AuthContext";
@@ -12,6 +11,7 @@ import { CourseCard } from "../components/CourseCard";
 import { useEnroll } from "../components/useEnroll";
 import { useCourses } from "../hooks";
 import { DEPARTMENTS } from "../mocks";
+import { CatalogList, CatalogListSkeleton } from "@/shared/components/common/CatalogRow";
 
 export default function CoursesPage() {
   const t = useT();
@@ -68,17 +68,7 @@ export default function CoursesPage() {
 
       {alert}
 
-      <QueryBoundary
-        query={query}
-        moduleName={t("module.academic")}
-        skeleton={
-          <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
-            {Array.from({ length: 6 }, (_, i) => (
-              <Skeleton key={i} className="h-56 rounded-xl" />
-            ))}
-          </div>
-        }
-      >
+      <QueryBoundary query={query} moduleName={t("module.academic")} skeleton={<CatalogListSkeleton count={6} />}>
         {(courses) =>
           courses.length === 0 ? (
             <Card>
@@ -89,7 +79,7 @@ export default function CoursesPage() {
               <p aria-live="polite" className="text-sm text-muted-foreground">
                 {t("academic.courses.count", { count: courses.length })}
               </p>
-              <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
+              <CatalogList>
                 {courses.map((c) => (
                   <CourseCard
                     key={c.id}
@@ -100,7 +90,7 @@ export default function CoursesPage() {
                     mine={c.teacherId === user.id}
                   />
                 ))}
-              </div>
+              </CatalogList>
             </>
           )
         }

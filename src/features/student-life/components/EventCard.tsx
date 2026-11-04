@@ -1,36 +1,30 @@
 import { Link } from "react-router-dom";
-import { Clock, MapPin } from "lucide-react";
-import { Card } from "@/shared/components/ui/card";
 import { useT } from "@/shared/i18n";
-import { formatDay } from "../utils/time";
 import type { CampusEvent } from "../types";
 
-/** Événement de l'agenda : date, horaire, lieu et club organisateur. */
+/** Événement de l'agenda : l'horaire en premier, puis l'intitulé, le lieu et le club organisateur. */
 export function EventCard({ event }: { event: CampusEvent }) {
   const t = useT();
   return (
-    <Card className="flex flex-col gap-2 p-5">
-      <p className="text-xs font-semibold tracking-wide text-muted-foreground">
-        {event.clubId ? (
-          <Link to={`/vie-etudiante/clubs/${event.clubId}`} className="rounded hover:underline">
-            {event.clubName}
-          </Link>
-        ) : (
-          t("life.events.campus")
-        )}
+    <li className="grid grid-cols-[6.5rem_minmax(0,1fr)] gap-x-6 py-4">
+      <p className="tabular text-sm font-semibold">
+        {event.start}–{event.end}
       </p>
-      <h3 className="text-base font-semibold leading-snug">{event.title}</h3>
-      {event.description && <p className="text-sm text-muted-foreground">{event.description}</p>}
-      <ul className="mt-1 space-y-1.5 text-sm text-muted-foreground">
-        <li className="flex items-center gap-2">
-          <Clock className="size-4 shrink-0" aria-hidden="true" />
-          <span className="capitalize">{formatDay(event.date)}</span> · {event.start}–{event.end}
-        </li>
-        <li className="flex items-center gap-2">
-          <MapPin className="size-4 shrink-0" aria-hidden="true" />
+      <div className="min-w-0">
+        <h3 className="text-base font-semibold leading-snug">{event.title}</h3>
+        <p className="mt-1 text-sm text-muted-foreground">
+          {event.clubId ? (
+            <Link to={`/vie-etudiante/clubs/${event.clubId}`} className="rounded underline-offset-4 hover:underline">
+              {event.clubName}
+            </Link>
+          ) : (
+            t("life.events.campus")
+          )}
+          {" · "}
           {event.location}
-        </li>
-      </ul>
-    </Card>
+        </p>
+        {event.description && <p className="mt-2 max-w-[62ch] text-sm">{event.description}</p>}
+      </div>
+    </li>
   );
 }

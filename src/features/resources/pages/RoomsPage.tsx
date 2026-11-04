@@ -4,7 +4,6 @@ import { Card } from "@/shared/components/ui/card";
 import { Dialog, DialogContent, DialogDescription, DialogTitle } from "@/shared/components/ui/dialog";
 import { Input } from "@/shared/components/ui/input";
 import { Select } from "@/shared/components/ui/select";
-import { Skeleton } from "@/shared/components/ui/skeleton";
 import { EmptyState } from "@/shared/components/common/EmptyState";
 import { QueryBoundary } from "@/shared/components/common/QueryBoundary";
 import { useT } from "@/shared/i18n";
@@ -15,6 +14,7 @@ import { useRooms } from "../hooks";
 import { BUILDINGS, CAPACITY_STEPS } from "../mocks";
 import { addDays, todayISO } from "../utils/time";
 import type { RoomView } from "../types";
+import { CatalogList, CatalogListSkeleton } from "@/shared/components/common/CatalogRow";
 
 export default function RoomsPage() {
   const t = useT();
@@ -82,17 +82,7 @@ export default function RoomsPage() {
         </div>
       </div>
 
-      <QueryBoundary
-        query={query}
-        moduleName={t("module.resources")}
-        skeleton={
-          <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
-            {Array.from({ length: 6 }, (_, i) => (
-              <Skeleton key={i} className="h-64 rounded-xl" />
-            ))}
-          </div>
-        }
-      >
+      <QueryBoundary query={query} moduleName={t("module.resources")} skeleton={<CatalogListSkeleton count={6} />}>
         {(rooms) =>
           rooms.length === 0 ? (
             <Card>
@@ -103,7 +93,7 @@ export default function RoomsPage() {
               <p aria-live="polite" className="text-sm text-muted-foreground">
                 {t("resources.rooms.count", { count: rooms.length })}
               </p>
-              <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
+              <CatalogList>
                 {rooms.map((r) => (
                   <RoomCard
                     key={r.id}
@@ -114,7 +104,7 @@ export default function RoomsPage() {
                     }}
                   />
                 ))}
-              </div>
+              </CatalogList>
             </>
           )
         }

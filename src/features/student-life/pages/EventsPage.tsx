@@ -2,7 +2,6 @@ import { useState } from "react";
 import { CalendarX } from "lucide-react";
 import { Card } from "@/shared/components/ui/card";
 import { Select } from "@/shared/components/ui/select";
-import { Skeleton } from "@/shared/components/ui/skeleton";
 import { EmptyState } from "@/shared/components/common/EmptyState";
 import { QueryBoundary } from "@/shared/components/common/QueryBoundary";
 import { useT } from "@/shared/i18n";
@@ -10,6 +9,7 @@ import { EventCard } from "../components/EventCard";
 import { useClubs, useEvents } from "../hooks";
 import { formatDay } from "../utils/time";
 import type { CampusEvent } from "../types";
+import { CatalogList, CatalogListSkeleton } from "@/shared/components/common/CatalogRow";
 
 const byDate = (events: CampusEvent[]) => {
   const groups = new Map<string, CampusEvent[]>();
@@ -40,17 +40,7 @@ export default function EventsPage() {
         </Select>
       </div>
 
-      <QueryBoundary
-        query={query}
-        moduleName={t("module.student-life")}
-        skeleton={
-          <div className="grid gap-4 md:grid-cols-2">
-            {Array.from({ length: 4 }, (_, i) => (
-              <Skeleton key={i} className="h-36 rounded-xl" />
-            ))}
-          </div>
-        }
-      >
+      <QueryBoundary query={query} moduleName={t("module.student-life")} skeleton={<CatalogListSkeleton count={4} />}>
         {(events) =>
           events.length === 0 ? (
             <Card>
@@ -66,11 +56,11 @@ export default function EventsPage() {
                   <h2 id={`day-${date}`} className="mb-2 border-b pb-2 text-sm font-semibold capitalize">
                     {formatDay(date)}
                   </h2>
-                  <div className="grid gap-4 md:grid-cols-2">
+                  <CatalogList>
                     {list.map((e) => (
                       <EventCard key={e.id} event={e} />
                     ))}
-                  </div>
+                  </CatalogList>
                 </section>
               ))}
             </div>

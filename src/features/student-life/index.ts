@@ -1,12 +1,12 @@
 import { lazy } from "react";
-import { Sparkles } from "lucide-react";
+import { Drama } from "lucide-react";
 import type { ModuleDef } from "@/shared/types/module";
 import "./i18n";
 
 export const studentLifeModule: ModuleDef = {
   id: "student-life",
   path: "/vie-etudiante",
-  icon: Sparkles,
+  icon: Drama,
   labelKey: "module.student-life",
   shortLabelKey: "module.student-life.short",
   roles: ["student", "teacher", "admin"],

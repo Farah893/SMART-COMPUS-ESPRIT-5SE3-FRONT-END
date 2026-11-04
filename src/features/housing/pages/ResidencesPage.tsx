@@ -1,6 +1,5 @@
 import { Building } from "lucide-react";
 import { Card } from "@/shared/components/ui/card";
-import { Skeleton } from "@/shared/components/ui/skeleton";
 import { EmptyState } from "@/shared/components/common/EmptyState";
 import { QueryBoundary } from "@/shared/components/common/QueryBoundary";
 import { useAuth } from "@/shared/auth/AuthContext";
@@ -8,23 +7,14 @@ import { useT } from "@/shared/i18n";
 import { OccupancyChart } from "../components/OccupancyChart";
 import { ResidenceCard } from "../components/ResidenceCard";
 import { useResidences } from "../hooks";
+import { CatalogList, CatalogListSkeleton } from "@/shared/components/common/CatalogRow";
 
 export default function ResidencesPage() {
   const t = useT();
   const { role } = useAuth();
   const query = useResidences();
   return (
-    <QueryBoundary
-      query={query}
-      moduleName={t("module.housing")}
-      skeleton={
-        <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
-          {Array.from({ length: 3 }, (_, i) => (
-            <Skeleton key={i} className="h-72 rounded-xl" />
-          ))}
-        </div>
-      }
-    >
+    <QueryBoundary query={query} moduleName={t("module.housing")} skeleton={<CatalogListSkeleton count={3} />}>
       {(residences) =>
         residences.length === 0 ? (
           <Card>
@@ -36,11 +26,11 @@ export default function ResidencesPage() {
             <p aria-live="polite" className="text-sm text-muted-foreground">
               {t("housing.residences.count", { count: residences.length })}
             </p>
-            <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
+            <CatalogList>
               {residences.map((r) => (
                 <ResidenceCard key={r.id} residence={r} canRequest={role === "student"} />
               ))}
-            </div>
+            </CatalogList>
           </div>
         )
       }
