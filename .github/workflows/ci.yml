@@ -1,0 +1,34 @@
+name: CI
+
+# À chaque push et chaque pull request : mêmes vérifications que celles lancées à la main avant de pousser.
+on:
+  push:
+  pull_request:
+
+# Le robot ne peut que lire le code (moindre privilège).
+permissions:
+  contents: read
+
+# Un nouveau push annule le run précédent de la même branche.
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      # Installation exacte selon package-lock.json (échoue si le lockfile est désynchronisé).
+      - run: npm ci
+      - run: npm run lint
+      - run: npm run typecheck
+      - run: npm test
+      # Build de production : sans VITE_USE_MOCKS, il parle au vrai service (jamais en mode démonstration).
+      - run: npm run build
+      # Dépendances de production : échec sur une vulnérabilité haute ou critique.
+      - run: npm audit --omit=dev --audit-level=high
