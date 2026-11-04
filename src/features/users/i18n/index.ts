@@ -43,6 +43,7 @@ registerMessages("fr", {
   "users.login.noAccount": "Pas encore de compte ?",
   "users.login.invalid": "Adresse e-mail ou mot de passe incorrect.",
   "users.login.inactive": "Ce compte est désactivé. Contactez un administrateur.",
+  "users.login.unverified": "Adresse e-mail non vérifiée. Saisissez le code reçu par e-mail pour activer votre compte.",
   "users.login.welcome": "Bienvenue, {name}",
   "users.login.demo": "Mode démo : se connecter en tant que",
   "users.login.demoHint": "Ou saisissez un compte fictif avec le mot de passe {password}",

@@ -45,8 +45,8 @@ export default function LoginPage() {
     }
     setErrors({});
     try {
-      const { user, token, refreshToken } = await mutate(v.data.email.trim().toLowerCase(), v.data.password);
-      openSession(user, token, refreshToken);
+      const { user, token } = await mutate(v.data.email.trim().toLowerCase(), v.data.password);
+      openSession(user, token);
       toast.success(t("users.login.welcome", { name: user.name }));
       navigate(user.mustChangePassword ? "/changer-mot-de-passe" : from, { replace: true });
     } catch (e) {
@@ -55,7 +55,9 @@ export default function LoginPage() {
       if (e.status === 423) setFailure({ kind: "locked", attempts: attempts ?? MAX_ATTEMPTS });
       else if (e.status === 401 && attempts) setFailure({ kind: "attempts", attempts });
       else if (e.status === 401) setFailure({ kind: "error", message: t("users.login.invalid") });
-      else if (e.status === 403) setFailure({ kind: "error", message: t("users.login.inactive") });
+      else if (e.status === 403 && (e.details as { code?: string } | undefined)?.code === "EMAIL_NOT_VERIFIED") {
+        setFailure({ kind: "error", message: t("users.login.unverified") });
+      } else if (e.status === 403) setFailure({ kind: "error", message: t("users.login.inactive") });
       else setFailure({ kind: "error", message: e.isUnavailable ? t("error.unavailable.title") : e.message });
     }
   }

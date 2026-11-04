@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useMemo, useState, type ReactNode } from "react";
-import { api, onSessionExpired, refreshStore, tokenStore, USE_MOCKS } from "@/shared/api/client";
+import { api, onSessionExpired, tokenStore, USE_MOCKS } from "@/shared/api/client";
 import { fakeJwt } from "@/shared/auth/jwt";
 import { DEMO_USERS, ROLES, type Role, type User } from "@/shared/auth/roles";
 import { AuthContext, type AuthValue } from "@/shared/auth/AuthContext";
@@ -36,7 +36,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   useEffect(() => {
     if (!session) {
       tokenStore.clear();
-      refreshStore.clear();
     } else if (USE_MOCKS) tokenStore.set(fakeJwt(session));
   }, [session]);
 
@@ -46,9 +45,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }, []);
 
   const login = useCallback(
-    (u: User, token?: string, refreshToken?: string) => {
-      if (token) tokenStore.set(token);
-      if (refreshToken) refreshStore.set(refreshToken);
+    (u: User, token?: string) => {
+      if (token) tokenStore.set(token); // mode mock uniquement : avec le vrai service, la session est dans des cookies httpOnly
       open(u);
     },
     [open],
@@ -66,10 +64,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }, []);
 
   const logout = useCallback(() => {
-    // Révoque la famille de jetons côté serveur (best effort : la déconnexion locale ne dépend pas de la réponse).
-    const refreshToken = refreshStore.get();
-    if (refreshToken && !USE_MOCKS) void api.post("/auth/logout", { body: { refreshToken }, mock: () => undefined }).catch(() => undefined);
-    refreshStore.clear();
+    // Révoque la session côté serveur et efface les cookies (best effort : la déconnexion locale ne dépend pas de la réponse).
+    if (!USE_MOCKS) void api.post("/auth/logout", { mock: () => undefined }).catch(() => undefined);
     setSession(null);
     writeSession(null);
   }, []);
@@ -78,7 +74,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   useEffect(
     () =>
       onSessionExpired(() => {
-        refreshStore.clear();
         setSession(null);
         writeSession(null);
       }),

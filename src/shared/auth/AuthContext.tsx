@@ -12,7 +12,7 @@ export interface AuthValue {
   role: Role;
   isAuthenticated: boolean;
   /** Ouvre une session (après POST /auth/login). */
-  login: (user: User, token?: string, refreshToken?: string) => void;
+  login: (user: User, token?: string) => void;
   /** Sélecteur de rôle de démo : ouvre une session avec l'utilisateur fictif du rôle. */
   setRole: (role: Role) => void;
   updateUser: (patch: Partial<Pick<User, "name" | "email" | "avatarUrl" | "mustChangePassword">>) => void;

@@ -1,4 +1,4 @@
-import { useRef, useState, type FormEvent } from "react";
+import { useEffect, useRef, useState, type FormEvent } from "react";
 import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import { toast } from "sonner";
 import { Button } from "@/shared/components/ui/button";
@@ -16,8 +16,11 @@ export default function ResetPasswordPage() {
   const t = useT();
   const navigate = useNavigate();
   const [params] = useSearchParams();
-  const token = params.get("token") ?? "";
-  const email = params.get("email") ?? "";
+  // Le jeton est lu une fois, puis retiré de la barre d'adresse (historique, captures d'écran, en-tête Referer).
+  const [{ token, email }] = useState(() => ({ token: params.get("token") ?? "", email: params.get("email") ?? "" }));
+  useEffect(() => {
+    if (window.location.search) window.history.replaceState(window.history.state, "", window.location.pathname);
+  }, []);
   const formRef = useRef<HTMLFormElement>(null);
   const [password, setPassword] = useState("");
   const [confirm, setConfirm] = useState("");

@@ -63,9 +63,8 @@ export interface ProfileInput {
 }
 
 export interface LoginResult {
-  token: string;
-  /** Fourni par le vrai user-service ; absent en mode mock. */
-  refreshToken?: string;
+  /** Mode mock uniquement : avec le vrai user-service, les jetons sont dans des cookies httpOnly (absents du corps). */
+  token?: string;
   user: { id: string; name: string; email: string; role: Role; avatarUrl?: string; mustChangePassword?: boolean };
 }
 

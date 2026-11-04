@@ -9,7 +9,8 @@ import { ApiError } from "./errors";
  *   feature remplace l'appel réseau, avec une latence simulée.
  */
 export const API_BASE_URL = import.meta.env.VITE_API_BASE_URL ?? "http://localhost:8080/api";
-export const USE_MOCKS = import.meta.env.VITE_USE_MOCKS !== "false";
+// Sans réglage explicite, un build de production parle au vrai service (jamais en mode démonstration avec changement de rôle).
+export const USE_MOCKS = import.meta.env.VITE_USE_MOCKS === undefined ? !import.meta.env.PROD : import.meta.env.VITE_USE_MOCKS !== "false";
 
 /**
  * Routes servies par un vrai microservice quand VITE_USE_MOCKS=false (préfixes séparés par des virgules).
@@ -22,7 +23,25 @@ const REAL_PREFIXES = (import.meta.env.VITE_REAL_API_PREFIXES ?? "/auth,/users,/
   .filter(Boolean);
 const isRealRoute = (path: string) => REAL_PREFIXES.some((p: string) => path === p || path.startsWith(`${p}/`) || path.startsWith(`${p}?`));
 
+/**
+ * Avec le vrai user-service, la session vit dans des cookies `httpOnly` posés par le serveur : le JavaScript de la page
+ * ne voit jamais les jetons (une faille XSS ne peut pas les voler). Le client envoie donc les cookies (`credentials`)
+ * et l'en-tête `X-Auth-Mode: cookie` (qui sert aussi de protection CSRF côté serveur).
+ * `tokenStore` ne sert plus qu'au mode mock (faux JWT de démonstration).
+ */
 const TOKEN_KEY = "smartcampus.jwt";
+const AUTH_MODE_HEADERS = { "X-Auth-Mode": "cookie" } as const;
+
+/** Nettoie les jetons laissés dans le navigateur par les versions précédentes (stockage lisible par le JS). */
+if (!USE_MOCKS) {
+  try {
+    localStorage.removeItem(TOKEN_KEY);
+    localStorage.removeItem("smartcampus.refresh");
+  } catch {
+    /* stockage indisponible */
+  }
+}
+
 export const tokenStore = {
   get: () => {
     try {
@@ -47,31 +66,6 @@ export const tokenStore = {
   },
 };
 
-const REFRESH_KEY = "smartcampus.refresh";
-export const refreshStore = {
-  get: () => {
-    try {
-      return localStorage.getItem(REFRESH_KEY);
-    } catch {
-      return null;
-    }
-  },
-  set: (t: string) => {
-    try {
-      localStorage.setItem(REFRESH_KEY, t);
-    } catch {
-      /* stockage indisponible */
-    }
-  },
-  clear: () => {
-    try {
-      localStorage.removeItem(REFRESH_KEY);
-    } catch {
-      /* stockage indisponible */
-    }
-  },
-};
-
 /** Appelé quand la session ne peut plus être renouvelée (jeton expiré/révoqué, compte désactivé). */
 const sessionExpiredListeners: Array<() => void> = [];
 export const onSessionExpired = (fn: () => void) => {
@@ -86,23 +80,17 @@ export const onSessionExpired = (fn: () => void) => {
 const NO_REFRESH = ["/auth/login", "/auth/register", "/auth/refresh", "/auth/logout", "/auth/verify-email"];
 
 let refreshing: Promise<boolean> | null = null;
-/** Renouvelle la paire de jetons (rotation). Une seule requête à la fois, partagée par les appels concurrents. */
+/** Renouvelle les cookies de session (rotation côté serveur). Une seule requête à la fois, partagée par les appels concurrents. */
 function refreshSession(): Promise<boolean> {
   refreshing ??= (async () => {
-    const refreshToken = refreshStore.get();
-    if (!refreshToken) return false;
     try {
       const res = await fetch(`${API_BASE_URL}/auth/refresh`, {
         method: "POST",
-        headers: { Accept: "application/json", "Content-Type": "application/json" },
-        body: JSON.stringify({ refreshToken }),
+        credentials: "include",
+        headers: { Accept: "application/json", "Content-Type": "application/json", ...AUTH_MODE_HEADERS },
+        body: "{}",
       });
-      if (!res.ok) return false;
-      const data = (await res.json()) as { token?: string; refreshToken?: string };
-      if (!data.token || !data.refreshToken) return false;
-      tokenStore.set(data.token);
-      refreshStore.set(data.refreshToken);
-      return true;
+      return res.ok;
     } catch {
       return false;
     }
@@ -160,7 +148,7 @@ async function request<T>(method: RequestConfig["method"], path: string, opts: C
     let config: RequestConfig = {
       method,
       url: `${API_BASE_URL}${path}`,
-      headers: { Accept: "application/json", ...(opts.body ? { "Content-Type": "application/json" } : {}) },
+      headers: { Accept: "application/json", ...AUTH_MODE_HEADERS, ...(opts.body ? { "Content-Type": "application/json" } : {}) },
       body: opts.body,
       signal: opts.signal,
     };
@@ -170,6 +158,7 @@ async function request<T>(method: RequestConfig["method"], path: string, opts: C
     try {
       res = await fetch(config.url, {
         method: config.method,
+        credentials: "include",
         headers: config.headers,
         body: config.body ? JSON.stringify(config.body) : undefined,
         signal: config.signal,
@@ -178,10 +167,9 @@ async function request<T>(method: RequestConfig["method"], path: string, opts: C
       if ((e as Error).name === "AbortError") throw e;
       throw new ApiError(0, "Impossible de joindre l'API Gateway");
     }
-    if (res.status === 401 && !retried && !NO_REFRESH.includes(path) && tokenStore.get()) {
+    if (res.status === 401 && !retried && !NO_REFRESH.includes(path)) {
       if (await refreshSession()) return await request<T>(method, path, opts, true);
       tokenStore.clear();
-      refreshStore.clear();
       sessionExpiredListeners.forEach((fn) => fn());
     }
     if (!res.ok) {
