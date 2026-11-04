@@ -47,6 +47,71 @@ export const tokenStore = {
   },
 };
 
+const REFRESH_KEY = "smartcampus.refresh";
+export const refreshStore = {
+  get: () => {
+    try {
+      return localStorage.getItem(REFRESH_KEY);
+    } catch {
+      return null;
+    }
+  },
+  set: (t: string) => {
+    try {
+      localStorage.setItem(REFRESH_KEY, t);
+    } catch {
+      /* stockage indisponible */
+    }
+  },
+  clear: () => {
+    try {
+      localStorage.removeItem(REFRESH_KEY);
+    } catch {
+      /* stockage indisponible */
+    }
+  },
+};
+
+/** Appelé quand la session ne peut plus être renouvelée (jeton expiré/révoqué, compte désactivé). */
+const sessionExpiredListeners: Array<() => void> = [];
+export const onSessionExpired = (fn: () => void) => {
+  sessionExpiredListeners.push(fn);
+  return () => {
+    const i = sessionExpiredListeners.indexOf(fn);
+    if (i >= 0) sessionExpiredListeners.splice(i, 1);
+  };
+};
+
+/** Routes d'authentification publiques : un 401 y signifie « identifiants invalides », pas « session expirée ». */
+const NO_REFRESH = ["/auth/login", "/auth/register", "/auth/refresh", "/auth/logout", "/auth/verify-email"];
+
+let refreshing: Promise<boolean> | null = null;
+/** Renouvelle la paire de jetons (rotation). Une seule requête à la fois, partagée par les appels concurrents. */
+function refreshSession(): Promise<boolean> {
+  refreshing ??= (async () => {
+    const refreshToken = refreshStore.get();
+    if (!refreshToken) return false;
+    try {
+      const res = await fetch(`${API_BASE_URL}/auth/refresh`, {
+        method: "POST",
+        headers: { Accept: "application/json", "Content-Type": "application/json" },
+        body: JSON.stringify({ refreshToken }),
+      });
+      if (!res.ok) return false;
+      const data = (await res.json()) as { token?: string; refreshToken?: string };
+      if (!data.token || !data.refreshToken) return false;
+      tokenStore.set(data.token);
+      refreshStore.set(data.refreshToken);
+      return true;
+    } catch {
+      return false;
+    }
+  })().finally(() => {
+    refreshing = null;
+  });
+  return refreshing;
+}
+
 export interface RequestConfig {
   method: "GET" | "POST" | "PUT" | "PATCH" | "DELETE";
   url: string;
@@ -83,7 +148,7 @@ export interface CallOptions<T> {
 
 const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
 
-async function request<T>(method: RequestConfig["method"], path: string, opts: CallOptions<T> = {}): Promise<T> {
+async function request<T>(method: RequestConfig["method"], path: string, opts: CallOptions<T> = {}, retried = false): Promise<T> {
   try {
     if (USE_MOCKS || (opts.mock && !isRealRoute(path))) {
       if (!opts.mock) throw new ApiError(404, `Aucun mock pour ${method} ${path}`);
@@ -112,6 +177,12 @@ async function request<T>(method: RequestConfig["method"], path: string, opts: C
     } catch (e) {
       if ((e as Error).name === "AbortError") throw e;
       throw new ApiError(0, "Impossible de joindre l'API Gateway");
+    }
+    if (res.status === 401 && !retried && !NO_REFRESH.includes(path) && tokenStore.get()) {
+      if (await refreshSession()) return await request<T>(method, path, opts, true);
+      tokenStore.clear();
+      refreshStore.clear();
+      sessionExpiredListeners.forEach((fn) => fn());
     }
     if (!res.ok) {
       const details = await res.json().catch(() => undefined);

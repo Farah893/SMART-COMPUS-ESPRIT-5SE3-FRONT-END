@@ -45,8 +45,8 @@ export default function LoginPage() {
     }
     setErrors({});
     try {
-      const { user, token } = await mutate(v.data.email.trim().toLowerCase(), v.data.password);
-      openSession(user, token);
+      const { user, token, refreshToken } = await mutate(v.data.email.trim().toLowerCase(), v.data.password);
+      openSession(user, token, refreshToken);
       toast.success(t("users.login.welcome", { name: user.name }));
       navigate(user.mustChangePassword ? "/changer-mot-de-passe" : from, { replace: true });
     } catch (e) {

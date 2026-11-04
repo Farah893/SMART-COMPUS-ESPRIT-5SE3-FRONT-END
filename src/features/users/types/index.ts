@@ -64,6 +64,8 @@ export interface ProfileInput {
 
 export interface LoginResult {
   token: string;
+  /** Fourni par le vrai user-service ; absent en mode mock. */
+  refreshToken?: string;
   user: { id: string; name: string; email: string; role: Role; avatarUrl?: string; mustChangePassword?: boolean };
 }
 

@@ -9,7 +9,7 @@ export function Logo() {
       <span className="flex size-9 items-center justify-center rounded-xl bg-navy text-white">
         <GraduationCap className="size-5" aria-hidden="true" />
       </span>
-      <span className="text-lg font-bold tracking-tight text-navy">{t("app.name")}</span>
+      <span className="font-display text-lg font-semibold text-navy sm:text-xl">{t("app.name")}</span>
     </Link>
   );
 }

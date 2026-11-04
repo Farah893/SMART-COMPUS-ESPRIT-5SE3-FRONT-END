@@ -7,7 +7,10 @@ export default {
   theme: {
     container: { center: true, padding: "1rem" },
     extend: {
-      fontFamily: { sans: ["Inter Variable", "Inter", "system-ui", "sans-serif"] },
+      fontFamily: {
+        sans: ['"Public Sans Variable"', "system-ui", "sans-serif"],
+        display: ['"Source Serif 4 Variable"', "Georgia", "serif"],
+      },
       colors: {
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",

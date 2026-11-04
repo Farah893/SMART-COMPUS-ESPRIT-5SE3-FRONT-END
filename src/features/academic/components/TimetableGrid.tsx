@@ -4,9 +4,9 @@ import { cn } from "@/lib/utils";
 import { DAY_LABELS, type Day, type SessionKind, type TimetableEntry } from "../types";
 
 const KIND_STYLE: Record<SessionKind, string> = {
-  CM: "border-l-navy bg-blue-50",
-  TD: "border-l-amber-brand bg-amber-50",
-  TP: "border-l-success bg-green-50",
+  CM: "border-navy/30 bg-blue-50",
+  TD: "border-amber-400/60 bg-amber-50",
+  TP: "border-green-600/30 bg-green-50",
 };
 
 const DAYS: Day[] = [1, 2, 3, 4, 5, 6];
@@ -28,7 +28,7 @@ export function TimetableGrid({ entries }: { entries: TimetableEntry[] }) {
             ) : (
               <ul className="space-y-2">
                 {list.map((e) => (
-                  <li key={e.id} className={cn("rounded-lg border border-l-4 p-3 text-sm", KIND_STYLE[e.kind])}>
+                  <li key={e.id} className={cn("rounded-lg border p-3 text-sm", KIND_STYLE[e.kind])}>
                     <p className="font-semibold">
                       <time>{e.start}</time>–<time>{e.end}</time>
                     </p>

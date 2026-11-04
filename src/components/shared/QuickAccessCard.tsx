@@ -15,16 +15,11 @@ export function QuickAccessCard({ to, title, description, icon: Icon, tone }: Qu
   return (
     <Link
       to={to}
-      className={cn(
-        "group flex flex-col gap-3 rounded-xl border bg-card p-5 shadow-card transition-all hover:-translate-y-0.5 hover:shadow-md",
-        TONES[tone].ring,
-      )}
+      className={cn("group flex items-start gap-3 rounded-lg border bg-card p-4 transition-colors hover:bg-secondary", TONES[tone].ring)}
     >
-      <span className={cn("flex size-12 items-center justify-center rounded-xl", TONES[tone].icon)}>
-        <Icon className="size-6" aria-hidden="true" />
-      </span>
+      <Icon className="mt-0.5 size-5 shrink-0 text-primary" aria-hidden="true" />
       <span>
-        <span className="block font-semibold">{title}</span>
+        <span className="block font-medium underline-offset-4 group-hover:underline">{title}</span>
         {description && <span className="mt-0.5 block text-sm text-muted-foreground">{description}</span>}
       </span>
     </Link>

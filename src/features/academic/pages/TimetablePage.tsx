@@ -9,9 +9,9 @@ import { TimetableGrid } from "../components/TimetableGrid";
 import { useTimetable } from "../hooks";
 
 const LEGEND = [
-  { kind: "CM", cls: "bg-blue-50 border-l-navy" },
-  { kind: "TD", cls: "bg-amber-50 border-l-amber-brand" },
-  { kind: "TP", cls: "bg-green-50 border-l-success" },
+  { kind: "CM", cls: "bg-blue-50 border-navy/30" },
+  { kind: "TD", cls: "bg-amber-50 border-amber-400/60" },
+  { kind: "TP", cls: "bg-green-50 border-green-600/30" },
 ] as const;
 
 export default function TimetablePage() {
@@ -25,7 +25,7 @@ export default function TimetablePage() {
         <ul className="flex gap-3 text-xs" aria-label={t("academic.timetable.legend")}>
           {LEGEND.map((l) => (
             <li key={l.kind} className="flex items-center gap-1.5">
-              <span aria-hidden="true" className={`size-3 rounded-sm border border-l-4 ${l.cls}`} />
+              <span aria-hidden="true" className={`size-3 rounded-sm border ${l.cls}`} />
               {t(`academic.kind.${l.kind}`)}
             </li>
           ))}

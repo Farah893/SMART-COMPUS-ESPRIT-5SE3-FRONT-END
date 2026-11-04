@@ -43,3 +43,5 @@ $RECYCLE.BIN/
 *.temp
 *.bak
 *.local
+# Playwright CLI output (may contain credentials)
+.playwright-cli/

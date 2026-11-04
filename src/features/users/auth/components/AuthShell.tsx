@@ -23,7 +23,7 @@ export function AuthShell({ title, description, children, footer }: AuthShellPro
   const t = useT();
   return (
     <div className="min-h-screen lg:grid lg:grid-cols-[minmax(0,5fr)_minmax(0,6fr)]">
-      <aside className="hidden flex-col justify-between bg-gradient-to-br from-navy via-blue-800 to-blue-700 p-10 text-white lg:flex xl:p-14">
+      <aside className="hidden flex-col justify-between bg-navy p-10 text-white lg:flex xl:p-14">
         <Link to="/" className="flex w-fit items-center gap-2.5 rounded-lg" aria-label={`${t("app.name")} — ${t("nav.home")}`}>
           <span className="flex size-9 items-center justify-center rounded-xl bg-white text-navy">
             <GraduationCap className="size-5" aria-hidden="true" />
@@ -31,19 +31,13 @@ export function AuthShell({ title, description, children, footer }: AuthShellPro
           <span className="text-lg font-bold tracking-tight">{t("app.name")}</span>
         </Link>
         <div>
-          <p className="max-w-sm text-3xl font-bold leading-tight tracking-tight">{t("users.shell.headline")}</p>
-          <ul className="mt-8 space-y-3">
-            {HIGHLIGHTS.map(({ icon: Icon, title, text }, i) => (
-              <li
-                key={title}
-                style={{ animationDelay: `${i * 90}ms` }}
-                className="animate-enter-card flex items-start gap-4 rounded-xl border border-white/20 bg-white/10 p-4"
-              >
-                <span className="flex size-10 shrink-0 items-center justify-center rounded-lg bg-white text-navy">
-                  <Icon className="size-5" aria-hidden="true" />
-                </span>
+          <p className="max-w-sm font-display text-4xl font-semibold leading-tight">{t("users.shell.headline")}</p>
+          <ul className="mt-10 divide-y divide-white/15 border-y border-white/15">
+            {HIGHLIGHTS.map(({ icon: Icon, title, text }) => (
+              <li key={title} className="flex items-start gap-4 py-4">
+                <Icon className="mt-0.5 size-5 shrink-0 text-amber-brand" aria-hidden="true" />
                 <span>
-                  <span className="block font-semibold">{t(title)}</span>
+                  <span className="block font-medium">{t(title)}</span>
                   <span className="block text-sm text-blue-100">{t(text)}</span>
                 </span>
               </li>
@@ -58,7 +52,7 @@ export function AuthShell({ title, description, children, footer }: AuthShellPro
           <Logo />
         </div>
         <main id="contenu" className="w-full max-w-md">
-          <h1 className="text-2xl font-bold tracking-tight">{title}</h1>
+          <h1 className="text-3xl">{title}</h1>
           {description && <p className="mt-1 text-sm text-muted-foreground">{description}</p>}
           <div className="mt-6">{children}</div>
           {footer && <div className="mt-6">{footer}</div>}

@@ -1,5 +1,5 @@
 import { createContext, useCallback, useContext, useEffect, useMemo, useState, type ReactNode } from "react";
-import { tokenStore, USE_MOCKS } from "@/api/client";
+import { api, onSessionExpired, refreshStore, tokenStore, USE_MOCKS } from "@/api/client";
 import { fakeJwt } from "@/auth/jwt";
 import { DEMO_USERS, ROLES, type Role, type User } from "@/auth/roles";
 import { storedAvatar } from "../mocks";
@@ -10,7 +10,7 @@ interface AuthValue {
   role: Role;
   isAuthenticated: boolean;
   /** Ouvre une session (après POST /auth/login). */
-  login: (user: User, token?: string) => void;
+  login: (user: User, token?: string, refreshToken?: string) => void;
   /** Sélecteur de rôle de démo : ouvre une session avec l'utilisateur fictif du rôle. */
   setRole: (role: Role) => void;
   updateUser: (patch: Partial<Pick<User, "name" | "email" | "avatarUrl" | "mustChangePassword">>) => void;
@@ -47,7 +47,10 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   // Garde le JWT envoyé par l'intercepteur synchronisé avec la session.
   // Avec le vrai back-end, le jeton signé reçu à la connexion ne doit jamais être remplacé par un faux.
   useEffect(() => {
-    if (!session) tokenStore.clear();
+    if (!session) {
+      tokenStore.clear();
+      refreshStore.clear();
+    }
     else if (USE_MOCKS) tokenStore.set(fakeJwt(session));
   }, [session]);
 
@@ -56,8 +59,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     writeSession(u);
   }, []);
 
-  const login = useCallback((u: User, token?: string) => {
+  const login = useCallback((u: User, token?: string, refreshToken?: string) => {
     if (token) tokenStore.set(token);
+    if (refreshToken) refreshStore.set(refreshToken);
     open(u);
   }, [open]);
 
@@ -73,9 +77,24 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }, []);
 
   const logout = useCallback(() => {
+    // Révoque la famille de jetons côté serveur (best effort : la déconnexion locale ne dépend pas de la réponse).
+    const refreshToken = refreshStore.get();
+    if (refreshToken && !USE_MOCKS) void api.post("/auth/logout", { body: { refreshToken }, mock: () => undefined }).catch(() => undefined);
+    refreshStore.clear();
     setSession(null);
     writeSession(null);
   }, []);
+
+  // Session non renouvelable (401 après tentative de refresh) : on déconnecte vraiment l'interface.
+  useEffect(
+    () =>
+      onSessionExpired(() => {
+        refreshStore.clear();
+        setSession(null);
+        writeSession(null);
+      }),
+    [],
+  );
 
   const value = useMemo(
     () => ({ user, role: user.role, isAuthenticated: session !== null, login, setRole, updateUser, logout }),
