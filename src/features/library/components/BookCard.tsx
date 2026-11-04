@@ -33,7 +33,9 @@ export function BookCard({ book, busy, onBorrow, onReserve, onCancel }: BookCard
         </h3>
         <p className="text-sm text-muted-foreground">{t("lib.book.by", { author: book.author })}</p>
       </div>
-      {book.available === 0 && book.waiting > 0 && <p className="text-xs text-muted-foreground">{t("lib.avail.queue", { count: book.waiting })}</p>}
+      {book.available === 0 && book.waiting > 0 && (
+        <p className="text-xs text-muted-foreground">{t("lib.avail.queue", { count: book.waiting })}</p>
+      )}
       <div className="mt-auto flex flex-wrap items-center gap-2">
         <Button variant="outline" size="sm" asChild>
           <Link to={`/bibliotheque/livres/${book.id}`} aria-label={`${t("lib.book.details")} — ${book.title}`}>

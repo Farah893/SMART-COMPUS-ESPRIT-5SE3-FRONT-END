@@ -20,22 +20,22 @@ resources/
 
 ## Pages (front)
 
-| Route | Accès | Écran |
-|---|---|---|
-| `/ressources` | enseignant, admin | Salles : recherche, bâtiment, capacité, disponibilités |
-| `/ressources/mes-reservations` | enseignant, admin | Mes réservations et suivi de statut |
-| `/ressources/reserver?salle=` | enseignant, admin | Formulaire de demande avec détection de conflit |
-| `/ressources/validations` | admin | File de validation (confirmer / refuser) |
+| Route                          | Accès             | Écran                                                  |
+| ------------------------------ | ----------------- | ------------------------------------------------------ |
+| `/ressources`                  | enseignant, admin | Salles : recherche, bâtiment, capacité, disponibilités |
+| `/ressources/mes-reservations` | enseignant, admin | Mes réservations et suivi de statut                    |
+| `/ressources/reserver?salle=`  | enseignant, admin | Formulaire de demande avec détection de conflit        |
+| `/ressources/validations`      | admin             | File de validation (confirmer / refuser)               |
 
 ## Routes de l'API
 
-| Route | Qui | Corps → Réponse | Erreurs |
-|---|---|---|---|
-| `GET /rooms?q=&building=&minCapacity=` | enseignant, admin | `RoomView[]` (avec heures occupées aujourd'hui) | 403 étudiant |
-| `GET /rooms/{id}/availability?date=` | enseignant, admin | `{roomId, date, slots[{start,end,status}]}` (sans données personnelles) | 404 |
-| `GET /reservations?scope=mine\|all` | enseignant, admin (`all` : admin) | `Reservation[]` | 403 |
-| `POST /reservations` | enseignant, admin | `{roomId,date,start,end,attendees,purpose}` → `Reservation` | 409 `ROOM_CONFLICT` (liste `conflicts`) · 422 passé, hors 08:00–19:00, capacité dépassée |
-| `PUT /reservations/{id}/status` | admin | `{status: confirmed\|refused}` | 403 · 404 · 409 conflit ou déjà traitée |
+| Route                                  | Qui                               | Corps → Réponse                                                         | Erreurs                                                                                  |
+| -------------------------------------- | --------------------------------- | ----------------------------------------------------------------------- | ---------------------------------------------------------------------------------------- |
+| `GET /rooms?q=&building=&minCapacity=` | enseignant, admin                 | `RoomView[]` (avec heures occupées aujourd'hui)                         | 403 étudiant                                                                             |
+| `GET /rooms/{id}/availability?date=`   | enseignant, admin                 | `{roomId, date, slots[{start,end,status}]}` (sans données personnelles) | 404                                                                                      |
+| `GET /reservations?scope=mine\|all`    | enseignant, admin (`all` : admin) | `Reservation[]`                                                         | 403                                                                                      |
+| `POST /reservations`                   | enseignant, admin                 | `{roomId,date,start,end,attendees,purpose}` → `Reservation`             | 409 `ROOM_CONFLICT` (liste `conflicts`) · 422 passé, hors 08:00–19:00, capacité dépassée |
+| `PUT /reservations/{id}/status`        | admin                             | `{status: confirmed\|refused}`                                          | 403 · 404 · 409 conflit ou déjà traitée                                                  |
 
 ## Événements de domaine publiés
 

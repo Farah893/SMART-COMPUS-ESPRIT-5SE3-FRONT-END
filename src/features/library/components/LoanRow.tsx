@@ -15,7 +15,11 @@ const STATUS_STYLE: Record<LoanStatus, string> = {
 
 export function LoanStatusBadge({ status }: { status: LoanStatus }) {
   const t = useT();
-  return <span className={cn("inline-flex items-center rounded-full border px-2.5 py-0.5 text-xs font-semibold", STATUS_STYLE[status])}>{t(`lib.loan.status.${status}`)}</span>;
+  return (
+    <span className={cn("inline-flex items-center rounded-full border px-2.5 py-0.5 text-xs font-semibold", STATUS_STYLE[status])}>
+      {t(`lib.loan.status.${status}`)}
+    </span>
+  );
 }
 
 interface LoanRowProps {
@@ -28,9 +32,16 @@ interface LoanRowProps {
 export function LoanRow({ loan, busy, onRenew }: LoanRowProps) {
   const t = useT();
   const left = diffDays(todayISO(), loan.dueDate);
-  const dueText = loan.status === "returned"
-    ? loan.daysLate > 0 ? t("lib.loan.lateReturned", { count: loan.daysLate }) : t("lib.loan.returned", { date: formatDay(loan.returnedAt!) })
-    : loan.status === "overdue" ? t("lib.loan.late", { count: loan.daysLate }) : left === 0 ? t("lib.loan.dueToday") : t("lib.loan.dueIn", { count: left });
+  const dueText =
+    loan.status === "returned"
+      ? loan.daysLate > 0
+        ? t("lib.loan.lateReturned", { count: loan.daysLate })
+        : t("lib.loan.returned", { date: formatDay(loan.returnedAt!) })
+      : loan.status === "overdue"
+        ? t("lib.loan.late", { count: loan.daysLate })
+        : left === 0
+          ? t("lib.loan.dueToday")
+          : t("lib.loan.dueIn", { count: left });
   const canRenew = onRenew && loan.status !== "returned";
 
   return (
@@ -48,13 +59,21 @@ export function LoanRow({ loan, busy, onRenew }: LoanRowProps) {
         </p>
         <p className={cn("text-sm font-medium", loan.status === "overdue" ? "text-red-700" : "text-slate-700")}>
           {dueText}
-          {loan.renewals > 0 && <span className="font-normal text-muted-foreground"> · {t("lib.loan.renewals", { count: loan.renewals })}</span>}
+          {loan.renewals > 0 && (
+            <span className="font-normal text-muted-foreground"> · {t("lib.loan.renewals", { count: loan.renewals })}</span>
+          )}
         </p>
       </div>
       <div className="flex items-center gap-2">
         <LoanStatusBadge status={loan.status} />
         {canRenew && (
-          <Button variant="outline" size="sm" disabled={busy || loan.renewals >= MAX_RENEWALS} onClick={() => onRenew(loan)} aria-label={`${t("lib.loan.renew")} — ${loan.bookTitle}`}>
+          <Button
+            variant="outline"
+            size="sm"
+            disabled={busy || loan.renewals >= MAX_RENEWALS}
+            onClick={() => onRenew(loan)}
+            aria-label={`${t("lib.loan.renew")} — ${loan.bookTitle}`}
+          >
             <RefreshCw aria-hidden="true" />
             {t("lib.loan.renew")}
           </Button>

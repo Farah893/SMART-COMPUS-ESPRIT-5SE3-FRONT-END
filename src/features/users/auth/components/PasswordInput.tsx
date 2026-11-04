@@ -24,7 +24,20 @@ interface PasswordInputProps {
  * Champ mot de passe : afficher/masquer, avertissement Verr. Maj, jauge de robustesse optionnelle.
  * Le collage reste autorisé (gestionnaires de mots de passe).
  */
-export function PasswordInput({ id, label, value, onChange, autoComplete, error, hint, disabled, required = true, showStrength, autoFocus, name }: PasswordInputProps) {
+export function PasswordInput({
+  id,
+  label,
+  value,
+  onChange,
+  autoComplete,
+  error,
+  hint,
+  disabled,
+  required = true,
+  showStrength,
+  autoFocus,
+  name,
+}: PasswordInputProps) {
   const t = useT();
   const [visible, setVisible] = useState(false);
   const [capsLock, setCapsLock] = useState(false);

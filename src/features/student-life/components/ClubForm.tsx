@@ -22,7 +22,13 @@ export function ClubForm({ onCreated, onCancel }: { onCreated: (club: Club) => v
   const viewer = useViewer();
   const formRef = useRef<HTMLFormElement>(null);
   const { mutate, isPending } = useMutation(createClub);
-  const [values, setValues] = useState({ name: "", category: "" as ClubCategory | "", description: "", meetingPlace: "", maxMembers: "30" });
+  const [values, setValues] = useState({
+    name: "",
+    category: "" as ClubCategory | "",
+    description: "",
+    meetingPlace: "",
+    maxMembers: "30",
+  });
   const [errors, setErrors] = useState<Errors>({});
   const [conflict, setConflict] = useState<string>();
   const [serviceError, setServiceError] = useState<string>();
@@ -66,11 +72,24 @@ export function ClubForm({ onCreated, onCancel }: { onCreated: (club: Club) => v
       {conflict && <ConflictAlert title={t("life.form.club.conflictTitle")} description={conflict} />}
 
       <Field id={id("name")} label={t("life.form.name")} error={errors.name}>
-        <Input id={id("name")} maxLength={70} value={values.name} onChange={(e) => set("name", e.target.value)} className={bad("name")} {...fieldA11y(id("name"), errors.name)} />
+        <Input
+          id={id("name")}
+          maxLength={70}
+          value={values.name}
+          onChange={(e) => set("name", e.target.value)}
+          className={bad("name")}
+          {...fieldA11y(id("name"), errors.name)}
+        />
       </Field>
       <div className="grid gap-4 sm:grid-cols-2">
         <Field id={id("category")} label={t("life.form.category")} error={errors.category}>
-          <Select id={id("category")} value={values.category} onChange={(e) => set("category", e.target.value as ClubCategory)} className={bad("category")} {...fieldA11y(id("category"), errors.category)}>
+          <Select
+            id={id("category")}
+            value={values.category}
+            onChange={(e) => set("category", e.target.value as ClubCategory)}
+            className={bad("category")}
+            {...fieldA11y(id("category"), errors.category)}
+          >
             <option value="">{t("life.form.categoryPlaceholder")}</option>
             {CATEGORIES.map((c) => (
               <option key={c} value={c}>
@@ -80,11 +99,28 @@ export function ClubForm({ onCreated, onCancel }: { onCreated: (club: Club) => v
           </Select>
         </Field>
         <Field id={id("maxMembers")} label={t("life.form.maxMembers")} error={errors.maxMembers}>
-          <Input id={id("maxMembers")} type="number" inputMode="numeric" min={5} max={500} value={values.maxMembers} onChange={(e) => set("maxMembers", e.target.value)} className={bad("maxMembers")} {...fieldA11y(id("maxMembers"), errors.maxMembers)} />
+          <Input
+            id={id("maxMembers")}
+            type="number"
+            inputMode="numeric"
+            min={5}
+            max={500}
+            value={values.maxMembers}
+            onChange={(e) => set("maxMembers", e.target.value)}
+            className={bad("maxMembers")}
+            {...fieldA11y(id("maxMembers"), errors.maxMembers)}
+          />
         </Field>
       </div>
       <Field id={id("meetingPlace")} label={t("life.form.place")} error={errors.meetingPlace}>
-        <Input id={id("meetingPlace")} maxLength={70} value={values.meetingPlace} onChange={(e) => set("meetingPlace", e.target.value)} className={bad("meetingPlace")} {...fieldA11y(id("meetingPlace"), errors.meetingPlace)} />
+        <Input
+          id={id("meetingPlace")}
+          maxLength={70}
+          value={values.meetingPlace}
+          onChange={(e) => set("meetingPlace", e.target.value)}
+          className={bad("meetingPlace")}
+          {...fieldA11y(id("meetingPlace"), errors.meetingPlace)}
+        />
       </Field>
       <Field id={id("description")} label={t("life.form.about")} error={errors.description} hint={t("life.form.aboutHint")}>
         <textarea

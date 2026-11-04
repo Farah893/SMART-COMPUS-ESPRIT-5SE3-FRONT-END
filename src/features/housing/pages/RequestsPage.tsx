@@ -23,7 +23,9 @@ import type { HousingRequest, RequestStatus } from "../types";
 
 type Conflict = { message: string; conflicts: string[] };
 const conflictOf = (e: unknown): Conflict | undefined =>
-  isApiError(e) && e.isConflict ? { message: e.message, conflicts: (e.details as { conflicts?: string[] } | undefined)?.conflicts ?? [] } : undefined;
+  isApiError(e) && e.isConflict
+    ? { message: e.message, conflicts: (e.details as { conflicts?: string[] } | undefined)?.conflicts ?? [] }
+    : undefined;
 
 /** Administrateur : file des demandes d'hébergement, affectation d'une chambre (ChambreAffectée) ou refus. */
 export default function RequestsPage() {
@@ -91,7 +93,12 @@ export default function RequestsPage() {
 
   const columns = useMemo<Column<HousingRequest>[]>(
     () => [
-      { key: "student", header: t("housing.col.student"), sortValue: (r) => r.studentName, cell: (r) => <span className="font-medium">{r.studentName}</span> },
+      {
+        key: "student",
+        header: t("housing.col.student"),
+        sortValue: (r) => r.studentName,
+        cell: (r) => <span className="font-medium">{r.studentName}</span>,
+      },
       {
         key: "request",
         header: t("housing.col.request"),
@@ -103,7 +110,9 @@ export default function RequestsPage() {
               {t(`housing.roomType.${r.roomType}`)}
               {r.accessibility && ` · ${t("housing.requests.accessibility")}`}
             </p>
-            {r.status === "pending" && fullIds.has(r.residenceId) && <p className="mt-0.5 text-xs font-semibold text-red-800">{t("housing.requests.fullBadge")}</p>}
+            {r.status === "pending" && fullIds.has(r.residenceId) && (
+              <p className="mt-0.5 text-xs font-semibold text-red-800">{t("housing.requests.fullBadge")}</p>
+            )}
           </div>
         ),
       },
@@ -116,10 +125,24 @@ export default function RequestsPage() {
         cell: (r) =>
           r.status === "pending" ? (
             <div className="flex gap-1">
-              <Button variant="ghost" size="icon" aria-label={`${t("housing.requests.assign")} — ${r.studentName}`} title={t("housing.requests.assign")} className="text-green-800 hover:bg-green-50" onClick={() => openAssign(r)}>
+              <Button
+                variant="ghost"
+                size="icon"
+                aria-label={`${t("housing.requests.assign")} — ${r.studentName}`}
+                title={t("housing.requests.assign")}
+                className="text-green-800 hover:bg-green-50"
+                onClick={() => openAssign(r)}
+              >
                 <BedDouble aria-hidden="true" />
               </Button>
-              <Button variant="ghost" size="icon" aria-label={`${t("housing.requests.refuse")} — ${r.studentName}`} title={t("housing.requests.refuse")} className="text-red-700 hover:bg-red-50" onClick={() => setRefusing(r)}>
+              <Button
+                variant="ghost"
+                size="icon"
+                aria-label={`${t("housing.requests.refuse")} — ${r.studentName}`}
+                title={t("housing.requests.refuse")}
+                className="text-red-700 hover:bg-red-50"
+                onClick={() => setRefusing(r)}
+              >
                 <X aria-hidden="true" />
               </Button>
             </div>
@@ -176,7 +199,13 @@ export default function RequestsPage() {
                   <EmptyState icon={ClipboardList} title={t("housing.requests.empty")} />
                 </Card>
               ) : (
-                <DataTable caption={t("housing.requests.caption")} columns={columns} data={rows} rowKey={(r) => r.id} emptyTitle={t("housing.requests.noMatch")} />
+                <DataTable
+                  caption={t("housing.requests.caption")}
+                  columns={columns}
+                  data={rows}
+                  rowKey={(r) => r.id}
+                  emptyTitle={t("housing.requests.noMatch")}
+                />
               )}
             </>
           );
@@ -188,7 +217,12 @@ export default function RequestsPage() {
           {assigning && (
             <>
               <DialogTitle>{t("housing.assign.title", { name: assigning.studentName })}</DialogTitle>
-              <DialogDescription>{t("housing.assign.description", { type: t(`housing.roomType.${assigning.roomType}`).toLowerCase(), residence: assigning.residenceName })}</DialogDescription>
+              <DialogDescription>
+                {t("housing.assign.description", {
+                  type: t(`housing.roomType.${assigning.roomType}`).toLowerCase(),
+                  residence: assigning.residenceName,
+                })}
+              </DialogDescription>
               <div className="space-y-1.5">
                 <label htmlFor="assign-residence" className="text-sm font-medium">
                   {t("housing.assign.residence")}

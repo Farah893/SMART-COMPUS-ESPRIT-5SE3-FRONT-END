@@ -66,7 +66,14 @@ export function AvatarUploader({ account, onChanged }: { account: UserAccount; o
           {src ? t("users.avatar.change") : t("users.avatar.add")}
         </Button>
         {src && (
-          <Button type="button" variant="ghost" size="sm" disabled={busy} className="text-red-700 hover:bg-red-50" onClick={() => void save(null)}>
+          <Button
+            type="button"
+            variant="ghost"
+            size="sm"
+            disabled={busy}
+            className="text-red-700 hover:bg-red-50"
+            onClick={() => void save(null)}
+          >
             <Trash2 aria-hidden="true" />
             {t("users.avatar.remove")}
           </Button>

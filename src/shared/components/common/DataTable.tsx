@@ -67,7 +67,11 @@ export function DataTable<T>({ columns, data, rowKey, caption, loading, pageSize
                     className={cn("px-4 py-3 font-semibold text-muted-foreground", c.className)}
                   >
                     {c.sortValue ? (
-                      <button type="button" onClick={() => toggleSort(c.key)} className="inline-flex items-center gap-1 rounded hover:text-foreground">
+                      <button
+                        type="button"
+                        onClick={() => toggleSort(c.key)}
+                        className="inline-flex items-center gap-1 rounded hover:text-foreground"
+                      >
                         {c.header}
                         {sorted === "asc" ? (
                           <ArrowUp className="size-3.5" aria-hidden="true" />

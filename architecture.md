@@ -1,6 +1,7 @@
 # SmartCampus — Architecture frontend et plan des 6 modules
 
 ## 1. Principes
+
 1. **Monolithe modulaire par fonctionnalités** (_feature-based modulith_) : une seule application React, découpée en **6 modules métier** autonomes, un par micro-service du back-end.
 2. **Dépendances à sens unique : `app → pages → features → shared`.** Une couche n'importe que celles qui sont à sa droite. **Une feature ne dépend jamais d'une autre feature** : le code commun descend dans `shared`.
 3. **Séparation des responsabilités** : UI (`components/`, `pages/`), logique d'usage (`hooks/`), accès aux données (`api/` + `mocks/`), état global (session et registre des modules, exposés par `shared` et fournis par `app`).
@@ -11,6 +12,7 @@
 8. **Qualité automatisée** : TypeScript strict, ESLint (accessibilité, hooks, **frontières de couches**), Prettier, tests unitaires/composants (Vitest), test d'architecture, tests de bout en bout (Playwright). `npm run check` enchaîne le tout.
 
 ## 2. Structure globale
+
 ```
 src/
 ├─ app/            Assemblage : seule couche qui connaît tous les modules
@@ -33,9 +35,11 @@ src/
 └─ main.tsx        Point d'entrée
 e2e/               Tests Playwright (desktop + téléphone)
 ```
+
 Le détail fichier par fichier est dans `FICHIERS.md`.
 
 ## 3. Gabarit d'un module (identique pour les 6)
+
 ```
 features/<module>/
 ├─ index.ts        API publique : ModuleDef (id, path, icône, rôles, Page lazy)
@@ -47,22 +51,24 @@ features/<module>/
 ├─ components/     composants propres au module
 └─ pages/          <Module>Module.tsx (sous-routes, onglets) + une page par écran
 ```
+
 Règles : une page ne contient que de la composition (données via hooks, UI via composants) ; chaque page gère les états **chargement (skeleton) / vide (EmptyState) / erreur (503 → ServiceUnavailableView, 403, 409)** ; les événements de domaine s'affichent en toast. Un dossier vide ou inutile n'est pas créé.
 
 **Frontières appliquées automatiquement** : `eslint.config.js` (règle `no-restricted-imports` par couche et par module) et `src/test/architecture.test.ts` (lit tous les imports, alias et relatifs). Une violation fait échouer `npm run check`.
 
 ## 4. Ordre de construction et contenu des modules
 
-| # | Module | Rôles | Statut |
-|---|---|---|---|
-| 1 | **Utilisateurs** `/utilisateurs` | admin (+ profil pour tous) | Fait |
-| 2 | **Académique** `/academique` | student, teacher, admin | Fait |
-| 3 | **Ressources** `/ressources` | teacher, admin | Fait |
-| 4 | **Résidences** `/residences` | student, admin | Fait |
-| 5 | **Vie étudiante & clubs** `/vie-etudiante` | student, teacher, admin | Fait |
-| 6 | **Bibliothèque** `/bibliotheque` | student, teacher, admin | Fait |
+| #   | Module                                     | Rôles                      | Statut |
+| --- | ------------------------------------------ | -------------------------- | ------ |
+| 1   | **Utilisateurs** `/utilisateurs`           | admin (+ profil pour tous) | Fait   |
+| 2   | **Académique** `/academique`               | student, teacher, admin    | Fait   |
+| 3   | **Ressources** `/ressources`               | teacher, admin             | Fait   |
+| 4   | **Résidences** `/residences`               | student, admin             | Fait   |
+| 5   | **Vie étudiante & clubs** `/vie-etudiante` | student, teacher, admin    | Fait   |
+| 6   | **Bibliothèque** `/bibliotheque`           | student, teacher, admin    | Fait   |
 
 ### Module 1 — Utilisateurs (user-service) — fait
+
 ```
 users/
 ├─ index.ts · README.md · routes.ts · api/ · mocks/ · hooks/ · types/ · utils/ · i18n/
@@ -74,9 +80,11 @@ users/
 ├─ components/      AccountForm, AccountStatusBadge, LoginHistoryTable, Fields
 └─ pages/           UsersModule (onglets), UsersListPage, RolesMatrixPage, LoginHistoryPage, ProfilePage
 ```
+
 Endpoints : `POST /auth/login`, `POST /users`, `GET /users/{id}`, `PUT /users/{id}/role`. Événements : `UtilisateurCréé`, `RôleModifié`.
 
 ### Module 2 — Académique (academic-service)
+
 ```
 academic/
 ├─ index.ts · README.md · api/ · mocks/ · hooks/ · types/ · schemas/ · i18n/
@@ -89,9 +97,11 @@ academic/
    ├─ GradesPage.tsx         étudiant : mes notes · enseignant : saisie
    └─ EnrollmentsPage.tsx    inscriptions pédagogiques (admin valide : En attente → Validé/Refusé)
 ```
+
 Types : `Course`, `Session`, `Enrollment`, `Grade`, `Semester`. Endpoints : `GET /courses`, `POST /enrollments`, `PUT /grades`. Événements : `InscriptionValidée`, `NotePubliée`. Règle : conflit d'horaire → 409 (`ConflictAlert`).
 
 ### Module 3 — Ressources (resource-service)
+
 ```
 resources/
 ├─ index.ts · README.md · api/ · mocks/ · hooks/ · types/ · schemas/ · utils/ · i18n/
@@ -103,9 +113,11 @@ resources/
    ├─ ReservationRequestPage.tsx formulaire + détection de conflit 409
    └─ ApprovalsPage.tsx          admin : valider / refuser
 ```
+
 Types : `Room`, `Equipment`, `Reservation`. Endpoints : `GET /rooms`, `POST /reservations`, `PUT /reservations/{id}/status`. Événements : `RéservationCréée`, `RéservationConfirmée`. Composants partagés : `CapacityGauge`, `ConflictAlert`, `StatusPill`.
 
 ### Module 4 — Résidences (housing-service)
+
 ```
 housing/
 ├─ index.ts · README.md · api/ · mocks/ · hooks/ · types/ · schemas/ · utils/ · i18n/
@@ -117,9 +129,11 @@ housing/
    ├─ RequestsPage.tsx     admin : file des demandes, affectation
    └─ MaintenancePage.tsx  signalement de pannes (remplace le rôle Technicien : l'admin les traite)
 ```
+
 Types : `Residence`, `HousingRoom`, `HousingRequest`, `Ticket`. Endpoints : `GET /residences`, `POST /housing-requests`, `PUT /housing-requests/{id}/assign`. Événements : `DemandeDéposée`, `ChambreAffectée`. Règle : résidence pleine → 409.
 
 ### Module 5 — Vie étudiante & clubs (club-service)
+
 ```
 student-life/
 ├─ index.ts · README.md · api/ · mocks/ · hooks/ · types/ · schemas/ · utils/ · i18n/
@@ -131,9 +145,11 @@ student-life/
    ├─ EventsPage.tsx         agenda campus
    └─ ClubAdminPage.tsx      admin : créer/valider clubs, adhésions
 ```
+
 Types : `Club`, `Membership`, `CampusEvent`. Endpoints : `GET /clubs`, `POST /clubs/{id}/members`, `POST /events`. Événements : `ClubCréé`, `AdhésionConfirmée`. (La gestion d'un club est faite par l'admin ; pas de rôle « responsable de club ».)
 
 ### Module 6 — Bibliothèque (library-service)
+
 ```
 library/
 ├─ index.ts · README.md · api/ · mocks/ · hooks/ · types/ · schemas/ · utils/ · i18n/
@@ -145,19 +161,22 @@ library/
    ├─ MyLoansPage.tsx      prêts en cours, retards, prolongation
    └─ LoansAdminPage.tsx   admin : prêts, retours, ajout d'ouvrages
 ```
+
 Types : `Book`, `Loan`, `Reservation`. Endpoints : `GET /books`, `POST /loans`, `PUT /loans/{id}/return`. Événements : `LivreEmprunté`, `LivreRetourné`.
 
 ## 5. Matrice des accès (3 rôles)
-| Module | Étudiant | Enseignant | Administrateur |
-|---|---|---|---|
-| Utilisateurs | profil seul | profil seul | tout |
-| Académique | ses cours, notes | ses cours, saisie | tout + validation |
-| Ressources | — | réserver | tout + validation |
-| Résidences | sa demande | — | tout + affectation |
-| Vie étudiante | adhérer | adhérer | tout |
-| Bibliothèque | emprunter | emprunter | tout + gestion |
+
+| Module        | Étudiant         | Enseignant        | Administrateur     |
+| ------------- | ---------------- | ----------------- | ------------------ |
+| Utilisateurs  | profil seul      | profil seul       | tout               |
+| Académique    | ses cours, notes | ses cours, saisie | tout + validation  |
+| Ressources    | —                | réserver          | tout + validation  |
+| Résidences    | sa demande       | —                 | tout + affectation |
+| Vie étudiante | adhérer          | adhérer           | tout               |
+| Bibliothèque  | emprunter        | emprunter         | tout + gestion     |
 
 ## 6. Définition de « module terminé »
+
 - Pages avec états chargement / vide / erreur (503, 403, 409).
 - Mocks cohérents (base en mémoire) et endpoints typés dans `api.ts`.
 - Textes dans `i18n.ts`, validation dans `schemas.ts`.

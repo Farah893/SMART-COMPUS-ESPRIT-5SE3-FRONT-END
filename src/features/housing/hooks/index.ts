@@ -27,7 +27,10 @@ export function useRequests() {
 
 export function useAvailableRooms(residenceId: string, type?: RoomType) {
   const viewer = useViewer();
-  return useQuery((signal) => (residenceId ? listAvailableRooms(residenceId, type, viewer, signal) : Promise.resolve([])), [residenceId, type, viewer.role]);
+  return useQuery(
+    (signal) => (residenceId ? listAvailableRooms(residenceId, type, viewer, signal) : Promise.resolve([])),
+    [residenceId, type, viewer.role],
+  );
 }
 
 export function useTickets() {

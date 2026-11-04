@@ -20,7 +20,10 @@ const TABS: { to: string; key: string; end?: boolean; roles: readonly Role[] }[]
 ];
 
 const tab = ({ isActive }: { isActive: boolean }) =>
-  cn("whitespace-nowrap border-b-2 px-4 py-2.5 text-sm font-medium", isActive ? "border-navy text-navy" : "border-transparent text-slate-600 hover:text-foreground");
+  cn(
+    "whitespace-nowrap border-b-2 px-4 py-2.5 text-sm font-medium",
+    isActive ? "border-navy text-navy" : "border-transparent text-slate-600 hover:text-foreground",
+  );
 
 /** Module Académique : catalogue, emploi du temps, notes, inscriptions (onglets selon le rôle). */
 export default function AcademicModule() {

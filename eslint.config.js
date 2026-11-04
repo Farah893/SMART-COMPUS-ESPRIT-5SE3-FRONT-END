@@ -29,7 +29,12 @@ export default tseslint.config(
   // Vérifié aussi par src/test/architecture.test.ts (couvre les imports relatifs).
   {
     files: ["src/shared/**/*.{ts,tsx}"],
-    rules: { "no-restricted-imports": ["error", { patterns: [{ group: ["@/app/*", "@/pages/*", "@/features/*"], message: "shared ne dépend d'aucune autre couche." }] }] },
+    rules: {
+      "no-restricted-imports": [
+        "error",
+        { patterns: [{ group: ["@/app/*", "@/pages/*", "@/features/*"], message: "shared ne dépend d'aucune autre couche." }] },
+      ],
+    },
   },
   {
     files: ["src/pages/**/*.{ts,tsx}"],
@@ -43,7 +48,10 @@ export default tseslint.config(
         {
           patterns: [
             { group: ["@/app/*", "@/pages/*"], message: "Une feature ne dépend ni de app ni de pages." },
-            { group: ["@/features/*", `!@/features/${m}`, `!@/features/${m}/*`], message: "Une feature ne dépend jamais d'une autre feature." },
+            {
+              group: ["@/features/*", `!@/features/${m}`, `!@/features/${m}/*`],
+              message: "Une feature ne dépend jamais d'une autre feature.",
+            },
           ],
         },
       ],

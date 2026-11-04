@@ -10,7 +10,10 @@ export function EquipmentList({ equipment, className }: { equipment: Equipment[]
   return (
     <ul aria-label={t("resources.room.equipment")} className={cn("flex flex-wrap gap-1.5", className)}>
       {equipment.map((e) => (
-        <li key={e.id} className="inline-flex items-center gap-1 rounded-full border bg-secondary px-2.5 py-0.5 text-xs font-medium text-secondary-foreground">
+        <li
+          key={e.id}
+          className="inline-flex items-center gap-1 rounded-full border bg-secondary px-2.5 py-0.5 text-xs font-medium text-secondary-foreground"
+        >
           <Check className="size-3" aria-hidden="true" />
           {e.label}
         </li>

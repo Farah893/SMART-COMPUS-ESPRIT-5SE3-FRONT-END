@@ -36,11 +36,15 @@ export default function EnrollmentsPage() {
     setBusy(true);
     try {
       await decideEnrollment(decision.enrollment.id, decision.status, viewer);
-      toast.success(t(`academic.enrollments.done.${decision.status}`, { name: decision.enrollment.studentName, code: decision.enrollment.courseCode }));
+      toast.success(
+        t(`academic.enrollments.done.${decision.status}`, { name: decision.enrollment.studentName, code: decision.enrollment.courseCode }),
+      );
       setDecision(null);
       query.refetch();
     } catch (e) {
-      toast.error(isApiError(e) ? (e.isConflict ? `${e.message} — ${t("academic.enrollments.conflictHint")}` : e.message) : t("error.generic"));
+      toast.error(
+        isApiError(e) ? (e.isConflict ? `${e.message} — ${t("academic.enrollments.conflictHint")}` : e.message) : t("error.generic"),
+      );
       setDecision(null);
       query.refetch();
     } finally {
@@ -50,7 +54,16 @@ export default function EnrollmentsPage() {
 
   const columns = useMemo<Column<Enrollment>[]>(
     () => [
-      ...(isAdmin ? [{ key: "student", header: t("academic.col.student"), cell: (e: Enrollment) => <span className="font-medium">{e.studentName}</span>, sortValue: (e: Enrollment) => e.studentName }] : []),
+      ...(isAdmin
+        ? [
+            {
+              key: "student",
+              header: t("academic.col.student"),
+              cell: (e: Enrollment) => <span className="font-medium">{e.studentName}</span>,
+              sortValue: (e: Enrollment) => e.studentName,
+            },
+          ]
+        : []),
       {
         key: "course",
         header: t("academic.col.course"),
@@ -72,10 +85,24 @@ export default function EnrollmentsPage() {
               cell: (e: Enrollment) =>
                 e.status === "pending" ? (
                   <div className="flex gap-1">
-                    <Button variant="ghost" size="icon" aria-label={`${t("academic.enrollments.validate")} — ${e.studentName}, ${e.courseCode}`} title={t("academic.enrollments.validate")} className="text-green-800 hover:bg-green-50" onClick={() => setDecision({ enrollment: e, status: "validated" })}>
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      aria-label={`${t("academic.enrollments.validate")} — ${e.studentName}, ${e.courseCode}`}
+                      title={t("academic.enrollments.validate")}
+                      className="text-green-800 hover:bg-green-50"
+                      onClick={() => setDecision({ enrollment: e, status: "validated" })}
+                    >
                       <Check aria-hidden="true" />
                     </Button>
-                    <Button variant="ghost" size="icon" aria-label={`${t("academic.enrollments.refuse")} — ${e.studentName}, ${e.courseCode}`} title={t("academic.enrollments.refuse")} className="text-red-700 hover:bg-red-50" onClick={() => setDecision({ enrollment: e, status: "refused" })}>
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      aria-label={`${t("academic.enrollments.refuse")} — ${e.studentName}, ${e.courseCode}`}
+                      title={t("academic.enrollments.refuse")}
+                      className="text-red-700 hover:bg-red-50"
+                      onClick={() => setDecision({ enrollment: e, status: "refused" })}
+                    >
                       <X aria-hidden="true" />
                     </Button>
                   </div>
@@ -120,7 +147,13 @@ export default function EnrollmentsPage() {
                   <EmptyState icon={ClipboardList} title={t("academic.empty.enrollments")} />
                 </Card>
               ) : (
-                <DataTable caption={t("academic.enrollments.caption")} columns={columns} data={rows} rowKey={(e) => e.id} emptyTitle={t("academic.empty.noMatch")} />
+                <DataTable
+                  caption={t("academic.enrollments.caption")}
+                  columns={columns}
+                  data={rows}
+                  rowKey={(e) => e.id}
+                  emptyTitle={t("academic.empty.noMatch")}
+                />
               )}
             </>
           );
@@ -132,9 +165,18 @@ export default function EnrollmentsPage() {
         onOpenChange={(o) => !o && !busy && setDecision(null)}
         loading={busy}
         destructive={decision?.status === "refused"}
-        title={decision ? t(`academic.enrollments.confirm.${decision.status}`, { name: decision.enrollment.studentName, code: decision.enrollment.courseCode }) : ""}
+        title={
+          decision
+            ? t(`academic.enrollments.confirm.${decision.status}`, {
+                name: decision.enrollment.studentName,
+                code: decision.enrollment.courseCode,
+              })
+            : ""
+        }
         description={decision ? t(`academic.enrollments.confirmBody.${decision.status}`) : undefined}
-        confirmLabel={decision ? t(decision.status === "validated" ? "academic.enrollments.validate" : "academic.enrollments.refuse") : undefined}
+        confirmLabel={
+          decision ? t(decision.status === "validated" ? "academic.enrollments.validate" : "academic.enrollments.refuse") : undefined
+        }
         onConfirm={confirm}
       />
     </div>

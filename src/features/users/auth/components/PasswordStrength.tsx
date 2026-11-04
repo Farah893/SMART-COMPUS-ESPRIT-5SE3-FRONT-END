@@ -33,7 +33,11 @@ export function PasswordStrength({ password }: { password: string }) {
         className="flex flex-1 gap-1"
       >
         {[1, 2, 3, 4].map((i) => (
-          <span key={i} aria-hidden="true" className={cn("h-1.5 flex-1 rounded-full transition-colors duration-150", i <= score ? BAR[score] : "bg-slate-200")} />
+          <span
+            key={i}
+            aria-hidden="true"
+            className={cn("h-1.5 flex-1 rounded-full transition-colors duration-150", i <= score ? BAR[score] : "bg-slate-200")}
+          />
         ))}
       </div>
       <span className={cn("w-24 text-right text-xs font-medium transition-colors duration-150", TEXT[score])}>{label}</span>

@@ -53,7 +53,12 @@ export default function ApprovalsPage() {
 
   const columns = useMemo<Column<Reservation>[]>(
     () => [
-      { key: "requester", header: t("resources.col.requester"), sortValue: (r) => r.requesterName, cell: (r) => <span className="font-medium">{r.requesterName}</span> },
+      {
+        key: "requester",
+        header: t("resources.col.requester"),
+        sortValue: (r) => r.requesterName,
+        cell: (r) => <span className="font-medium">{r.requesterName}</span>,
+      },
       {
         key: "room",
         header: t("resources.col.room"),
@@ -86,10 +91,24 @@ export default function ApprovalsPage() {
         cell: (r) =>
           r.status === "pending" ? (
             <div className="flex gap-1">
-              <Button variant="ghost" size="icon" aria-label={`${t("resources.approvals.confirm")} — ${r.requesterName}, ${r.roomName}`} title={t("resources.approvals.confirm")} className="text-green-800 hover:bg-green-50" onClick={() => setDecision({ reservation: r, status: "confirmed" })}>
+              <Button
+                variant="ghost"
+                size="icon"
+                aria-label={`${t("resources.approvals.confirm")} — ${r.requesterName}, ${r.roomName}`}
+                title={t("resources.approvals.confirm")}
+                className="text-green-800 hover:bg-green-50"
+                onClick={() => setDecision({ reservation: r, status: "confirmed" })}
+              >
                 <Check aria-hidden="true" />
               </Button>
-              <Button variant="ghost" size="icon" aria-label={`${t("resources.approvals.refuse")} — ${r.requesterName}, ${r.roomName}`} title={t("resources.approvals.refuse")} className="text-red-700 hover:bg-red-50" onClick={() => setDecision({ reservation: r, status: "refused" })}>
+              <Button
+                variant="ghost"
+                size="icon"
+                aria-label={`${t("resources.approvals.refuse")} — ${r.requesterName}, ${r.roomName}`}
+                title={t("resources.approvals.refuse")}
+                className="text-red-700 hover:bg-red-50"
+                onClick={() => setDecision({ reservation: r, status: "refused" })}
+              >
                 <X aria-hidden="true" />
               </Button>
             </div>
@@ -145,7 +164,13 @@ export default function ApprovalsPage() {
                   <EmptyState icon={ClipboardList} title={t("resources.approvals.empty")} />
                 </Card>
               ) : (
-                <DataTable caption={t("resources.approvals.caption")} columns={columns} data={rows} rowKey={(r) => r.id} emptyTitle={t("resources.approvals.noMatch")} />
+                <DataTable
+                  caption={t("resources.approvals.caption")}
+                  columns={columns}
+                  data={rows}
+                  rowKey={(r) => r.id}
+                  emptyTitle={t("resources.approvals.noMatch")}
+                />
               )}
             </>
           );
@@ -159,7 +184,9 @@ export default function ApprovalsPage() {
         destructive={decision?.status === "refused"}
         title={decision ? t(`resources.approvals.confirm.${decision.status}`, { room: decision.reservation.roomName }) : ""}
         description={decision ? t(`resources.approvals.confirmBody.${decision.status}`) : undefined}
-        confirmLabel={decision ? t(decision.status === "confirmed" ? "resources.approvals.confirm" : "resources.approvals.refuse") : undefined}
+        confirmLabel={
+          decision ? t(decision.status === "confirmed" ? "resources.approvals.confirm" : "resources.approvals.refuse") : undefined
+        }
         onConfirm={confirm}
       />
     </div>

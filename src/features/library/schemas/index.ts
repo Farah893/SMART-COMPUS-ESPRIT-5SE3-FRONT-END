@@ -5,7 +5,10 @@ import { BOOK_CATEGORIES } from "../types";
 export const bookSchema = z.object({
   title: z.string().trim().min(2, "lib.err.titleShort").max(120, "lib.err.titleLong"),
   author: z.string().trim().min(2, "lib.err.authorShort").max(80, "lib.err.authorLong"),
-  isbn: z.string().trim().regex(/^(97[89])-?\d{1,5}-?\d{1,7}-?\d{1,7}-?\d$|^\d{10}$|^97[89]-?\d{10}$/, "lib.err.isbn"),
+  isbn: z
+    .string()
+    .trim()
+    .regex(/^(97[89])-?\d{1,5}-?\d{1,7}-?\d{1,7}-?\d$|^\d{10}$|^97[89]-?\d{10}$/, "lib.err.isbn"),
   category: z.enum(BOOK_CATEGORIES, "lib.err.category"),
   year: z.number({ error: "lib.err.year" }).int("lib.err.year").min(1400, "lib.err.year").max(new Date().getFullYear(), "lib.err.year"),
   copies: z.number({ error: "lib.err.copies" }).int("lib.err.copies").min(1, "lib.err.copies").max(50, "lib.err.copies"),

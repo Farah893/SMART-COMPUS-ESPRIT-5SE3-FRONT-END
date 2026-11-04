@@ -55,7 +55,14 @@ function MobileMenu({ items, registerLabel, label }: { items: { href: string; te
   }, [open]);
   return (
     <div className="md:hidden">
-      <Button variant="ghost" size="sm" className="px-2" aria-expanded={open} aria-controls="menu-mobile" onClick={() => setOpen((v) => !v)}>
+      <Button
+        variant="ghost"
+        size="sm"
+        className="px-2"
+        aria-expanded={open}
+        aria-controls="menu-mobile"
+        onClick={() => setOpen((v) => !v)}
+      >
         {label}
         <ChevronDown className={open ? "rotate-180 transition-transform" : "transition-transform"} aria-hidden="true" />
       </Button>
@@ -106,7 +113,10 @@ export default function LandingPage() {
 
   return (
     <div className="min-h-screen bg-background">
-      <a href="#contenu" className="sr-only focus:not-sr-only focus:absolute focus:left-3 focus:top-3 focus:z-50 focus:rounded-lg focus:bg-card focus:px-4 focus:py-2 focus:shadow-lg">
+      <a
+        href="#contenu"
+        className="sr-only focus:not-sr-only focus:absolute focus:left-3 focus:top-3 focus:z-50 focus:rounded-lg focus:bg-card focus:px-4 focus:py-2 focus:shadow-lg"
+      >
         {t("app.skipToContent")}
       </a>
 
@@ -114,13 +124,22 @@ export default function LandingPage() {
         <div className="mx-auto flex h-16 max-w-6xl items-center justify-between gap-2 px-4 sm:gap-4 sm:px-6">
           <Logo />
           <nav aria-label={t("home.nav.label")} className="hidden items-center gap-7 text-sm font-medium md:flex">
-            <a href="#services" className="rounded text-muted-foreground underline-offset-8 transition-colors hover:text-foreground hover:underline">
+            <a
+              href="#services"
+              className="rounded text-muted-foreground underline-offset-8 transition-colors hover:text-foreground hover:underline"
+            >
               {t("home.nav.modules")}
             </a>
-            <a href="#profils" className="rounded text-muted-foreground underline-offset-8 transition-colors hover:text-foreground hover:underline">
+            <a
+              href="#profils"
+              className="rounded text-muted-foreground underline-offset-8 transition-colors hover:text-foreground hover:underline"
+            >
               {t("home.nav.roles")}
             </a>
-            <a href="#pourquoi" className="rounded text-muted-foreground underline-offset-8 transition-colors hover:text-foreground hover:underline">
+            <a
+              href="#pourquoi"
+              className="rounded text-muted-foreground underline-offset-8 transition-colors hover:text-foreground hover:underline"
+            >
               {t("home.nav.why")}
             </a>
           </nav>
@@ -150,9 +169,14 @@ export default function LandingPage() {
           <div className="mx-auto grid max-w-6xl items-center gap-12 px-4 py-16 sm:px-6 sm:py-24 lg:grid-cols-[minmax(0,1.1fr)_minmax(0,1fr)] lg:gap-16">
             <div>
               <h1 data-hero="title" className="text-5xl leading-[1.05] text-navy sm:text-6xl">
-                {t("home.hero.lead")} <span className="underline decoration-amber-brand decoration-[0.09em] underline-offset-[0.14em]">{t("home.hero.word4")}</span>
+                {t("home.hero.lead")}{" "}
+                <span className="underline decoration-amber-brand decoration-[0.09em] underline-offset-[0.14em]">
+                  {t("home.hero.word4")}
+                </span>
               </h1>
-              <p data-hero="body" className="mt-6 max-w-[58ch] text-lg text-muted-foreground">{t("home.hero.text")}</p>
+              <p data-hero="body" className="mt-6 max-w-[58ch] text-lg text-muted-foreground">
+                {t("home.hero.text")}
+              </p>
               <div data-hero="body" className="mt-8 flex flex-wrap gap-3">
                 <Button size="lg" asChild className="group">
                   <Link to="/connexion">
@@ -198,7 +222,11 @@ export default function LandingPage() {
         </section>
 
         {/* ---------- Services ---------- */}
-        <section id="services" aria-labelledby="services-title" className="mx-auto grid max-w-6xl scroll-mt-20 gap-10 px-4 py-20 sm:px-6 lg:grid-cols-[minmax(0,2fr)_minmax(0,3fr)] lg:gap-16">
+        <section
+          id="services"
+          aria-labelledby="services-title"
+          className="mx-auto grid max-w-6xl scroll-mt-20 gap-10 px-4 py-20 sm:px-6 lg:grid-cols-[minmax(0,2fr)_minmax(0,3fr)] lg:gap-16"
+        >
           <div className="lg:sticky lg:top-24 lg:self-start">
             <h2 id="services-title" className="text-3xl sm:text-4xl">
               {t("home.modules.title")}
@@ -214,7 +242,9 @@ export default function LandingPage() {
                 </h3>
                 <div>
                   <p className="text-sm text-foreground/80">{t(`home.module.${m.id}`)}</p>
-                  <p className="mt-1 text-xs text-muted-foreground">{t("home.module.for", { roles: m.roles.map((r) => t(ROLE_LABEL[r])).join(", ") })}</p>
+                  <p className="mt-1 text-xs text-muted-foreground">
+                    {t("home.module.for", { roles: m.roles.map((r) => t(ROLE_LABEL[r])).join(", ") })}
+                  </p>
                 </div>
                 <p className="mt-3 flex flex-wrap items-baseline justify-between gap-x-4 gap-y-0.5 rounded-md bg-secondary px-3 py-2 text-sm sm:col-span-2">
                   <span className="font-medium">{t(`home.proof.${m.id}.what`)}</span>
@@ -271,7 +301,12 @@ export default function LandingPage() {
               <Button size="lg" asChild className="bg-amber-brand font-semibold text-slate-950 hover:bg-amber-brand/90">
                 <Link to="/connexion">{t("home.login")}</Link>
               </Button>
-              <Button size="lg" variant="outline" asChild className="border-white/50 bg-transparent text-white hover:bg-white/10 hover:text-white">
+              <Button
+                size="lg"
+                variant="outline"
+                asChild
+                className="border-white/50 bg-transparent text-white hover:bg-white/10 hover:text-white"
+              >
                 <Link to="/inscription">{t("home.register")}</Link>
               </Button>
             </div>

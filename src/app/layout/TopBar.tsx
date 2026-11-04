@@ -3,7 +3,13 @@ import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 import { UserAvatar } from "@/shared/components/common/UserAvatar";
 import { Button } from "@/shared/components/ui/button";
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from "@/shared/components/ui/dropdown-menu";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/shared/components/ui/dropdown-menu";
 import { USE_MOCKS } from "@/shared/api/client";
 import { Logo } from "@/shared/components/Logo";
 import { DemoPanel } from "./DemoPanel";
@@ -36,7 +42,10 @@ export function TopBar() {
             {t("topbar.search.label")}
           </label>
           <div className="relative">
-            <Search className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" aria-hidden="true" />
+            <Search
+              className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground"
+              aria-hidden="true"
+            />
             <input
               id="global-search"
               type="search"
@@ -49,7 +58,12 @@ export function TopBar() {
         <div className="ml-auto flex items-center gap-1 sm:gap-2 md:ml-0">
           {USE_MOCKS && <DemoPanel />}
 
-          <Button variant="ghost" size="icon" className="relative" aria-label={t("topbar.notifications.count", { count: UNREAD_NOTIFICATIONS })}>
+          <Button
+            variant="ghost"
+            size="icon"
+            className="relative"
+            aria-label={t("topbar.notifications.count", { count: UNREAD_NOTIFICATIONS })}
+          >
             <Bell className="size-5" aria-hidden="true" />
             <span
               aria-hidden="true"
@@ -64,7 +78,11 @@ export function TopBar() {
 
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <button type="button" aria-label={t("topbar.userMenu")} className="flex items-center gap-2 rounded-full py-1 pl-1 pr-2 hover:bg-secondary">
+              <button
+                type="button"
+                aria-label={t("topbar.userMenu")}
+                className="flex items-center gap-2 rounded-full py-1 pl-1 pr-2 hover:bg-secondary"
+              >
                 <UserAvatar name={user.name} src={user.avatarUrl} />
                 <span className="hidden text-left leading-tight lg:block">
                   <span className="block text-sm font-semibold">{user.name}</span>
@@ -83,7 +101,13 @@ export function TopBar() {
                 <Settings aria-hidden="true" />
                 {t("topbar.profileSettings")}
               </DropdownMenuItem>
-              <DropdownMenuItem onSelect={() => { logout(); navigate("/connexion"); }} className="text-red-700 data-[highlighted]:bg-red-50">
+              <DropdownMenuItem
+                onSelect={() => {
+                  logout();
+                  navigate("/connexion");
+                }}
+                className="text-red-700 data-[highlighted]:bg-red-50"
+              >
                 <LogOut aria-hidden="true" />
                 {t("topbar.logout")}
               </DropdownMenuItem>

@@ -9,8 +9,18 @@ import { db, DEMO_PASSWORD, PERMISSIONS, saveAvatar } from "../mocks";
 import { generateTemporaryPassword, INSTITUTIONAL_DOMAIN, isInstitutionalEmail, passwordError } from "../utils/validation";
 import {
   fullName,
-  type AccountStatus, type AdminCreateInput, type AdminCreateResult, type DomainEvent, type LoginEvent, type LoginHistoryFilters,
-  type PermissionMatrix, type ProfileInput, type RegisterInput, type UserAccount, type UserFilters, type UserList,
+  type AccountStatus,
+  type AdminCreateInput,
+  type AdminCreateResult,
+  type DomainEvent,
+  type LoginEvent,
+  type LoginHistoryFilters,
+  type PermissionMatrix,
+  type ProfileInput,
+  type RegisterInput,
+  type UserAccount,
+  type UserFilters,
+  type UserList,
 } from "../types";
 
 /**
@@ -38,8 +48,13 @@ export function publishEvent(name: DomainEvent, description: string) {
 
 export function logLogin(u: UserAccount, success: boolean) {
   db.history.unshift({
-    id: `h-${++db.seq}`, userId: u.id, userName: fullName(u), date: db.now(),
-    ip: "41.226.12.87", device: `${navigator.userAgent.includes("Firefox") ? "Firefox" : "Chrome"} · ${navigator.platform || "Navigateur"}`, success,
+    id: `h-${++db.seq}`,
+    userId: u.id,
+    userName: fullName(u),
+    date: db.now(),
+    ip: "41.226.12.87",
+    device: `${navigator.userAgent.includes("Firefox") ? "Firefox" : "Chrome"} · ${navigator.platform || "Navigateur"}`,
+    success,
   });
 }
 
@@ -61,8 +76,14 @@ export const registerAccount = (input: Omit<RegisterInput, "role">) =>
       if (byEmail(email)) throw new ApiError(409, "Un compte existe déjà avec cette adresse", { code: "EMAIL_EXISTS" });
       const acct: UserAccount = {
         id: `${ID_PREFIX.student}-${new Date().getFullYear()}-${String(++db.seq).padStart(4, "0")}`,
-        firstName: input.firstName.trim(), lastName: input.lastName.trim(), email, role: "student",
-        status: "active", failedAttempts: 0, createdAt: db.now(), lastLoginAt: null,
+        firstName: input.firstName.trim(),
+        lastName: input.lastName.trim(),
+        email,
+        role: "student",
+        status: "active",
+        failedAttempts: 0,
+        createdAt: db.now(),
+        lastLoginAt: null,
       };
       db.users.unshift(acct);
       db.passwords.set(email, input.password);
@@ -87,8 +108,15 @@ export const createUserByAdmin = (input: AdminCreateInput) =>
       const temporary = generateTemporaryPassword();
       const acct: UserAccount = {
         id: `${ID_PREFIX[input.role]}-${new Date().getFullYear()}-${String(++db.seq).padStart(4, "0")}`,
-        firstName: input.firstName.trim(), lastName: input.lastName.trim(), email, role: input.role,
-        status: "active", failedAttempts: 0, createdAt: db.now(), lastLoginAt: null, mustChangePassword: true,
+        firstName: input.firstName.trim(),
+        lastName: input.lastName.trim(),
+        email,
+        role: input.role,
+        status: "active",
+        failedAttempts: 0,
+        createdAt: db.now(),
+        lastLoginAt: null,
+        mustChangePassword: true,
       };
       db.users.unshift(acct);
       db.passwords.set(email, temporary);
@@ -117,7 +145,10 @@ export const listUsers = (filters: UserFilters, signal?: AbortSignal) =>
           (!q || normalize(`${fullName(u)} ${u.email} ${u.id}`).includes(q)),
       );
       const count = (s: AccountStatus) => db.users.filter((u) => u.status === s).length;
-      return clone({ items, stats: { total: db.users.length, active: count("active"), inactive: count("inactive"), suspended: count("suspended") } });
+      return clone({
+        items,
+        stats: { total: db.users.length, active: count("active"), inactive: count("inactive"), suspended: count("suspended") },
+      });
     },
   });
 
@@ -150,7 +181,8 @@ export const changePassword = (id: string, current: string, next: string) =>
     mock: () => {
       svc();
       const u = byId(id);
-      if (current !== (db.passwords.get(u.email) ?? DEMO_PASSWORD)) throw new ApiError(401, "Mot de passe actuel incorrect", { code: "WRONG_PASSWORD" });
+      if (current !== (db.passwords.get(u.email) ?? DEMO_PASSWORD))
+        throw new ApiError(401, "Mot de passe actuel incorrect", { code: "WRONG_PASSWORD" });
       if (next === current) throw new ApiError(422, "Le nouveau mot de passe doit être différent de l'actuel", { code: "SAME_PASSWORD" });
       if (passwordError(next)) throw new ApiError(422, "Mot de passe trop faible", { code: "WEAK_PASSWORD" });
       db.passwords.set(u.email, next);
@@ -229,7 +261,8 @@ export const setPermission = (role: Role, key: string, granted: boolean) =>
     body: { role, key, granted },
     mock: () => {
       svc();
-      if (role === "admin" && key.startsWith("users.")) throw new ApiError(403, "Les droits d'administration des utilisateurs sont verrouillés");
+      if (role === "admin" && key.startsWith("users."))
+        throw new ApiError(403, "Les droits d'administration des utilisateurs sont verrouillés");
       db.permissions[role][key] = granted;
     },
   });
@@ -238,14 +271,17 @@ export const setPermission = (role: Role, key: string, granted: boolean) =>
 
 /** GET /users/{id}/login-history (ou /login-history pour tous, admin) */
 export const getLoginHistory = (filters: LoginHistoryFilters, signal?: AbortSignal) =>
-  api.get<LoginEvent[]>(`${filters.userId ? `/users/${filters.userId}/login-history` : "/login-history"}${query({ result: filters.result })}`, {
-    signal,
-    mock: () => {
-      svc();
-      return clone(
-        db.history.filter(
-          (e) => (!filters.userId || e.userId === filters.userId) && (!filters.result || (filters.result === "success") === e.success),
-        ),
-      );
+  api.get<LoginEvent[]>(
+    `${filters.userId ? `/users/${filters.userId}/login-history` : "/login-history"}${query({ result: filters.result })}`,
+    {
+      signal,
+      mock: () => {
+        svc();
+        return clone(
+          db.history.filter(
+            (e) => (!filters.userId || e.userId === filters.userId) && (!filters.result || (filters.result === "success") === e.success),
+          ),
+        );
+      },
     },
-  });
+  );

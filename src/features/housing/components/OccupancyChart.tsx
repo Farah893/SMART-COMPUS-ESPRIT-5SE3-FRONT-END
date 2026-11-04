@@ -27,7 +27,10 @@ export function OccupancyChart({ residences }: { residences: Residence[] }) {
                   </span>
                 </div>
                 <div aria-hidden="true" className="h-3 overflow-hidden rounded-full bg-slate-200">
-                  <div className={cn("h-full rounded-full", pct >= 90 ? "bg-danger" : pct >= 70 ? "bg-amber-brand" : "bg-success")} style={{ width: `${pct}%` }} />
+                  <div
+                    className={cn("h-full rounded-full", pct >= 90 ? "bg-danger" : pct >= 70 ? "bg-amber-brand" : "bg-success")}
+                    style={{ width: `${pct}%` }}
+                  />
                 </div>
               </li>
             );

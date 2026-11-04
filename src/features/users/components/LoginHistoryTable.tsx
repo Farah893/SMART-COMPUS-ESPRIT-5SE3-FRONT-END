@@ -15,8 +15,15 @@ interface Props {
 export function LoginHistoryTable({ events, loading, showUser, pageSize = 8 }: Props) {
   const t = useT();
   const columns: Column<LoginEvent>[] = [
-    { key: "date", header: t("users.history.date"), cell: (e) => <time dateTime={e.date}>{formatDateTime(e.date)}</time>, sortValue: (e) => e.date },
-    ...(showUser ? [{ key: "user", header: t("users.history.user"), cell: (e: LoginEvent) => e.userName, sortValue: (e: LoginEvent) => e.userName }] : []),
+    {
+      key: "date",
+      header: t("users.history.date"),
+      cell: (e) => <time dateTime={e.date}>{formatDateTime(e.date)}</time>,
+      sortValue: (e) => e.date,
+    },
+    ...(showUser
+      ? [{ key: "user", header: t("users.history.user"), cell: (e: LoginEvent) => e.userName, sortValue: (e: LoginEvent) => e.userName }]
+      : []),
     { key: "ip", header: t("users.history.ip"), cell: (e) => <code className="text-xs">{e.ip}</code> },
     { key: "device", header: t("users.history.device"), cell: (e) => e.device },
     {
@@ -31,5 +38,15 @@ export function LoginHistoryTable({ events, loading, showUser, pageSize = 8 }: P
       ),
     },
   ];
-  return <DataTable caption={t("users.history.caption")} columns={columns} data={events} rowKey={(e) => e.id} loading={loading} pageSize={pageSize} emptyTitle={t("users.history.empty")} />;
+  return (
+    <DataTable
+      caption={t("users.history.caption")}
+      columns={columns}
+      data={events}
+      rowKey={(e) => e.id}
+      loading={loading}
+      pageSize={pageSize}
+      emptyTitle={t("users.history.empty")}
+    />
+  );
 }

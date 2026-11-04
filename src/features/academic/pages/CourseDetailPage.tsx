@@ -59,7 +59,14 @@ export default function CourseDetailPage() {
                 <h2 id="sessions-title" className="mb-3 text-lg font-semibold">
                   {t("academic.detail.sessions")}
                 </h2>
-                <DataTable caption={t("academic.detail.sessions")} columns={columns} data={c.sessions} rowKey={(s) => s.id} pageSize={10} emptyTitle={t("academic.empty.sessions")} />
+                <DataTable
+                  caption={t("academic.detail.sessions")}
+                  columns={columns}
+                  data={c.sessions}
+                  rowKey={(s) => s.id}
+                  pageSize={10}
+                  emptyTitle={t("academic.empty.sessions")}
+                />
               </section>
             </div>
 
@@ -81,10 +88,16 @@ export default function CourseDetailPage() {
                 <CapacityGauge used={c.enrolled} capacity={c.capacity} label={t("academic.course.seats")} />
                 {role === "student" && (!c.myEnrollment || c.myEnrollment === "refused") && (
                   <Button className="w-full" disabled={pendingId === c.id} onClick={() => void enroll(c)}>
-                    {c.enrolled >= c.capacity ? t("academic.enroll.full") : c.myEnrollment === "refused" ? t("academic.enroll.retry") : t("academic.enroll")}
+                    {c.enrolled >= c.capacity
+                      ? t("academic.enroll.full")
+                      : c.myEnrollment === "refused"
+                        ? t("academic.enroll.retry")
+                        : t("academic.enroll")}
                   </Button>
                 )}
-                {role === "student" && c.myEnrollment === "pending" && <EmptyState className="py-2" title={t("academic.enroll.pendingInfo")} />}
+                {role === "student" && c.myEnrollment === "pending" && (
+                  <EmptyState className="py-2" title={t("academic.enroll.pendingInfo")} />
+                )}
               </CardContent>
             </Card>
           </div>

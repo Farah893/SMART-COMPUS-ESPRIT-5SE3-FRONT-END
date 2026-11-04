@@ -14,9 +14,17 @@ import { formatDay } from "../utils/time";
 import type { Reservation } from "../types";
 
 function trackingItems(r: Reservation, t: TFunction): TimelineItem[] {
-  const items: TimelineItem[] = [{ id: "requested", title: t("resources.timeline.requested"), date: formatDateTime(r.requestedAt), tone: "navy" }];
+  const items: TimelineItem[] = [
+    { id: "requested", title: t("resources.timeline.requested"), date: formatDateTime(r.requestedAt), tone: "navy" },
+  ];
   if (r.status === "pending") items.push({ id: "waiting", title: t("resources.timeline.waiting"), date: "", tone: "amber" });
-  else items.push({ id: r.status, title: t(`resources.timeline.${r.status}`), date: r.decidedAt ? formatDateTime(r.decidedAt) : "", tone: r.status === "confirmed" ? "green" : "red" });
+  else
+    items.push({
+      id: r.status,
+      title: t(`resources.timeline.${r.status}`),
+      date: r.decidedAt ? formatDateTime(r.decidedAt) : "",
+      tone: r.status === "confirmed" ? "green" : "red",
+    });
   return items;
 }
 
@@ -81,7 +89,9 @@ export default function ReservationsPage() {
                       <StatusPill status={r.status} />
                     </div>
                     <details>
-                      <summary className="cursor-pointer rounded text-sm font-medium text-navy underline-offset-4 hover:underline">{t("resources.mine.track")}</summary>
+                      <summary className="cursor-pointer rounded text-sm font-medium text-navy underline-offset-4 hover:underline">
+                        {t("resources.mine.track")}
+                      </summary>
                       <Timeline className="mt-4" items={trackingItems(r, t)} />
                     </details>
                   </Card>

@@ -28,7 +28,12 @@ export function DemoPanel() {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button variant="outline" size="sm" className="gap-1.5 border-amber-400 bg-amber-50 text-amber-950 hover:bg-amber-100" aria-label={t("demo.title")}>
+        <Button
+          variant="outline"
+          size="sm"
+          className="gap-1.5 border-amber-400 bg-amber-50 text-amber-950 hover:bg-amber-100"
+          aria-label={t("demo.title")}
+        >
           <FlaskConical aria-hidden="true" />
           <span className="hidden xl:inline">{t("demo.title")}</span>
         </Button>

@@ -3,7 +3,8 @@ import { EMAIL_DOMAIN } from "@/shared/config/env";
 export const INSTITUTIONAL_DOMAIN = EMAIL_DOMAIN;
 export const MAX_ATTEMPTS = 5;
 
-export const isInstitutionalEmail = (email: string) => new RegExp(`^[^\\s@]+@${INSTITUTIONAL_DOMAIN.replace(/\./g, "\\.")}$`, "i").test(email.trim());
+export const isInstitutionalEmail = (email: string) =>
+  new RegExp(`^[^\\s@]+@${INSTITUTIONAL_DOMAIN.replace(/\./g, "\\.")}$`, "i").test(email.trim());
 
 /** Retourne la clé i18n de l'erreur, ou null si le mot de passe est valide. */
 export function passwordError(pw: string): string | null {

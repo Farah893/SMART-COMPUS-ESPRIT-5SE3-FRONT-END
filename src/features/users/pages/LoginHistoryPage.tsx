@@ -21,7 +21,11 @@ export default function LoginHistoryPage() {
   if (history.error && !history.data) {
     return (
       <Card>
-        <EmptyState title={t("error.generic")} description={history.error.message} action={<Button onClick={history.refetch}>{t("common.retry")}</Button>} />
+        <EmptyState
+          title={t("error.generic")}
+          description={history.error.message}
+          action={<Button onClick={history.refetch}>{t("common.retry")}</Button>}
+        />
       </Card>
     );
   }

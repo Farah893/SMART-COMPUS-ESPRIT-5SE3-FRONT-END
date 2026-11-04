@@ -7,7 +7,16 @@ import { publishDomainEvent } from "@/shared/events/domainEvents";
 import { db } from "../mocks";
 import { todayISO, toMinutes } from "../utils/time";
 import type {
-  CampusEvent, Club, ClubDetail, ClubFilters, ClubInput, ClubView, EventFilters, EventInput, Membership, MembershipStatus,
+  CampusEvent,
+  Club,
+  ClubDetail,
+  ClubFilters,
+  ClubInput,
+  ClubView,
+  EventFilters,
+  EventInput,
+  Membership,
+  MembershipStatus,
 } from "../types";
 
 /**
@@ -40,7 +49,8 @@ const withState = (c: Club, viewerId: string): ClubView => {
   const m = mineIn(c.id, viewerId);
   return { ...c, myMembership: m ? { id: m.id, status: m.status } : undefined };
 };
-const fullError = (c: Club) => new ApiError(409, `${c.name} est complet`, { code: "CLUB_FULL", conflicts: [`${c.name} — ${c.members}/${c.maxMembers} membres`] });
+const fullError = (c: Club) =>
+  new ApiError(409, `${c.name} est complet`, { code: "CLUB_FULL", conflicts: [`${c.name} — ${c.members}/${c.maxMembers} membres`] });
 
 // ---------- Clubs ----------
 
@@ -53,7 +63,11 @@ export const listClubs = (filters: ClubFilters, viewer: Viewer, signal?: AbortSi
       const q = normalize(filters.q?.trim() ?? "");
       return clone(
         db.clubs
-          .filter((c) => (!filters.category || c.category === filters.category) && (!q || normalize(`${c.name} ${c.category} ${c.description}`).includes(q)))
+          .filter(
+            (c) =>
+              (!filters.category || c.category === filters.category) &&
+              (!q || normalize(`${c.name} ${c.category} ${c.description}`).includes(q)),
+          )
           .map((c) => withState(c, viewer.id)),
       );
     },
@@ -70,7 +84,9 @@ export const getClub = (id: string, viewer: Viewer, signal?: AbortSignal) =>
       return clone({
         ...withState(c, viewer.id),
         memberNames: db.memberships.filter((m) => m.clubId === id && m.status === "confirmed").map((m) => m.memberName),
-        events: db.events.filter((e) => e.clubId === id && e.date >= today).sort((a, b) => `${a.date} ${a.start}`.localeCompare(`${b.date} ${b.start}`)),
+        events: db.events
+          .filter((e) => e.clubId === id && e.date >= today)
+          .sort((a, b) => `${a.date} ${a.start}`.localeCompare(`${b.date} ${b.start}`)),
       });
     },
   });
@@ -85,7 +101,15 @@ export const createClub = (input: ClubInput, viewer: Viewer) =>
       if (db.clubs.some((c) => normalize(c.name) === normalize(name))) {
         throw new ApiError(409, "Un club porte déjà ce nom", { code: "CLUB_EXISTS", conflicts: [name] });
       }
-      const created: Club = { id: `k${++db.seq}`, name, category: input.category, description: input.description.trim(), meetingPlace: input.meetingPlace.trim(), members: 0, maxMembers: input.maxMembers };
+      const created: Club = {
+        id: `k${++db.seq}`,
+        name,
+        category: input.category,
+        description: input.description.trim(),
+        meetingPlace: input.meetingPlace.trim(),
+        members: 0,
+        maxMembers: input.maxMembers,
+      };
       db.clubs.unshift(created);
       publishDomainEvent(SERVICE, "ClubCréé", `${created.name} · ${created.category}`);
       return clone(created);
@@ -103,13 +127,23 @@ export const requestMembership = (clubId: string, viewer: Viewer) =>
       const club = clubById(clubId);
       const existing = mineIn(clubId, viewer.id);
       if (existing && existing.status !== "refused") {
-        throw new ApiError(409, existing.status === "confirmed" ? "Vous êtes déjà membre de ce club" : "Vous avez déjà une demande en attente", { code: "ALREADY_MEMBER", conflicts: [] });
+        throw new ApiError(
+          409,
+          existing.status === "confirmed" ? "Vous êtes déjà membre de ce club" : "Vous avez déjà une demande en attente",
+          { code: "ALREADY_MEMBER", conflicts: [] },
+        );
       }
       if (club.members >= club.maxMembers) throw fullError(club);
       if (existing) db.memberships.splice(db.memberships.indexOf(existing), 1); // nouvelle demande après un refus
       const created: Membership = {
-        id: `m-${++db.seq}`, clubId, clubName: club.name, memberId: viewer.id, memberName: viewer.name, memberRole: viewer.role,
-        status: "pending", requestedAt: db.now(),
+        id: `m-${++db.seq}`,
+        clubId,
+        clubName: club.name,
+        memberId: viewer.id,
+        memberName: viewer.name,
+        memberRole: viewer.role,
+        status: "pending",
+        requestedAt: db.now(),
       };
       db.memberships.unshift(created);
       return clone(created);
@@ -188,8 +222,15 @@ export const createEvent = (input: EventInput, viewer: Viewer) =>
       if (toMinutes(input.end) <= toMinutes(input.start)) throw new ApiError(422, "La fin doit être après le début");
       const club = input.clubId ? clubById(input.clubId) : undefined;
       const created: CampusEvent = {
-        id: `ev-${++db.seq}`, title: input.title.trim(), description: input.description.trim(), date: input.date, start: input.start, end: input.end,
-        location: input.location.trim(), clubId: club?.id, clubName: club?.name,
+        id: `ev-${++db.seq}`,
+        title: input.title.trim(),
+        description: input.description.trim(),
+        date: input.date,
+        start: input.start,
+        end: input.end,
+        location: input.location.trim(),
+        clubId: club?.id,
+        clubName: club?.name,
       };
       db.events.push(created);
       return clone(created);

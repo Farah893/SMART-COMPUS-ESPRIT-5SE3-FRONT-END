@@ -25,7 +25,11 @@ export function QueryBoundary<T>({ query, moduleName, children, skeleton }: Quer
     if (error.isUnavailable) return <ServiceUnavailableView moduleName={moduleName} onRetry={refetch} />;
     return (
       <Card>
-        <EmptyState title={t("error.generic")} description={error.message} action={<Button onClick={refetch}>{t("common.retry")}</Button>} />
+        <EmptyState
+          title={t("error.generic")}
+          description={error.message}
+          action={<Button onClick={refetch}>{t("common.retry")}</Button>}
+        />
       </Card>
     );
   }

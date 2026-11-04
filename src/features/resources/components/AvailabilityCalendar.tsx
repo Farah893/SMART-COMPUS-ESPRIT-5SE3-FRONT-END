@@ -47,7 +47,9 @@ export function AvailabilityCalendar({ roomId, date }: { roomId: string; date: s
               return (
                 <li key={h} className="flex items-center gap-3">
                   <span className="w-12 shrink-0 text-xs tabular-nums text-muted-foreground">{fromMinutes(h * 60)}</span>
-                  <span className={cn("flex-1 rounded-md border px-3 py-1 text-xs font-medium", STATE_STYLE[state])}>{t(`resources.avail.${state}`)}</span>
+                  <span className={cn("flex-1 rounded-md border px-3 py-1 text-xs font-medium", STATE_STYLE[state])}>
+                    {t(`resources.avail.${state}`)}
+                  </span>
                 </li>
               );
             })}

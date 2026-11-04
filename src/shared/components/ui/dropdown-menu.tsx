@@ -85,7 +85,10 @@ export const DropdownMenuCheckboxItem = React.forwardRef<
 DropdownMenuCheckboxItem.displayName = "DropdownMenuCheckboxItem";
 
 export const DropdownMenuLabel = ({ className, ...props }: React.ComponentPropsWithoutRef<typeof DropdownMenuPrimitive.Label>) => (
-  <DropdownMenuPrimitive.Label className={cn("px-3 py-2 text-xs font-semibold uppercase tracking-wide text-muted-foreground", className)} {...props} />
+  <DropdownMenuPrimitive.Label
+    className={cn("px-3 py-2 text-xs font-semibold uppercase tracking-wide text-muted-foreground", className)}
+    {...props}
+  />
 );
 
 export const DropdownMenuSeparator = ({ className, ...props }: React.ComponentPropsWithoutRef<typeof DropdownMenuPrimitive.Separator>) => (

@@ -14,9 +14,16 @@ export function Stepper({ steps, current, className }: { steps: Step[]; current:
         const done = i < current;
         const active = i === current;
         return (
-          <li key={step.label} className="relative flex flex-1 flex-col items-center text-center" aria-current={active ? "step" : undefined}>
+          <li
+            key={step.label}
+            className="relative flex flex-1 flex-col items-center text-center"
+            aria-current={active ? "step" : undefined}
+          >
             {i > 0 && (
-              <span aria-hidden="true" className={cn("absolute right-1/2 top-4 h-0.5 w-full -translate-y-1/2", i <= current ? "bg-primary" : "bg-slate-200")} />
+              <span
+                aria-hidden="true"
+                className={cn("absolute right-1/2 top-4 h-0.5 w-full -translate-y-1/2", i <= current ? "bg-primary" : "bg-slate-200")}
+              />
             )}
             <span
               className={cn(

@@ -18,7 +18,10 @@ export function MobileNav({ drawerOpen, onDrawerChange }: { drawerOpen: boolean;
 
   return (
     <>
-      <nav aria-label={t("nav.mobile")} className="fixed inset-x-0 bottom-0 z-30 flex border-t bg-card pb-[env(safe-area-inset-bottom)] lg:hidden">
+      <nav
+        aria-label={t("nav.mobile")}
+        className="fixed inset-x-0 bottom-0 z-30 flex border-t bg-card pb-[env(safe-area-inset-bottom)] lg:hidden"
+      >
         <NavLink to="/" end className={({ isActive }) => cn(tab, isActive ? "text-navy" : "text-slate-600")}>
           <Home className="size-5" aria-hidden="true" />
           {t("nav.home")}

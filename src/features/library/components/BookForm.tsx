@@ -22,7 +22,15 @@ export function BookForm({ onCreated, onCancel }: { onCreated: (book: Book) => v
   const viewer = useViewer();
   const formRef = useRef<HTMLFormElement>(null);
   const { mutate, isPending } = useMutation(createBook);
-  const [values, setValues] = useState({ title: "", author: "", isbn: "", category: "" as BookCategory | "", year: String(new Date().getFullYear()), copies: "1", description: "" });
+  const [values, setValues] = useState({
+    title: "",
+    author: "",
+    isbn: "",
+    category: "" as BookCategory | "",
+    year: String(new Date().getFullYear()),
+    copies: "1",
+    description: "",
+  });
   const [errors, setErrors] = useState<Errors>({});
   const [conflict, setConflict] = useState<{ message: string; conflicts: string[] }>();
   const [serviceError, setServiceError] = useState<string>();
@@ -49,7 +57,8 @@ export function BookForm({ onCreated, onCancel }: { onCreated: (book: Book) => v
       toast.success(t("lib.form.created", { title: created.title }));
       onCreated(created);
     } catch (err) {
-      if (isApiError(err) && err.isConflict) setConflict({ message: err.message, conflicts: (err.details as { conflicts?: string[] } | undefined)?.conflicts ?? [] });
+      if (isApiError(err) && err.isConflict)
+        setConflict({ message: err.message, conflicts: (err.details as { conflicts?: string[] } | undefined)?.conflicts ?? [] });
       else setServiceError(isApiError(err) ? (err.isUnavailable ? t("error.unavailable.title") : err.message) : t("error.generic"));
     }
   }
@@ -67,19 +76,45 @@ export function BookForm({ onCreated, onCancel }: { onCreated: (book: Book) => v
       {conflict && <ConflictAlert title={t("lib.form.conflictTitle")} description={conflict.message} conflicts={conflict.conflicts} />}
 
       <Field id={id("title")} label={t("lib.form.bookTitle")} error={errors.title}>
-        <Input id={id("title")} maxLength={130} value={values.title} onChange={(e) => set("title", e.target.value)} className={bad("title")} {...fieldA11y(id("title"), errors.title)} />
+        <Input
+          id={id("title")}
+          maxLength={130}
+          value={values.title}
+          onChange={(e) => set("title", e.target.value)}
+          className={bad("title")}
+          {...fieldA11y(id("title"), errors.title)}
+        />
       </Field>
       <div className="grid gap-4 sm:grid-cols-2">
         <Field id={id("author")} label={t("lib.form.author")} error={errors.author}>
-          <Input id={id("author")} maxLength={90} value={values.author} onChange={(e) => set("author", e.target.value)} className={bad("author")} {...fieldA11y(id("author"), errors.author)} />
+          <Input
+            id={id("author")}
+            maxLength={90}
+            value={values.author}
+            onChange={(e) => set("author", e.target.value)}
+            className={bad("author")}
+            {...fieldA11y(id("author"), errors.author)}
+          />
         </Field>
         <Field id={id("isbn")} label={t("lib.form.isbn")} error={errors.isbn} hint={t("lib.form.isbnHint")}>
-          <Input id={id("isbn")} value={values.isbn} onChange={(e) => set("isbn", e.target.value)} className={bad("isbn")} {...fieldA11y(id("isbn"), errors.isbn, t("lib.form.isbnHint"))} />
+          <Input
+            id={id("isbn")}
+            value={values.isbn}
+            onChange={(e) => set("isbn", e.target.value)}
+            className={bad("isbn")}
+            {...fieldA11y(id("isbn"), errors.isbn, t("lib.form.isbnHint"))}
+          />
         </Field>
       </div>
       <div className="grid gap-4 sm:grid-cols-3">
         <Field id={id("category")} label={t("lib.form.category")} error={errors.category}>
-          <Select id={id("category")} value={values.category} onChange={(e) => set("category", e.target.value as BookCategory)} className={bad("category")} {...fieldA11y(id("category"), errors.category)}>
+          <Select
+            id={id("category")}
+            value={values.category}
+            onChange={(e) => set("category", e.target.value as BookCategory)}
+            className={bad("category")}
+            {...fieldA11y(id("category"), errors.category)}
+          >
             <option value="">{t("lib.form.categoryPlaceholder")}</option>
             {BOOK_CATEGORIES.map((c) => (
               <option key={c} value={c}>
@@ -89,10 +124,28 @@ export function BookForm({ onCreated, onCancel }: { onCreated: (book: Book) => v
           </Select>
         </Field>
         <Field id={id("year")} label={t("lib.form.year")} error={errors.year}>
-          <Input id={id("year")} type="number" inputMode="numeric" value={values.year} onChange={(e) => set("year", e.target.value)} className={bad("year")} {...fieldA11y(id("year"), errors.year)} />
+          <Input
+            id={id("year")}
+            type="number"
+            inputMode="numeric"
+            value={values.year}
+            onChange={(e) => set("year", e.target.value)}
+            className={bad("year")}
+            {...fieldA11y(id("year"), errors.year)}
+          />
         </Field>
         <Field id={id("copies")} label={t("lib.form.copies")} error={errors.copies}>
-          <Input id={id("copies")} type="number" inputMode="numeric" min={1} max={50} value={values.copies} onChange={(e) => set("copies", e.target.value)} className={bad("copies")} {...fieldA11y(id("copies"), errors.copies)} />
+          <Input
+            id={id("copies")}
+            type="number"
+            inputMode="numeric"
+            min={1}
+            max={50}
+            value={values.copies}
+            onChange={(e) => set("copies", e.target.value)}
+            className={bad("copies")}
+            {...fieldA11y(id("copies"), errors.copies)}
+          />
         </Field>
       </div>
       <Field id={id("description")} label={t("lib.form.summary")} error={errors.description} optional>

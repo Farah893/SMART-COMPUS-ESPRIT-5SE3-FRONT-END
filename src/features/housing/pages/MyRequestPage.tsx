@@ -18,13 +18,24 @@ import { formatDay } from "../utils/time";
 import type { HousingRequest } from "../types";
 
 function trackingItems(r: HousingRequest, t: TFunction): TimelineItem[] {
-  const items: TimelineItem[] = [{ id: "requested", title: t("housing.timeline.requested"), description: r.residenceName, date: formatDateTime(r.requestedAt), tone: "navy" }];
+  const items: TimelineItem[] = [
+    {
+      id: "requested",
+      title: t("housing.timeline.requested"),
+      description: r.residenceName,
+      date: formatDateTime(r.requestedAt),
+      tone: "navy",
+    },
+  ];
   if (r.status === "pending") items.push({ id: "waiting", title: t("housing.timeline.waiting"), date: "", tone: "amber" });
   else {
     items.push({
       id: r.status,
       title: t(`housing.timeline.${r.status}`),
-      description: r.status === "confirmed" ? t("housing.mine.assigned", { number: r.assignedRoomNumber ?? "—", residence: r.assignedResidenceName ?? r.residenceName }) : undefined,
+      description:
+        r.status === "confirmed"
+          ? t("housing.mine.assigned", { number: r.assignedRoomNumber ?? "—", residence: r.assignedResidenceName ?? r.residenceName })
+          : undefined,
       date: r.decidedAt ? formatDateTime(r.decidedAt) : "",
       tone: r.status === "confirmed" ? "green" : "red",
     });

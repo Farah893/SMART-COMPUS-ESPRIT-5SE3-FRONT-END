@@ -27,22 +27,59 @@ function StudentGrades() {
   const t = useT();
   const query = useMyGrades();
   const columns: Column<MyGrade>[] = [
-    { key: "course", header: t("academic.col.course"), sortValue: (g) => g.code, cell: (g) => (<div><p className="font-medium">{g.code}</p><p className="text-xs text-muted-foreground">{g.title}</p></div>) },
+    {
+      key: "course",
+      header: t("academic.col.course"),
+      sortValue: (g) => g.code,
+      cell: (g) => (
+        <div>
+          <p className="font-medium">{g.code}</p>
+          <p className="text-xs text-muted-foreground">{g.title}</p>
+        </div>
+      ),
+    },
     { key: "teacher", header: t("academic.detail.teacher"), cell: (g) => g.teacherName },
     { key: "credits", header: t("academic.detail.credits"), sortValue: (g) => g.credits, cell: (g) => g.credits },
-    { key: "value", header: t("academic.col.grade"), sortValue: (g) => g.value ?? -1, cell: (g) => (g.value === null ? <span className="text-muted-foreground">{t("academic.grades.unpublished")}</span> : <span className={cn("font-semibold", g.value < PASS_MARK ? "text-red-800" : "text-foreground")}>{fmt(g.value)} / 20</span>) },
-    { key: "result", header: t("academic.col.status"), cell: (g) => <StatusPill status={g.value === null ? "pending" : g.value >= PASS_MARK ? "validated" : "refused"} /> },
+    {
+      key: "value",
+      header: t("academic.col.grade"),
+      sortValue: (g) => g.value ?? -1,
+      cell: (g) =>
+        g.value === null ? (
+          <span className="text-muted-foreground">{t("academic.grades.unpublished")}</span>
+        ) : (
+          <span className={cn("font-semibold", g.value < PASS_MARK ? "text-red-800" : "text-foreground")}>{fmt(g.value)} / 20</span>
+        ),
+    },
+    {
+      key: "result",
+      header: t("academic.col.status"),
+      cell: (g) => <StatusPill status={g.value === null ? "pending" : g.value >= PASS_MARK ? "validated" : "refused"} />,
+    },
   ];
   return (
     <QueryBoundary query={query} moduleName={t("module.academic")}>
       {(s) => (
         <div className="space-y-6">
           <div className="grid gap-4 sm:grid-cols-2">
-            <StatCard label={t("academic.grades.average")} value={s.average === null ? "—" : `${fmt(s.average)} / 20`} icon={Percent} tone="navy" hint={t("academic.grades.averageHint")} />
-            <StatCard label={t("academic.grades.credits")} value={`${s.creditsEarned} / ${s.creditsTotal}`} icon={GraduationCap} tone="green" />
+            <StatCard
+              label={t("academic.grades.average")}
+              value={s.average === null ? "—" : `${fmt(s.average)} / 20`}
+              icon={Percent}
+              tone="navy"
+              hint={t("academic.grades.averageHint")}
+            />
+            <StatCard
+              label={t("academic.grades.credits")}
+              value={`${s.creditsEarned} / ${s.creditsTotal}`}
+              icon={GraduationCap}
+              tone="green"
+            />
           </div>
           {s.items.length === 0 ? (
-            <Card><EmptyState icon={Award} title={t("academic.empty.grades")} /></Card>
+            <Card>
+              <EmptyState icon={Award} title={t("academic.empty.grades")} />
+            </Card>
           ) : (
             <DataTable caption={t("academic.grades.caption")} columns={columns} data={s.items} rowKey={(g) => g.courseId} />
           )}
@@ -100,18 +137,37 @@ function GradeSheet({ courseId, data, refetch }: { courseId: string; data: Cours
     }
   }
 
-  if (data.entries.length === 0) return <Card><EmptyState icon={Award} title={t("academic.empty.roster")} /></Card>;
+  if (data.entries.length === 0)
+    return (
+      <Card>
+        <EmptyState icon={Award} title={t("academic.empty.roster")} />
+      </Card>
+    );
 
   return (
-    <form ref={formRef} onSubmit={(e) => { e.preventDefault(); void submit(false); }} noValidate className="space-y-4">
+    <form
+      ref={formRef}
+      onSubmit={(e) => {
+        e.preventDefault();
+        void submit(false);
+      }}
+      noValidate
+      className="space-y-4"
+    >
       <div className="overflow-x-auto rounded-xl border bg-card shadow-card">
         <table className="w-full text-left text-sm">
           <caption className="sr-only">{t("academic.grades.sheetCaption", { code: data.course.code })}</caption>
           <thead className="border-b bg-secondary/60">
             <tr>
-              <th scope="col" className="px-4 py-3 font-semibold text-muted-foreground">{t("academic.col.student")}</th>
-              <th scope="col" className="w-48 px-4 py-3 font-semibold text-muted-foreground">{t("academic.col.grade")} (/20)</th>
-              <th scope="col" className="px-4 py-3 font-semibold text-muted-foreground">{t("academic.col.status")}</th>
+              <th scope="col" className="px-4 py-3 font-semibold text-muted-foreground">
+                {t("academic.col.student")}
+              </th>
+              <th scope="col" className="w-48 px-4 py-3 font-semibold text-muted-foreground">
+                {t("academic.col.grade")} (/20)
+              </th>
+              <th scope="col" className="px-4 py-3 font-semibold text-muted-foreground">
+                {t("academic.col.status")}
+              </th>
             </tr>
           </thead>
           <tbody className="divide-y">
@@ -120,7 +176,10 @@ function GradeSheet({ courseId, data, refetch }: { courseId: string; data: Cours
               const err = errors[e.studentId];
               return (
                 <tr key={e.studentId} className="align-top">
-                  <th scope="row" className="px-4 py-3 font-medium"><label htmlFor={id}>{e.studentName}</label><span className="block text-xs font-normal text-muted-foreground">{e.studentId}</span></th>
+                  <th scope="row" className="px-4 py-3 font-medium">
+                    <label htmlFor={id}>{e.studentName}</label>
+                    <span className="block text-xs font-normal text-muted-foreground">{e.studentId}</span>
+                  </th>
                   <td className="px-4 py-2">
                     <input
                       id={id}
@@ -129,12 +188,26 @@ function GradeSheet({ courseId, data, refetch }: { courseId: string; data: Cours
                       value={inputs[e.studentId] ?? ""}
                       aria-invalid={err ? true : undefined}
                       aria-describedby={err ? `${id}-err` : undefined}
-                      onChange={(ev) => { setInputs((s) => ({ ...s, [e.studentId]: ev.target.value })); setErrors((s) => ({ ...s, [e.studentId]: "" })); }}
+                      onChange={(ev) => {
+                        setInputs((s) => ({ ...s, [e.studentId]: ev.target.value }));
+                        setErrors((s) => ({ ...s, [e.studentId]: "" }));
+                      }}
                       className={cn("h-10 w-28 rounded-lg border bg-card px-3 text-sm", err ? "border-red-600" : "border-input")}
                     />
-                    <p id={`${id}-err`} className="min-h-5 pt-1 text-xs text-red-700">{err ? t(err) : ""}</p>
+                    <p id={`${id}-err`} className="min-h-5 pt-1 text-xs text-red-700">
+                      {err ? t(err) : ""}
+                    </p>
                   </td>
-                  <td className="px-4 py-3"><span className={cn("inline-flex rounded-full border px-2.5 py-0.5 text-xs font-semibold", e.published ? "border-green-200 bg-green-100 text-green-800" : "border-slate-200 bg-slate-100 text-slate-700")}>{e.published ? t("academic.grades.published") : t("academic.grades.draft")}</span></td>
+                  <td className="px-4 py-3">
+                    <span
+                      className={cn(
+                        "inline-flex rounded-full border px-2.5 py-0.5 text-xs font-semibold",
+                        e.published ? "border-green-200 bg-green-100 text-green-800" : "border-slate-200 bg-slate-100 text-slate-700",
+                      )}
+                    >
+                      {e.published ? t("academic.grades.published") : t("academic.grades.draft")}
+                    </span>
+                  </td>
                 </tr>
               );
             })}
@@ -142,8 +215,18 @@ function GradeSheet({ courseId, data, refetch }: { courseId: string; data: Cours
         </table>
       </div>
       <div className="flex flex-wrap justify-end gap-2">
-        <Button type="submit" variant="outline" disabled={busy}>{t("academic.grades.saveDraft")}</Button>
-        <Button type="button" disabled={busy} onClick={() => { if (collect()) setConfirmPublish(true); }}>{t("academic.grades.publish")}</Button>
+        <Button type="submit" variant="outline" disabled={busy}>
+          {t("academic.grades.saveDraft")}
+        </Button>
+        <Button
+          type="button"
+          disabled={busy}
+          onClick={() => {
+            if (collect()) setConfirmPublish(true);
+          }}
+        >
+          {t("academic.grades.publish")}
+        </Button>
       </div>
       <ConfirmDialog
         open={confirmPublish}
@@ -181,13 +264,21 @@ function TeacherGrades() {
     <QueryBoundary query={query} moduleName={t("module.academic")}>
       {(list) =>
         list.length === 0 ? (
-          <Card><EmptyState icon={Award} title={t("academic.empty.teacherCourses")} /></Card>
+          <Card>
+            <EmptyState icon={Award} title={t("academic.empty.teacherCourses")} />
+          </Card>
         ) : (
           <div className="space-y-4">
             <div className="w-full sm:w-96">
-              <label htmlFor="grade-course" className="mb-1.5 block text-sm font-medium">{t("academic.grades.chooseCourse")}</label>
+              <label htmlFor="grade-course" className="mb-1.5 block text-sm font-medium">
+                {t("academic.grades.chooseCourse")}
+              </label>
               <Select id="grade-course" value={selected} onChange={(e) => setCourseId(e.target.value)}>
-                {list.map((c) => <option key={c.id} value={c.id}>{c.code} — {c.title}</option>)}
+                {list.map((c) => (
+                  <option key={c.id} value={c.id}>
+                    {c.code} — {c.title}
+                  </option>
+                ))}
               </Select>
             </div>
             <CourseGradesView key={selected} courseId={selected} />

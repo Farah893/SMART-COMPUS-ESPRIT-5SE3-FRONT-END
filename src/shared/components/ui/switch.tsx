@@ -21,7 +21,10 @@ export const Switch = React.forwardRef<HTMLButtonElement, SwitchProps>(({ classN
     )}
     {...props}
   >
-    <span aria-hidden="true" className={cn("block size-5 rounded-full bg-white shadow transition-transform", checked ? "translate-x-5" : "translate-x-0")} />
+    <span
+      aria-hidden="true"
+      className={cn("block size-5 rounded-full bg-white shadow transition-transform", checked ? "translate-x-5" : "translate-x-0")}
+    />
   </button>
 ));
 Switch.displayName = "Switch";

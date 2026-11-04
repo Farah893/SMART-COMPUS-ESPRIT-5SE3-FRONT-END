@@ -51,7 +51,8 @@ function Field({ id, label, error, hint, children }: { id: string; label: string
   );
 }
 
-const focusFirstInvalid = (form: HTMLFormElement | null) => setTimeout(() => form?.querySelector<HTMLElement>('[aria-invalid="true"]')?.focus(), 0);
+const focusFirstInvalid = (form: HTMLFormElement | null) =>
+  setTimeout(() => form?.querySelector<HTMLElement>('[aria-invalid="true"]')?.focus(), 0);
 
 /** Formulaire de demande de réservation : validation zod, jauge de capacité, disponibilités du jour et ConflictAlert sur 409. */
 export function ReservationForm({ initialRoomId }: { initialRoomId?: string }) {
@@ -63,7 +64,14 @@ export function ReservationForm({ initialRoomId }: { initialRoomId?: string }) {
   const rooms = useRooms();
   const { mutate, isPending } = useMutation(createReservation);
 
-  const [values, setValues] = useState({ roomId: initialRoomId ?? "", date: addDays(1), start: "09:00", end: "11:00", attendees: "", purpose: "" });
+  const [values, setValues] = useState({
+    roomId: initialRoomId ?? "",
+    date: addDays(1),
+    start: "09:00",
+    end: "11:00",
+    attendees: "",
+    purpose: "",
+  });
   const [errors, setErrors] = useState<Errors>({});
   const [conflict, setConflict] = useState<{ room: string; message: string; conflicts: string[] }>();
   const [serviceError, setServiceError] = useState<string>();
@@ -89,11 +97,20 @@ export function ReservationForm({ initialRoomId }: { initialRoomId?: string }) {
     }
     try {
       const created = await mutate(data, viewer);
-      toast.success(t(`resources.form.sent.${created.status === "confirmed" ? "confirmed" : "pending"}`, { room: created.roomName, date: formatDay(created.date) }));
+      toast.success(
+        t(`resources.form.sent.${created.status === "confirmed" ? "confirmed" : "pending"}`, {
+          room: created.roomName,
+          date: formatDay(created.date),
+        }),
+      );
       navigate("/ressources/mes-reservations");
     } catch (err) {
       if (isApiError(err) && err.isConflict) {
-        setConflict({ room: room?.name ?? "", message: err.message, conflicts: (err.details as { conflicts?: string[] } | undefined)?.conflicts ?? [] });
+        setConflict({
+          room: room?.name ?? "",
+          message: err.message,
+          conflicts: (err.details as { conflicts?: string[] } | undefined)?.conflicts ?? [],
+        });
       } else if (isApiError(err) && err.status === 422) {
         setErrors({ attendees: err.message });
         focusFirstInvalid(formRef.current);
@@ -117,8 +134,16 @@ export function ReservationForm({ initialRoomId }: { initialRoomId?: string }) {
         return (
           <div className="grid gap-6 lg:grid-cols-[minmax(0,1fr)_minmax(0,22rem)]">
             <Card className="p-5 sm:p-6">
-              <form ref={formRef} onSubmit={(e) => void submit(e, list)} noValidate className="space-y-4" aria-label={t("resources.form.title")}>
-                <p className="text-sm text-muted-foreground">{role === "admin" ? t("resources.form.adminNote") : t("resources.form.teacherNote")}</p>
+              <form
+                ref={formRef}
+                onSubmit={(e) => void submit(e, list)}
+                noValidate
+                className="space-y-4"
+                aria-label={t("resources.form.title")}
+              >
+                <p className="text-sm text-muted-foreground">
+                  {role === "admin" ? t("resources.form.adminNote") : t("resources.form.teacherNote")}
+                </p>
 
                 {serviceError && (
                   <p role="alert" className="rounded-lg border border-red-200 bg-red-50 px-3 py-2 text-sm text-red-900">
@@ -146,7 +171,14 @@ export function ReservationForm({ initialRoomId }: { initialRoomId?: string }) {
 
                 <div className="grid gap-4 sm:grid-cols-3">
                   <Field id={id("date")} label={t("resources.form.date")} error={errors.date}>
-                    <Input id={id("date")} type="date" min={todayISO()} value={values.date} onChange={(e) => set("date", e.target.value)} {...invalid("date")} />
+                    <Input
+                      id={id("date")}
+                      type="date"
+                      min={todayISO()}
+                      value={values.date}
+                      onChange={(e) => set("date", e.target.value)}
+                      {...invalid("date")}
+                    />
                   </Field>
                   <Field id={id("start")} label={t("resources.form.start")} error={errors.start}>
                     <Select id={id("start")} value={values.start} onChange={(e) => set("start", e.target.value)} {...invalid("start")}>
@@ -169,7 +201,15 @@ export function ReservationForm({ initialRoomId }: { initialRoomId?: string }) {
                 </div>
 
                 <Field id={id("attendees")} label={t("resources.form.attendees")} error={errors.attendees}>
-                  <Input id={id("attendees")} type="number" inputMode="numeric" min={1} value={values.attendees} onChange={(e) => set("attendees", e.target.value)} {...invalid("attendees")} />
+                  <Input
+                    id={id("attendees")}
+                    type="number"
+                    inputMode="numeric"
+                    min={1}
+                    value={values.attendees}
+                    onChange={(e) => set("attendees", e.target.value)}
+                    {...invalid("attendees")}
+                  />
                 </Field>
                 {showGauge && (
                   <div>
@@ -179,12 +219,22 @@ export function ReservationForm({ initialRoomId }: { initialRoomId?: string }) {
                 )}
 
                 <Field id={id("purpose")} label={t("resources.form.purpose")} error={errors.purpose} hint={t("resources.form.purposeHint")}>
-                  <Input id={id("purpose")} maxLength={140} value={values.purpose} onChange={(e) => set("purpose", e.target.value)} {...invalid("purpose", t("resources.form.purposeHint"))} />
+                  <Input
+                    id={id("purpose")}
+                    maxLength={140}
+                    value={values.purpose}
+                    onChange={(e) => set("purpose", e.target.value)}
+                    {...invalid("purpose", t("resources.form.purposeHint"))}
+                  />
                 </Field>
 
                 <div className="flex flex-wrap gap-2 pt-2">
                   <Button type="submit" disabled={isPending}>
-                    {isPending ? t("resources.form.submitting") : role === "admin" ? t("resources.form.submitAdmin") : t("resources.form.submit")}
+                    {isPending
+                      ? t("resources.form.submitting")
+                      : role === "admin"
+                        ? t("resources.form.submitAdmin")
+                        : t("resources.form.submit")}
                   </Button>
                   <Button type="button" variant="outline" onClick={() => navigate("/ressources")}>
                     {t("common.cancel")}

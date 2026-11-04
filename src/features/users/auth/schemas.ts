@@ -5,11 +5,7 @@ import { isInstitutionalEmail } from "../utils/validation";
  * Schémas de validation des formulaires d'authentification.
  * Les messages sont des clés i18n (résolues à l'affichage avec `t`).
  */
-export const emailSchema = z
-  .string()
-  .trim()
-  .min(1, "users.err.required")
-  .refine(isInstitutionalEmail, "users.err.emailDomain");
+export const emailSchema = z.string().trim().min(1, "users.err.required").refine(isInstitutionalEmail, "users.err.emailDomain");
 
 export const passwordRules = z
   .string()
@@ -42,7 +38,10 @@ export const otpSchema = z.string().regex(/^\d{6}$/, "users.verify.badCode");
 export type FieldErrors<T> = Partial<Record<keyof T, string>>;
 
 /** Valide `values` ; renvoie les données typées, ou la première clé d'erreur i18n par champ. */
-export function validate<T>(schema: ZodType<T>, values: unknown): { data: T; errors?: undefined } | { data?: undefined; errors: FieldErrors<T> } {
+export function validate<T>(
+  schema: ZodType<T>,
+  values: unknown,
+): { data: T; errors?: undefined } | { data?: undefined; errors: FieldErrors<T> } {
   const r = schema.safeParse(values);
   if (r.success) return { data: r.data };
   const errors: Record<string, string> = {};

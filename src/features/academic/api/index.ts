@@ -6,7 +6,15 @@ import { assertAvailable } from "@/shared/services/serviceHealth";
 import { publishDomainEvent } from "@/shared/events/domainEvents";
 import { db } from "../mocks";
 import type {
-  Course, CourseFilters, CourseGrades, CourseView, Enrollment, EnrollmentStatus, GradeSummary, Session, TimetableEntry,
+  Course,
+  CourseFilters,
+  CourseGrades,
+  CourseView,
+  Enrollment,
+  EnrollmentStatus,
+  GradeSummary,
+  Session,
+  TimetableEntry,
 } from "../types";
 
 /**
@@ -31,9 +39,11 @@ function courseById(id: string) {
 }
 
 const toMinutes = (hhmm: string) => Number(hhmm.slice(0, 2)) * 60 + Number(hhmm.slice(3, 5));
-const overlaps = (a: Session, b: Session) => a.day === b.day && toMinutes(a.start) < toMinutes(b.end) && toMinutes(b.start) < toMinutes(a.end);
+const overlaps = (a: Session, b: Session) =>
+  a.day === b.day && toMinutes(a.start) < toMinutes(b.end) && toMinutes(b.start) < toMinutes(a.end);
 
-const enrollmentFor = (courseId: string, studentId: string) => db.enrollments.find((e) => e.courseId === courseId && e.studentId === studentId);
+const enrollmentFor = (courseId: string, studentId: string) =>
+  db.enrollments.find((e) => e.courseId === courseId && e.studentId === studentId);
 
 const withState = (c: Course, viewerId: string): CourseView => ({ ...c, myEnrollment: enrollmentFor(c.id, viewerId)?.status });
 
@@ -83,7 +93,10 @@ export const enroll = (courseId: string, viewer: Viewer) =>
         throw new ApiError(409, "Vous avez déjà une demande pour ce cours", { code: "ALREADY_ENROLLED", conflicts: [] });
       }
       if (course.enrolled >= course.capacity) {
-        throw new ApiError(409, "Ce cours est complet", { code: "COURSE_FULL", conflicts: [`${course.code} — ${course.enrolled}/${course.capacity} places occupées`] });
+        throw new ApiError(409, "Ce cours est complet", {
+          code: "COURSE_FULL",
+          conflicts: [`${course.code} — ${course.enrolled}/${course.capacity} places occupées`],
+        });
       }
       const mine = db.enrollments.filter((e) => e.studentId === viewer.id && e.status !== "refused");
       const conflicts: string[] = [];
@@ -91,7 +104,9 @@ export const enroll = (courseId: string, viewer: Viewer) =>
         for (const other of courseById(e.courseId).sessions) {
           for (const mineSession of course.sessions) {
             if (overlaps(mineSession, other)) {
-              conflicts.push(`${e.courseCode} — ${other.kind} ${other.start}–${other.end} (${other.room}) chevauche ${course.code} ${mineSession.kind} ${mineSession.start}–${mineSession.end}`);
+              conflicts.push(
+                `${e.courseCode} — ${other.kind} ${other.start}–${other.end} (${other.room}) chevauche ${course.code} ${mineSession.kind} ${mineSession.start}–${mineSession.end}`,
+              );
             }
           }
         }
@@ -100,8 +115,14 @@ export const enroll = (courseId: string, viewer: Viewer) =>
 
       if (existing) db.enrollments.splice(db.enrollments.indexOf(existing), 1); // nouvelle demande après un refus
       const created: Enrollment = {
-        id: `e-${++db.seq}`, courseId, courseCode: course.code, courseTitle: course.title,
-        studentId: viewer.id, studentName: viewer.name, status: "pending", requestedAt: db.now(),
+        id: `e-${++db.seq}`,
+        courseId,
+        courseCode: course.code,
+        courseTitle: course.title,
+        studentId: viewer.id,
+        studentName: viewer.name,
+        status: "pending",
+        requestedAt: db.now(),
       };
       db.enrollments.unshift(created);
       return clone(created);
@@ -115,7 +136,11 @@ export const listEnrollments = (viewer: Viewer, signal?: AbortSignal) =>
     mock: () => {
       svc();
       if (viewer.role === "teacher") throw new ApiError(403, "Accès interdit");
-      return clone(db.enrollments.filter((e) => viewer.role === "admin" || e.studentId === viewer.id).sort((a, b) => b.requestedAt.localeCompare(a.requestedAt)));
+      return clone(
+        db.enrollments
+          .filter((e) => viewer.role === "admin" || e.studentId === viewer.id)
+          .sort((a, b) => b.requestedAt.localeCompare(a.requestedAt)),
+      );
     },
   });
 
@@ -131,7 +156,11 @@ export const decideEnrollment = (id: string, status: Exclude<EnrollmentStatus, "
       if (e.status !== "pending") throw new ApiError(409, "Cette demande a déjà été traitée", { code: "ALREADY_DECIDED", conflicts: [] });
       if (status === "validated") {
         const c = courseById(e.courseId);
-        if (c.enrolled >= c.capacity) throw new ApiError(409, "Ce cours est complet", { code: "COURSE_FULL", conflicts: [`${c.code} — ${c.enrolled}/${c.capacity} places occupées`] });
+        if (c.enrolled >= c.capacity)
+          throw new ApiError(409, "Ce cours est complet", {
+            code: "COURSE_FULL",
+            conflicts: [`${c.code} — ${c.enrolled}/${c.capacity} places occupées`],
+          });
         c.enrolled += 1;
       }
       e.status = status;
@@ -177,7 +206,14 @@ export const getMyGrades = (viewer: Viewer, signal?: AbortSignal) =>
         .map((e) => {
           const c = courseById(e.courseId);
           const g = db.grades.get(gradeKey(c.id, viewer.id));
-          return { courseId: c.id, code: c.code, title: c.title, credits: c.credits, teacherName: c.teacherName, value: g?.published ? g.value : null };
+          return {
+            courseId: c.id,
+            code: c.code,
+            title: c.title,
+            credits: c.credits,
+            teacherName: c.teacherName,
+            value: g?.published ? g.value : null,
+          };
         });
       const graded = items.filter((i) => i.value !== null);
       const weight = graded.reduce((n, i) => n + i.credits, 0);
@@ -198,7 +234,8 @@ export const getCourseGrades = (courseId: string, viewer: Viewer, signal?: Abort
     mock: () => {
       svc();
       const c = courseById(courseId);
-      if (viewer.role === "student" || (viewer.role === "teacher" && c.teacherId !== viewer.id)) throw new ApiError(403, "Accès interdit à ce cours");
+      if (viewer.role === "student" || (viewer.role === "teacher" && c.teacherId !== viewer.id))
+        throw new ApiError(403, "Accès interdit à ce cours");
       const entries = db.enrollments
         .filter((e) => e.courseId === courseId && e.status === "validated")
         .map((e) => {
@@ -222,7 +259,10 @@ export const saveGrades = (courseId: string, values: Record<string, number | nul
       for (const [studentId, value] of Object.entries(values)) {
         if (value !== null && (value < 0 || value > 20)) throw new ApiError(422, "La note doit être comprise entre 0 et 20");
         const prev = db.grades.get(gradeKey(courseId, studentId));
-        db.grades.set(gradeKey(courseId, studentId), { value, published: publish ? value !== null : (prev?.published ?? false) && value === prev?.value });
+        db.grades.set(gradeKey(courseId, studentId), {
+          value,
+          published: publish ? value !== null : (prev?.published ?? false) && value === prev?.value,
+        });
         if (publish && value !== null) count++;
       }
       if (publish) publishDomainEvent(SERVICE, "NotePubliée", `${c.code} · ${count} note(s) publiée(s)`);

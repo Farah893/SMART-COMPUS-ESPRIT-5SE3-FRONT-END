@@ -29,7 +29,9 @@ export function AccountCreatedDialog({ result, onClose }: { result: AdminCreateR
               </span>
               <div className="space-y-1">
                 <DialogTitle>{t("users.created.title")}</DialogTitle>
-                <DialogDescription>{t("users.created.sent", { email: result.account.email, name: fullName(result.account) })}</DialogDescription>
+                <DialogDescription>
+                  {t("users.created.sent", { email: result.account.email, name: fullName(result.account) })}
+                </DialogDescription>
               </div>
             </div>
             {result.demoTemporaryPassword && (
@@ -37,8 +39,16 @@ export function AccountCreatedDialog({ result, onClose }: { result: AdminCreateR
                 <p className="text-sm font-semibold">{t("users.created.demoTitle")}</p>
                 <p className="mt-1 text-sm">{t("users.created.demoBody")}</p>
                 <div className="mt-2 flex items-center gap-2">
-                  <code className="rounded bg-white px-3 py-1.5 font-mono text-base font-semibold tracking-wider">{result.demoTemporaryPassword}</code>
-                  <Button type="button" variant="outline" size="sm" className="bg-white" onClick={() => void copy(result.demoTemporaryPassword!)}>
+                  <code className="rounded bg-white px-3 py-1.5 font-mono text-base font-semibold tracking-wider">
+                    {result.demoTemporaryPassword}
+                  </code>
+                  <Button
+                    type="button"
+                    variant="outline"
+                    size="sm"
+                    className="bg-white"
+                    onClick={() => void copy(result.demoTemporaryPassword!)}
+                  >
                     <Copy aria-hidden="true" />
                     {t("users.created.copy")}
                   </Button>

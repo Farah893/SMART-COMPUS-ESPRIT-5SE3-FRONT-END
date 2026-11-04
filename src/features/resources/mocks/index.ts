@@ -15,8 +15,22 @@ export const EQUIPMENT: Record<string, Equipment> = {
 };
 
 const eq = (...ids: (keyof typeof EQUIPMENT)[]) => ids.map((id) => EQUIPMENT[id]!);
-const room = (id: string, name: string, building: string, floor: number, kind: RoomKind, capacity: number, equipment: Equipment[]): Room => ({
-  id, name, building, floor, kind, capacity, equipment,
+const room = (
+  id: string,
+  name: string,
+  building: string,
+  floor: number,
+  kind: RoomKind,
+  capacity: number,
+  equipment: Equipment[],
+): Room => ({
+  id,
+  name,
+  building,
+  floor,
+  kind,
+  capacity,
+  equipment,
 });
 
 // Les noms de salles sont ceux utilisés par l'emploi du temps du module Académique.
@@ -41,14 +55,33 @@ const ENS = {
 
 let rid = 0;
 const rsv = (
-  who: readonly [string, string], roomId: string, dayOffset: number, start: string, end: string, attendees: number, purpose: string,
-  status: ReservationStatus, requestedHoursAgo: number, rooms: Room[],
+  who: readonly [string, string],
+  roomId: string,
+  dayOffset: number,
+  start: string,
+  end: string,
+  attendees: number,
+  purpose: string,
+  status: ReservationStatus,
+  requestedHoursAgo: number,
+  rooms: Room[],
 ): Reservation => {
   const r = rooms.find((x) => x.id === roomId)!;
   return {
-    id: `rs-${++rid}`, roomId, roomName: r.name, building: r.building, requesterId: who[0], requesterName: who[1],
-    date: addDays(dayOffset), start, end, attendees, purpose, status,
-    requestedAt: iso(requestedHoursAgo), decidedAt: status === "pending" ? undefined : iso(Math.max(1, requestedHoursAgo - 6)),
+    id: `rs-${++rid}`,
+    roomId,
+    roomName: r.name,
+    building: r.building,
+    requesterId: who[0],
+    requesterName: who[1],
+    date: addDays(dayOffset),
+    start,
+    end,
+    attendees,
+    purpose,
+    status,
+    requestedAt: iso(requestedHoursAgo),
+    decidedAt: status === "pending" ? undefined : iso(Math.max(1, requestedHoursAgo - 6)),
   };
 };
 

@@ -68,8 +68,24 @@ export function AccountForm({ roles, submitLabel, onCreated, idPrefix = "acc", e
         </p>
       )}
       <div className="grid gap-4 sm:grid-cols-2">
-        <TextField id={id("first")} label={t("users.field.firstName")} value={values.firstName} onChange={(e) => set("firstName", e.target.value)} error={errors.firstName} autoComplete="off" required />
-        <TextField id={id("last")} label={t("users.field.lastName")} value={values.lastName} onChange={(e) => set("lastName", e.target.value)} error={errors.lastName} autoComplete="off" required />
+        <TextField
+          id={id("first")}
+          label={t("users.field.firstName")}
+          value={values.firstName}
+          onChange={(e) => set("firstName", e.target.value)}
+          error={errors.firstName}
+          autoComplete="off"
+          required
+        />
+        <TextField
+          id={id("last")}
+          label={t("users.field.lastName")}
+          value={values.lastName}
+          onChange={(e) => set("lastName", e.target.value)}
+          error={errors.lastName}
+          autoComplete="off"
+          required
+        />
       </div>
       <TextField
         id={id("email")}

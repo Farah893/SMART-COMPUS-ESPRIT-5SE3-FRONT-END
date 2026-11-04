@@ -6,8 +6,5 @@ import type { DashboardData } from "./types";
 
 export function useDashboard() {
   const { role } = useAuth();
-  return useQuery(
-    (signal) => api.get<DashboardData>("/dashboard", { signal, mock: () => buildDashboard(role) }),
-    [role],
-  );
+  return useQuery((signal) => api.get<DashboardData>("/dashboard", { signal, mock: () => buildDashboard(role) }), [role]);
 }

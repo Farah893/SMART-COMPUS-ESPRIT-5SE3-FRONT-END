@@ -36,8 +36,18 @@ export default function ClubsPage() {
             {t("life.search.label")}
           </label>
           <div className="relative">
-            <Search className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" aria-hidden="true" />
-            <Input id="club-search" type="search" className="pl-9" placeholder={t("life.search.placeholder")} value={search} onChange={(e) => setSearch(e.target.value)} />
+            <Search
+              className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground"
+              aria-hidden="true"
+            />
+            <Input
+              id="club-search"
+              type="search"
+              className="pl-9"
+              placeholder={t("life.search.placeholder")}
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+            />
           </div>
         </div>
         <div className="w-full sm:w-56">
@@ -80,7 +90,14 @@ export default function ClubsPage() {
               </p>
               <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
                 {clubs.map((c) => (
-                  <ClubCard key={c.id} club={c} busy={pendingId === c.id} onJoin={(x) => void join(x)} onCancel={(x) => void cancel(x)} onLeave={askLeave} />
+                  <ClubCard
+                    key={c.id}
+                    club={c}
+                    busy={pendingId === c.id}
+                    onJoin={(x) => void join(x)}
+                    onCancel={(x) => void cancel(x)}
+                    onLeave={askLeave}
+                  />
                 ))}
               </div>
             </>

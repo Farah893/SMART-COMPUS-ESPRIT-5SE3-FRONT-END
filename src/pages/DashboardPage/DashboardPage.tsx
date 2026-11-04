@@ -46,16 +46,15 @@ export default function DashboardPage() {
   if (error || !data) {
     return (
       <Card>
-        <EmptyState
-          icon={CloudOff}
-          title={t("dashboard.loadError")}
-          action={<Button onClick={refetch}>{t("common.retry")}</Button>}
-        />
+        <EmptyState icon={CloudOff} title={t("dashboard.loadError")} action={<Button onClick={refetch}>{t("common.retry")}</Button>} />
       </Card>
     );
   }
 
-  const quick = data.quickAccess.map(getModule).filter((m) => canAccess(m, role)).slice(0, 4);
+  const quick = data.quickAccess
+    .map(getModule)
+    .filter((m) => canAccess(m, role))
+    .slice(0, 4);
 
   return (
     <div className="grid items-start gap-6 lg:grid-cols-[minmax(0,1fr)_20rem]">

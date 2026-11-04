@@ -20,26 +20,26 @@ student-life/
 
 ## Pages (front)
 
-| Route | Accès | Écran |
-|---|---|---|
-| `/vie-etudiante` | tous | Annuaire des clubs, recherche, catégorie, adhésion |
-| `/vie-etudiante/clubs/:id` | tous | Fiche du club : membres, événements à venir |
-| `/vie-etudiante/agenda` | tous | Événements à venir, regroupés par jour |
-| `/vie-etudiante/gestion` | admin | Créer un club, créer un événement, valider les adhésions |
+| Route                      | Accès | Écran                                                    |
+| -------------------------- | ----- | -------------------------------------------------------- |
+| `/vie-etudiante`           | tous  | Annuaire des clubs, recherche, catégorie, adhésion       |
+| `/vie-etudiante/clubs/:id` | tous  | Fiche du club : membres, événements à venir              |
+| `/vie-etudiante/agenda`    | tous  | Événements à venir, regroupés par jour                   |
+| `/vie-etudiante/gestion`   | admin | Créer un club, créer un événement, valider les adhésions |
 
 ## Routes de l'API
 
-| Route | Qui | Corps → Réponse | Erreurs |
-|---|---|---|---|
-| `GET /clubs?q=&category=` | tous | `ClubView[]` (avec `myMembership`) | — |
-| `GET /clubs/{id}` | tous | `ClubDetail` (membres confirmés, événements à venir) | 404 |
-| `POST /clubs` | admin | `{name,category,description,meetingPlace,maxMembers}` → `Club` | 403 · 409 `CLUB_EXISTS` |
-| `POST /clubs/{id}/members` | étudiant, enseignant | — → `Membership` (en attente) | 403 admin · 409 `ALREADY_MEMBER` / `CLUB_FULL` |
-| `DELETE /clubs/{id}/members/me` | étudiant, enseignant | retire la demande ou quitte le club | 404 |
-| `GET /memberships` | admin | `Membership[]` | 403 |
-| `PUT /memberships/{id}/status` | admin | `{status: confirmed\|refused}` | 403 · 404 · 409 `ALREADY_DECIDED` / `CLUB_FULL` |
-| `GET /events?clubId=` | tous | événements à venir | — |
-| `POST /events` | **admin seulement** | `{title,description,date,start,end,location,clubId?}` | 403 · 422 |
+| Route                           | Qui                  | Corps → Réponse                                                | Erreurs                                         |
+| ------------------------------- | -------------------- | -------------------------------------------------------------- | ----------------------------------------------- |
+| `GET /clubs?q=&category=`       | tous                 | `ClubView[]` (avec `myMembership`)                             | —                                               |
+| `GET /clubs/{id}`               | tous                 | `ClubDetail` (membres confirmés, événements à venir)           | 404                                             |
+| `POST /clubs`                   | admin                | `{name,category,description,meetingPlace,maxMembers}` → `Club` | 403 · 409 `CLUB_EXISTS`                         |
+| `POST /clubs/{id}/members`      | étudiant, enseignant | — → `Membership` (en attente)                                  | 403 admin · 409 `ALREADY_MEMBER` / `CLUB_FULL`  |
+| `DELETE /clubs/{id}/members/me` | étudiant, enseignant | retire la demande ou quitte le club                            | 404                                             |
+| `GET /memberships`              | admin                | `Membership[]`                                                 | 403                                             |
+| `PUT /memberships/{id}/status`  | admin                | `{status: confirmed\|refused}`                                 | 403 · 404 · 409 `ALREADY_DECIDED` / `CLUB_FULL` |
+| `GET /events?clubId=`           | tous                 | événements à venir                                             | —                                               |
+| `POST /events`                  | **admin seulement**  | `{title,description,date,start,end,location,clubId?}`          | 403 · 422                                       |
 
 ## Événements de domaine publiés
 

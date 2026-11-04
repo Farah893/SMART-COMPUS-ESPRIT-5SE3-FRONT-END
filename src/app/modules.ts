@@ -18,7 +18,5 @@ export const MODULES: readonly ModuleDef[] = [
   libraryModule,
 ];
 
-
-
 export { canAccess };
 export const modulesForRole = (role: Role) => MODULES.filter((m) => canAccess(m, role));

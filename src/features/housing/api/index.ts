@@ -5,7 +5,17 @@ import { assertAvailable } from "@/shared/services/serviceHealth";
 import { publishDomainEvent } from "@/shared/events/domainEvents";
 import { db } from "../mocks";
 import { todayISO } from "../utils/time";
-import type { HousingRequest, HousingRequestInput, HousingRoom, Residence, RequestStatus, RoomType, Ticket, TicketInput, TicketStatus } from "../types";
+import type {
+  HousingRequest,
+  HousingRequestInput,
+  HousingRoom,
+  Residence,
+  RequestStatus,
+  RoomType,
+  Ticket,
+  TicketInput,
+  TicketStatus,
+} from "../types";
 
 /**
  * Stubs du housing-service (via l'API Gateway). En production l'identité vient du JWT ;
@@ -41,7 +51,10 @@ function residenceById(id: string): Residence {
 }
 
 const fullError = (r: Residence) =>
-  new ApiError(409, `${r.name} est complète`, { code: "RESIDENCE_FULL", conflicts: [`${r.name} — ${r.occupied}/${r.capacity} lits occupés`] });
+  new ApiError(409, `${r.name} est complète`, {
+    code: "RESIDENCE_FULL",
+    conflicts: [`${r.name} — ${r.occupied}/${r.capacity} lits occupés`],
+  });
 
 // ---------- Résidences et chambres ----------
 
@@ -90,14 +103,26 @@ export const createRequest = (input: HousingRequestInput, viewer: Viewer) =>
       const residence = residenceById(input.residenceId);
       if (input.entryDate < todayISO()) throw new ApiError(422, "La date d'entrée ne peut pas être dans le passé");
       if (db.requests.some((r) => r.studentId === viewer.id && r.status !== "refused")) {
-        throw new ApiError(409, "Vous avez déjà une demande en cours ou une chambre affectée", { code: "ALREADY_REQUESTED", conflicts: [] });
+        throw new ApiError(409, "Vous avez déjà une demande en cours ou une chambre affectée", {
+          code: "ALREADY_REQUESTED",
+          conflicts: [],
+        });
       }
       if (residence.occupied >= residence.capacity) throw fullError(residence);
 
       const created: HousingRequest = {
-        id: `q-${++db.seq}`, studentId: viewer.id, studentName: viewer.name, residenceId: residence.id, residenceName: residence.name,
-        roomType: input.roomType, entryDate: input.entryDate, durationMonths: input.durationMonths, accessibility: input.accessibility,
-        notes: input.notes.trim(), status: "pending", requestedAt: db.now(),
+        id: `q-${++db.seq}`,
+        studentId: viewer.id,
+        studentName: viewer.name,
+        residenceId: residence.id,
+        residenceName: residence.name,
+        roomType: input.roomType,
+        entryDate: input.entryDate,
+        durationMonths: input.durationMonths,
+        accessibility: input.accessibility,
+        notes: input.notes.trim(),
+        status: "pending",
+        requestedAt: db.now(),
       };
       db.requests.unshift(created);
       publishDomainEvent(SERVICE, "DemandeDéposée", `${viewer.name} · ${residence.name}`);
@@ -147,7 +172,10 @@ export const assignRoom = (id: string, roomId: string, viewer: Viewer) =>
       const residence = residenceById(room.residenceId);
       if (residence.occupied >= residence.capacity) throw fullError(residence);
       if (room.occupants >= room.beds) {
-        throw new ApiError(409, `La chambre ${room.number} est déjà complète`, { code: "ROOM_FULL", conflicts: [`${residence.name} — chambre ${room.number} : ${room.occupants}/${room.beds} lits occupés`] });
+        throw new ApiError(409, `La chambre ${room.number} est déjà complète`, {
+          code: "ROOM_FULL",
+          conflicts: [`${residence.name} — chambre ${room.number} : ${room.occupants}/${room.beds} lits occupés`],
+        });
       }
       room.occupants += 1;
       r.status = "confirmed";
@@ -179,7 +207,11 @@ export const listTickets = (viewer: Viewer, signal?: AbortSignal) =>
     signal,
     mock: () => {
       svc(viewer);
-      return clone(db.tickets.filter((t) => viewer.role === "admin" || t.studentId === viewer.id).sort((a, b) => b.createdAt.localeCompare(a.createdAt)));
+      return clone(
+        db.tickets
+          .filter((t) => viewer.role === "admin" || t.studentId === viewer.id)
+          .sort((a, b) => b.createdAt.localeCompare(a.createdAt)),
+      );
     },
   });
 
@@ -192,8 +224,17 @@ export const createTicket = (input: TicketInput, viewer: Viewer) =>
       const residence = residenceById(input.residenceId);
       const now = db.now();
       const created: Ticket = {
-        id: `t-${++db.seq}`, studentId: viewer.id, studentName: viewer.name, residenceId: residence.id, residenceName: residence.name,
-        location: input.location.trim(), category: input.category, description: input.description.trim(), status: "open", createdAt: now, updatedAt: now,
+        id: `t-${++db.seq}`,
+        studentId: viewer.id,
+        studentName: viewer.name,
+        residenceId: residence.id,
+        residenceName: residence.name,
+        location: input.location.trim(),
+        category: input.category,
+        description: input.description.trim(),
+        status: "open",
+        createdAt: now,
+        updatedAt: now,
       };
       db.tickets.unshift(created);
       return clone(created);

@@ -17,12 +17,28 @@ import { Field, fieldA11y } from "./Field";
 type Errors = Partial<Record<"title" | "description" | "date" | "start" | "end" | "location", string>>;
 
 /** Formulaire de création d'événement (administrateur), rattaché ou non à un club. */
-export function EventForm({ clubs, onCreated, onCancel }: { clubs: Club[]; onCreated: (event: CampusEvent) => void; onCancel: () => void }) {
+export function EventForm({
+  clubs,
+  onCreated,
+  onCancel,
+}: {
+  clubs: Club[];
+  onCreated: (event: CampusEvent) => void;
+  onCancel: () => void;
+}) {
   const t = useT();
   const viewer = useViewer();
   const formRef = useRef<HTMLFormElement>(null);
   const { mutate, isPending } = useMutation(createEvent);
-  const [values, setValues] = useState({ title: "", description: "", date: addDays(7), start: "14:00", end: "16:00", location: "", clubId: "" });
+  const [values, setValues] = useState({
+    title: "",
+    description: "",
+    date: addDays(7),
+    start: "14:00",
+    end: "16:00",
+    location: "",
+    clubId: "",
+  });
   const [errors, setErrors] = useState<Errors>({});
   const [serviceError, setServiceError] = useState<string>();
 
@@ -61,14 +77,35 @@ export function EventForm({ clubs, onCreated, onCancel }: { clubs: Club[]; onCre
         </p>
       )}
       <Field id={id("title")} label={t("life.form.eventTitle")} error={errors.title}>
-        <Input id={id("title")} maxLength={90} value={values.title} onChange={(e) => set("title", e.target.value)} className={bad("title")} {...fieldA11y(id("title"), errors.title)} />
+        <Input
+          id={id("title")}
+          maxLength={90}
+          value={values.title}
+          onChange={(e) => set("title", e.target.value)}
+          className={bad("title")}
+          {...fieldA11y(id("title"), errors.title)}
+        />
       </Field>
       <div className="grid gap-4 sm:grid-cols-3">
         <Field id={id("date")} label={t("life.form.date")} error={errors.date}>
-          <Input id={id("date")} type="date" min={todayISO()} value={values.date} onChange={(e) => set("date", e.target.value)} className={bad("date")} {...fieldA11y(id("date"), errors.date)} />
+          <Input
+            id={id("date")}
+            type="date"
+            min={todayISO()}
+            value={values.date}
+            onChange={(e) => set("date", e.target.value)}
+            className={bad("date")}
+            {...fieldA11y(id("date"), errors.date)}
+          />
         </Field>
         <Field id={id("start")} label={t("life.form.start")} error={errors.start}>
-          <Select id={id("start")} value={values.start} onChange={(e) => set("start", e.target.value)} className={bad("start")} {...fieldA11y(id("start"), errors.start)}>
+          <Select
+            id={id("start")}
+            value={values.start}
+            onChange={(e) => set("start", e.target.value)}
+            className={bad("start")}
+            {...fieldA11y(id("start"), errors.start)}
+          >
             {TIME_OPTIONS.slice(0, -1).map((h) => (
               <option key={h} value={h}>
                 {h}
@@ -77,7 +114,13 @@ export function EventForm({ clubs, onCreated, onCancel }: { clubs: Club[]; onCre
           </Select>
         </Field>
         <Field id={id("end")} label={t("life.form.end")} error={errors.end}>
-          <Select id={id("end")} value={values.end} onChange={(e) => set("end", e.target.value)} className={bad("end")} {...fieldA11y(id("end"), errors.end)}>
+          <Select
+            id={id("end")}
+            value={values.end}
+            onChange={(e) => set("end", e.target.value)}
+            className={bad("end")}
+            {...fieldA11y(id("end"), errors.end)}
+          >
             {TIME_OPTIONS.slice(1).map((h) => (
               <option key={h} value={h}>
                 {h}
@@ -88,7 +131,14 @@ export function EventForm({ clubs, onCreated, onCancel }: { clubs: Club[]; onCre
       </div>
       <div className="grid gap-4 sm:grid-cols-2">
         <Field id={id("location")} label={t("life.form.place")} error={errors.location}>
-          <Input id={id("location")} maxLength={70} value={values.location} onChange={(e) => set("location", e.target.value)} className={bad("location")} {...fieldA11y(id("location"), errors.location)} />
+          <Input
+            id={id("location")}
+            maxLength={70}
+            value={values.location}
+            onChange={(e) => set("location", e.target.value)}
+            className={bad("location")}
+            {...fieldA11y(id("location"), errors.location)}
+          />
         </Field>
         <Field id={id("clubId")} label={t("life.form.club")} optional>
           <Select id={id("clubId")} value={values.clubId} onChange={(e) => set("clubId", e.target.value)}>

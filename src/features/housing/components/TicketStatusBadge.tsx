@@ -11,5 +11,9 @@ const STYLE: Record<TicketStatus, string> = {
 /** Statut d'un signalement de panne (Signalé / En cours / Résolu). */
 export function TicketStatusBadge({ status, className }: { status: TicketStatus; className?: string }) {
   const t = useT();
-  return <span className={cn("inline-flex items-center rounded-full border px-2.5 py-0.5 text-xs font-semibold", STYLE[status], className)}>{t(`housing.ticketStatus.${status}`)}</span>;
+  return (
+    <span className={cn("inline-flex items-center rounded-full border px-2.5 py-0.5 text-xs font-semibold", STYLE[status], className)}>
+      {t(`housing.ticketStatus.${status}`)}
+    </span>
+  );
 }

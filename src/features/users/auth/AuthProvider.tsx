@@ -37,8 +37,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     if (!session) {
       tokenStore.clear();
       refreshStore.clear();
-    }
-    else if (USE_MOCKS) tokenStore.set(fakeJwt(session));
+    } else if (USE_MOCKS) tokenStore.set(fakeJwt(session));
   }, [session]);
 
   const open = useCallback((u: User) => {
@@ -46,11 +45,14 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     writeSession(u);
   }, []);
 
-  const login = useCallback((u: User, token?: string, refreshToken?: string) => {
-    if (token) tokenStore.set(token);
-    if (refreshToken) refreshStore.set(refreshToken);
-    open(u);
-  }, [open]);
+  const login = useCallback(
+    (u: User, token?: string, refreshToken?: string) => {
+      if (token) tokenStore.set(token);
+      if (refreshToken) refreshStore.set(refreshToken);
+      open(u);
+    },
+    [open],
+  );
 
   const setRole = useCallback((r: Role) => open({ ...DEMO_USERS[r], avatarUrl: storedAvatar(DEMO_USERS[r].id) }), [open]);
 

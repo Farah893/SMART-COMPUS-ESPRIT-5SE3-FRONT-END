@@ -14,7 +14,9 @@ export function Sidebar({ collapsed, onToggle }: { collapsed: boolean; onToggle:
       )}
     >
       <nav aria-label={t("nav.main")} className="flex-1 overflow-y-auto">
-        {!collapsed && <p className="px-3 pb-2 pt-1 text-xs font-semibold uppercase tracking-wide text-muted-foreground">{t("nav.modules")}</p>}
+        {!collapsed && (
+          <p className="px-3 pb-2 pt-1 text-xs font-semibold uppercase tracking-wide text-muted-foreground">{t("nav.modules")}</p>
+        )}
         <NavItems collapsed={collapsed} />
       </nav>
       <Button

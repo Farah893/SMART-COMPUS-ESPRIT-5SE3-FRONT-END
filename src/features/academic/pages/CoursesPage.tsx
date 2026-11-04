@@ -37,8 +37,18 @@ export default function CoursesPage() {
             {t("academic.search.label")}
           </label>
           <div className="relative">
-            <Search className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" aria-hidden="true" />
-            <Input id="course-search" type="search" className="pl-9" placeholder={t("academic.search.placeholder")} value={search} onChange={(e) => setSearch(e.target.value)} />
+            <Search
+              className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground"
+              aria-hidden="true"
+            />
+            <Input
+              id="course-search"
+              type="search"
+              className="pl-9"
+              placeholder={t("academic.search.placeholder")}
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+            />
           </div>
         </div>
         <div className="w-full sm:w-56">
@@ -81,7 +91,14 @@ export default function CoursesPage() {
               </p>
               <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
                 {courses.map((c) => (
-                  <CourseCard key={c.id} course={c} canEnroll={role === "student"} enrolling={pendingId === c.id} onEnroll={(x) => void enroll(x)} mine={c.teacherId === user.id} />
+                  <CourseCard
+                    key={c.id}
+                    course={c}
+                    canEnroll={role === "student"}
+                    enrolling={pendingId === c.id}
+                    onEnroll={(x) => void enroll(x)}
+                    mine={c.teacherId === user.id}
+                  />
                 ))}
               </div>
             </>

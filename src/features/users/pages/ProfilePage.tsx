@@ -71,11 +71,36 @@ function ProfileForm({ account, onSaved, onCancel }: { account: UserAccount; onS
         </p>
       )}
       <div className="grid gap-4 sm:grid-cols-2">
-        <TextField id="profile-first" label={t("users.field.firstName")} value={v.firstName} onChange={(e) => setV({ ...v, firstName: e.target.value })} error={errors.firstName} autoComplete="given-name" required />
-        <TextField id="profile-last" label={t("users.field.lastName")} value={v.lastName} onChange={(e) => setV({ ...v, lastName: e.target.value })} error={errors.lastName} autoComplete="family-name" required />
+        <TextField
+          id="profile-first"
+          label={t("users.field.firstName")}
+          value={v.firstName}
+          onChange={(e) => setV({ ...v, firstName: e.target.value })}
+          error={errors.firstName}
+          autoComplete="given-name"
+          required
+        />
+        <TextField
+          id="profile-last"
+          label={t("users.field.lastName")}
+          value={v.lastName}
+          onChange={(e) => setV({ ...v, lastName: e.target.value })}
+          error={errors.lastName}
+          autoComplete="family-name"
+          required
+        />
       </div>
       <TextField id="profile-email" label={t("users.field.email")} value={account.email} readOnly hint={t("users.profile.emailLocked")} />
-      <TextField id="profile-phone" type="tel" label={t("users.field.phone")} placeholder="+216 20 000 000" value={v.phone} onChange={(e) => setV({ ...v, phone: e.target.value })} error={errors.phone} autoComplete="tel" />
+      <TextField
+        id="profile-phone"
+        type="tel"
+        label={t("users.field.phone")}
+        placeholder="+216 20 000 000"
+        value={v.phone}
+        onChange={(e) => setV({ ...v, phone: e.target.value })}
+        error={errors.phone}
+        autoComplete="tel"
+      />
       <div className="flex justify-end gap-2">
         <Button type="button" variant="outline" onClick={onCancel} disabled={isPending}>
           {t("common.cancel")}
@@ -110,7 +135,11 @@ export default function ProfilePage() {
   if (account.error || !account.data) {
     return (
       <Card>
-        <EmptyState title={t("users.profile.notFound")} description={account.error?.message} action={<Button onClick={account.refetch}>{t("common.retry")}</Button>} />
+        <EmptyState
+          title={t("users.profile.notFound")}
+          description={account.error?.message}
+          action={<Button onClick={account.refetch}>{t("common.retry")}</Button>}
+        />
       </Card>
     );
   }
@@ -176,7 +205,11 @@ export default function ProfilePage() {
             </CardHeader>
             {changingPassword && (
               <CardContent>
-                <ChangePasswordForm idPrefix="profile-pw" onDone={() => setChangingPassword(false)} onCancel={() => setChangingPassword(false)} />
+                <ChangePasswordForm
+                  idPrefix="profile-pw"
+                  onDone={() => setChangingPassword(false)}
+                  onCancel={() => setChangingPassword(false)}
+                />
               </CardContent>
             )}
           </Card>

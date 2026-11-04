@@ -60,7 +60,13 @@ export default function ClubDetailPage() {
                 </li>
               </ul>
               <CapacityGauge used={club.members} capacity={club.maxMembers} label={t("life.club.capacity")} className="max-w-sm" />
-              <MembershipButton club={club} busy={pendingId === club.id} onJoin={(x) => void join(x)} onCancel={(x) => void cancel(x)} onLeave={askLeave} />
+              <MembershipButton
+                club={club}
+                busy={pendingId === club.id}
+                onJoin={(x) => void join(x)}
+                onCancel={(x) => void cancel(x)}
+                onLeave={askLeave}
+              />
             </Card>
 
             <div className="grid gap-6 lg:grid-cols-[minmax(0,1fr)_minmax(0,20rem)]">
@@ -93,7 +99,9 @@ export default function ClubDetailPage() {
                       ))}
                     </ul>
                     {club.members > Math.min(club.memberNames.length, SHOWN_MEMBERS) && (
-                      <p className="mt-3 text-xs text-muted-foreground">{t("life.club.membersMore", { count: club.members - Math.min(club.memberNames.length, SHOWN_MEMBERS) })}</p>
+                      <p className="mt-3 text-xs text-muted-foreground">
+                        {t("life.club.membersMore", { count: club.members - Math.min(club.memberNames.length, SHOWN_MEMBERS) })}
+                      </p>
                     )}
                   </Card>
                 )}

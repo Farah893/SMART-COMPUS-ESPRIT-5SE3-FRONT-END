@@ -7,7 +7,19 @@ import { useAuth } from "@/shared/auth/AuthContext";
 import { ROLE_LABEL } from "@/shared/auth/roles";
 import type { ReactNode } from "react";
 
-function ErrorCard({ icon: Icon, code, title, description, children }: { icon: LucideIcon; code?: string; title: string; description: string; children?: ReactNode }) {
+function ErrorCard({
+  icon: Icon,
+  code,
+  title,
+  description,
+  children,
+}: {
+  icon: LucideIcon;
+  code?: string;
+  title: string;
+  description: string;
+  children?: ReactNode;
+}) {
   return (
     <Card role="alert" className="mx-auto my-8 flex max-w-xl flex-col items-center gap-3 px-6 py-12 text-center">
       <div className="flex size-16 items-center justify-center rounded-full bg-red-100 text-red-800">
@@ -26,7 +38,12 @@ export function ForbiddenView() {
   const t = useT();
   const { role } = useAuth();
   return (
-    <ErrorCard icon={ShieldAlert} code="403" title={t("error.403.title")} description={t("error.403.description", { role: t(ROLE_LABEL[role]) })}>
+    <ErrorCard
+      icon={ShieldAlert}
+      code="403"
+      title={t("error.403.title")}
+      description={t("error.403.description", { role: t(ROLE_LABEL[role]) })}
+    >
       <Button asChild>
         <Link to="/">{t("soon.backHome")}</Link>
       </Button>
@@ -49,7 +66,12 @@ export function NotFoundView() {
 export function ServiceUnavailableView({ moduleName, onRetry }: { moduleName: string; onRetry?: () => void }) {
   const t = useT();
   return (
-    <ErrorCard icon={CloudOff} code="503" title={t("error.unavailable.title")} description={t("error.unavailable.description", { module: moduleName })}>
+    <ErrorCard
+      icon={CloudOff}
+      code="503"
+      title={t("error.unavailable.title")}
+      description={t("error.unavailable.description", { module: moduleName })}
+    >
       {onRetry && <Button onClick={onRetry}>{t("common.retry")}</Button>}
       <Button variant="outline" asChild>
         <Link to="/">{t("soon.backHome")}</Link>

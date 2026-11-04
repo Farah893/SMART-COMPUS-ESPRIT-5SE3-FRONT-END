@@ -18,7 +18,8 @@ registerMessages("fr", {
   "home.hero.text":
     "Consultez vos cours et vos notes, réservez une salle, demandez une chambre, rejoignez un club ou empruntez un livre : une seule connexion, six services.",
   "home.hero.cta": "Se connecter",
-  "home.hero.access": "Étudiant : créez votre compte en quelques minutes. Enseignant ou administrateur : votre compte est créé par l'administration.",
+  "home.hero.access":
+    "Étudiant : créez votre compte en quelques minutes. Enseignant ou administrateur : votre compte est créé par l'administration.",
   "home.hero.secondary": "Découvrir les services",
 
   "home.preview.label": "Aperçu de la plateforme",

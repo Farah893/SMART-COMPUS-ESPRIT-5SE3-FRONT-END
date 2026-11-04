@@ -43,7 +43,9 @@ export function CourseCard({ course, canEnroll, enrolling, onEnroll, mine }: Cou
         <li className="flex items-center gap-2">
           <User className="size-4 shrink-0" aria-hidden="true" />
           {course.teacherName}
-          {mine && <span className="rounded-full bg-blue-100 px-2 py-0.5 text-xs font-semibold text-blue-800">{t("academic.course.mine")}</span>}
+          {mine && (
+            <span className="rounded-full bg-blue-100 px-2 py-0.5 text-xs font-semibold text-blue-800">{t("academic.course.mine")}</span>
+          )}
         </li>
         <li className="flex items-center gap-2">
           <GraduationCap className="size-4 shrink-0" aria-hidden="true" />

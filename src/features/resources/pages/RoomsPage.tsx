@@ -41,8 +41,18 @@ export default function RoomsPage() {
             {t("resources.search.label")}
           </label>
           <div className="relative">
-            <Search className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" aria-hidden="true" />
-            <Input id="room-search" type="search" className="pl-9" placeholder={t("resources.search.placeholder")} value={search} onChange={(e) => setSearch(e.target.value)} />
+            <Search
+              className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground"
+              aria-hidden="true"
+            />
+            <Input
+              id="room-search"
+              type="search"
+              className="pl-9"
+              placeholder={t("resources.search.placeholder")}
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+            />
           </div>
         </div>
         <div className="w-full sm:w-48">
@@ -121,7 +131,14 @@ export default function RoomsPage() {
                 <label htmlFor="avail-date" className="text-sm font-medium">
                   {t("resources.avail.date")}
                 </label>
-                <Input id="avail-date" type="date" min={todayISO()} max={addDays(180)} value={date} onChange={(e) => e.target.value && setDate(e.target.value)} />
+                <Input
+                  id="avail-date"
+                  type="date"
+                  min={todayISO()}
+                  max={addDays(180)}
+                  value={date}
+                  onChange={(e) => e.target.value && setDate(e.target.value)}
+                />
               </div>
               <AvailabilityCalendar roomId={selected.id} date={date} />
             </>

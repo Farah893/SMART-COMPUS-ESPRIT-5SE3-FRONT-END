@@ -42,7 +42,12 @@ export function MembershipButton({ club, busy, onJoin, onCancel, onLeave }: Memb
     );
   }
   return (
-    <Button size="sm" disabled={busy} onClick={() => onJoin(club)} aria-label={label(state === "refused" ? "life.member.retry" : "life.member.join")}>
+    <Button
+      size="sm"
+      disabled={busy}
+      onClick={() => onJoin(club)}
+      aria-label={label(state === "refused" ? "life.member.retry" : "life.member.join")}
+    >
       {full ? t("life.member.joinFull") : state === "refused" ? t("life.member.retry") : t("life.member.join")}
     </Button>
   );

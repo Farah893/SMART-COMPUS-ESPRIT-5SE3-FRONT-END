@@ -17,7 +17,9 @@ export const overlaps = (a: { start: string; end: string }, b: { start: string; 
   toMinutes(a.start) < toMinutes(b.end) && toMinutes(b.start) < toMinutes(a.end);
 
 /** Créneaux de début possibles : toutes les 30 min dans les heures d'ouverture. */
-export const TIME_OPTIONS: string[] = Array.from({ length: (CLOSE_HOUR - OPEN_HOUR) * 2 + 1 }, (_, i) => fromMinutes(OPEN_HOUR * 60 + i * 30));
+export const TIME_OPTIONS: string[] = Array.from({ length: (CLOSE_HOUR - OPEN_HOUR) * 2 + 1 }, (_, i) =>
+  fromMinutes(OPEN_HOUR * 60 + i * 30),
+);
 
 const dayFmt = new Intl.DateTimeFormat("fr-FR", { weekday: "long", day: "numeric", month: "long" });
 /** « jeudi 15 octobre » à partir d'un YYYY-MM-DD. */

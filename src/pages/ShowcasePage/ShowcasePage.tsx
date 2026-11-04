@@ -48,17 +48,26 @@ export default function Showcase() {
       </div>
 
       <Card>
-        <CardHeader><CardTitle>Statuts</CardTitle></CardHeader>
+        <CardHeader>
+          <CardTitle>Statuts</CardTitle>
+        </CardHeader>
         <CardContent className="flex flex-wrap gap-2">
-          {(["pending", "validated", "confirmed", "refused"] as const).map((s) => <StatusPill key={s} status={s} />)}
+          {(["pending", "validated", "confirmed", "refused"] as const).map((s) => (
+            <StatusPill key={s} status={s} />
+          ))}
         </CardContent>
       </Card>
 
       <Card>
-        <CardHeader><CardTitle>Stepper, jauges et chronologie</CardTitle></CardHeader>
+        <CardHeader>
+          <CardTitle>Stepper, jauges et chronologie</CardTitle>
+        </CardHeader>
         <CardContent className="grid gap-8 lg:grid-cols-2">
           <div className="space-y-8">
-            <Stepper current={1} steps={[{ label: "Demande" }, { label: "Validation" }, { label: "Affectation" }, { label: "Confirmation" }]} />
+            <Stepper
+              current={1}
+              steps={[{ label: "Demande" }, { label: "Validation" }, { label: "Affectation" }, { label: "Confirmation" }]}
+            />
             <CapacityGauge label="Résidence Les Oliviers" used={212} capacity={240} />
             <CapacityGauge label="Résidence El Manar" used={131} capacity={180} />
             <CapacityGauge label="Amphi B" used={60} capacity={200} />
@@ -82,16 +91,26 @@ export default function Showcase() {
       <DataTable caption="Réservations de salles" columns={columns} data={rows} rowKey={(r) => r.id} />
 
       <div className="grid gap-4 lg:grid-cols-2">
-        <Card><EmptyState title="Aucune réservation" description="Vous n'avez pas encore de réservation." /></Card>
+        <Card>
+          <EmptyState title="Aucune réservation" description="Vous n'avez pas encore de réservation." />
+        </Card>
         <Card className="space-y-3 p-5">
-          <Skeleton className="h-6 w-1/2" /><Skeleton className="h-4 w-full" /><Skeleton className="h-4 w-4/5" />
+          <Skeleton className="h-6 w-1/2" />
+          <Skeleton className="h-4 w-full" />
+          <Skeleton className="h-4 w-4/5" />
         </Card>
       </div>
 
       <div className="flex flex-wrap gap-2">
-        <Button onClick={() => setConfirm(true)} variant="destructive">Annuler la réservation</Button>
-        <Button variant="outline" onClick={() => toast.success("Réservation confirmée")}>Toast succès</Button>
-        <Button variant="outline" onClick={() => toast.error("Échec de l'opération")}>Toast erreur</Button>
+        <Button onClick={() => setConfirm(true)} variant="destructive">
+          Annuler la réservation
+        </Button>
+        <Button variant="outline" onClick={() => toast.success("Réservation confirmée")}>
+          Toast succès
+        </Button>
+        <Button variant="outline" onClick={() => toast.error("Échec de l'opération")}>
+          Toast erreur
+        </Button>
       </div>
       <ConfirmDialog
         open={confirm}

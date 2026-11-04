@@ -20,28 +20,28 @@ housing/
 
 ## Pages (front)
 
-| Route | Accès | Écran |
-|---|---|---|
-| `/residences` | étudiant, admin | Résidences, jauge de lits ; graphique d'occupation (admin) |
-| `/residences/ma-demande` | étudiant | Demande en 4 étapes (Stepper), puis suivi (Timeline), annulation possible |
-| `/residences/demandes` | admin | File des demandes : affecter une chambre ou refuser |
-| `/residences/maintenance` | étudiant, admin | Signaler une panne · l'admin la traite (Signalé → En cours → Résolu) |
+| Route                     | Accès           | Écran                                                                     |
+| ------------------------- | --------------- | ------------------------------------------------------------------------- |
+| `/residences`             | étudiant, admin | Résidences, jauge de lits ; graphique d'occupation (admin)                |
+| `/residences/ma-demande`  | étudiant        | Demande en 4 étapes (Stepper), puis suivi (Timeline), annulation possible |
+| `/residences/demandes`    | admin           | File des demandes : affecter une chambre ou refuser                       |
+| `/residences/maintenance` | étudiant, admin | Signaler une panne · l'admin la traite (Signalé → En cours → Résolu)      |
 
 ## Routes de l'API
 
-| Route | Qui | Corps → Réponse | Erreurs |
-|---|---|---|---|
-| `GET /residences` | étudiant, admin | `Residence[]` (avec `capacity` et `occupied` en lits) | 403 enseignant |
-| `GET /residences/{id}/rooms?type=` | admin | chambres avec au moins un lit libre | 403 · 404 |
-| `GET /housing-requests/me` | étudiant | dernière demande ou `null` | 403 |
-| `POST /housing-requests` | étudiant | `{residenceId,roomType,entryDate,durationMonths,accessibility,notes}` → `HousingRequest` | 409 `RESIDENCE_FULL` · `ALREADY_REQUESTED` · 422 date passée |
-| `DELETE /housing-requests/{id}` | étudiant (la sienne, en attente) | — | 403 · 404 · 409 déjà traitée |
-| `GET /housing-requests` | admin | `HousingRequest[]` | 403 |
-| `PUT /housing-requests/{id}/assign` | admin | `{roomId}` → demande « confirmée » + chambre | 409 `RESIDENCE_FULL` · `ROOM_FULL` · `ALREADY_DECIDED` |
-| `PUT /housing-requests/{id}/refuse` | admin | — | 404 · 409 |
-| `GET /tickets` | étudiant (les siens), admin (tous) | `Ticket[]` | — |
-| `POST /tickets` | étudiant | `{residenceId,location,category,description}` | 422 |
-| `PUT /tickets/{id}/status` | admin | `{status: open\|in_progress\|resolved}` | 403 · 404 |
+| Route                               | Qui                                | Corps → Réponse                                                                          | Erreurs                                                      |
+| ----------------------------------- | ---------------------------------- | ---------------------------------------------------------------------------------------- | ------------------------------------------------------------ |
+| `GET /residences`                   | étudiant, admin                    | `Residence[]` (avec `capacity` et `occupied` en lits)                                    | 403 enseignant                                               |
+| `GET /residences/{id}/rooms?type=`  | admin                              | chambres avec au moins un lit libre                                                      | 403 · 404                                                    |
+| `GET /housing-requests/me`          | étudiant                           | dernière demande ou `null`                                                               | 403                                                          |
+| `POST /housing-requests`            | étudiant                           | `{residenceId,roomType,entryDate,durationMonths,accessibility,notes}` → `HousingRequest` | 409 `RESIDENCE_FULL` · `ALREADY_REQUESTED` · 422 date passée |
+| `DELETE /housing-requests/{id}`     | étudiant (la sienne, en attente)   | —                                                                                        | 403 · 404 · 409 déjà traitée                                 |
+| `GET /housing-requests`             | admin                              | `HousingRequest[]`                                                                       | 403                                                          |
+| `PUT /housing-requests/{id}/assign` | admin                              | `{roomId}` → demande « confirmée » + chambre                                             | 409 `RESIDENCE_FULL` · `ROOM_FULL` · `ALREADY_DECIDED`       |
+| `PUT /housing-requests/{id}/refuse` | admin                              | —                                                                                        | 404 · 409                                                    |
+| `GET /tickets`                      | étudiant (les siens), admin (tous) | `Ticket[]`                                                                               | —                                                            |
+| `POST /tickets`                     | étudiant                           | `{residenceId,location,category,description}`                                            | 422                                                          |
+| `PUT /tickets/{id}/status`          | admin                              | `{status: open\|in_progress\|resolved}`                                                  | 403 · 404                                                    |
 
 ## Événements de domaine publiés
 

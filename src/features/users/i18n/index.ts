@@ -77,13 +77,15 @@ registerMessages("fr", {
 
   "users.lock.title": "Compte suspendu après {max} tentatives échouées",
   "users.lock.warning": "Échec de connexion",
-  "users.lock.description": "Pour votre sécurité, ce compte est suspendu. Réinitialisez votre mot de passe ou contactez un administrateur pour le réactiver.",
+  "users.lock.description":
+    "Pour votre sécurité, ce compte est suspendu. Réinitialisez votre mot de passe ou contactez un administrateur pour le réactiver.",
   "users.lock.remaining": "Encore {remaining} tentative(s) avant la suspension du compte.",
   "users.lock.counter": "Tentatives échouées : {attempts}/{max}",
   "users.lock.reset": "Réinitialiser mon mot de passe",
 
   "users.register.title": "Créer un compte",
-  "users.register.description": "Inscription réservée aux étudiants. Les comptes enseignants et administrateurs sont créés par l'administration.",
+  "users.register.description":
+    "Inscription réservée aux étudiants. Les comptes enseignants et administrateurs sont créés par l'administration.",
   "users.register.submit": "Créer mon compte",
   "users.register.hasAccount": "Vous avez déjà un compte ?",
 
@@ -196,14 +198,17 @@ registerMessages("fr", {
   "users.err.passwordSame": "Le nouveau mot de passe doit être différent de l'actuel.",
 
   "users.force.title": "Choisissez votre mot de passe",
-  "users.force.description": "Vous vous connectez avec un mot de passe temporaire reçu par e-mail. Pour protéger votre compte, choisissez-en un nouveau, différent du mot de passe temporaire.",
+  "users.force.description":
+    "Vous vous connectez avec un mot de passe temporaire reçu par e-mail. Pour protéger votre compte, choisissez-en un nouveau, différent du mot de passe temporaire.",
   "users.force.current": "Mot de passe temporaire",
   "users.force.submit": "Valider et continuer",
   "users.force.logout": "Se déconnecter",
 
-  "users.create.noPassword": "Un mot de passe temporaire est généré automatiquement et envoyé par e-mail. La personne devra le changer à sa première connexion.",
+  "users.create.noPassword":
+    "Un mot de passe temporaire est généré automatiquement et envoyé par e-mail. La personne devra le changer à sa première connexion.",
   "users.created.title": "Compte créé",
-  "users.created.sent": "Un e-mail contenant le mot de passe temporaire a été envoyé à {email}. {name} devra choisir un nouveau mot de passe dès sa première connexion.",
+  "users.created.sent":
+    "Un e-mail contenant le mot de passe temporaire a été envoyé à {email}. {name} devra choisir un nouveau mot de passe dès sa première connexion.",
   "users.created.demoTitle": "Mode démonstration : aucun e-mail n'est réellement envoyé",
   "users.created.demoBody": "Transmettez ce mot de passe temporaire à la personne pour tester :",
   "users.created.copy": "Copier",

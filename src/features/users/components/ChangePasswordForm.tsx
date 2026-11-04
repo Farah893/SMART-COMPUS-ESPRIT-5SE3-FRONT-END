@@ -74,9 +74,33 @@ export function ChangePasswordForm({ forced, idPrefix = "pw", onDone, onCancel }
           {formError}
         </p>
       )}
-      <PasswordInput id={id("current")} label={forced ? t("users.force.current") : t("users.password.current")} autoComplete="current-password" autoFocus={forced} value={v.current} onChange={(x) => set("current", x)} error={errors.current} />
-      <PasswordInput id={id("next")} label={t("users.password.new")} autoComplete="new-password" showStrength value={v.next} onChange={(x) => set("next", x)} error={errors.next} hint={t("users.password.rules")} />
-      <PasswordInput id={id("confirm")} label={t("users.password.confirmNew")} autoComplete="new-password" value={v.confirm} onChange={(x) => set("confirm", x)} error={errors.confirm} />
+      <PasswordInput
+        id={id("current")}
+        label={forced ? t("users.force.current") : t("users.password.current")}
+        autoComplete="current-password"
+        autoFocus={forced}
+        value={v.current}
+        onChange={(x) => set("current", x)}
+        error={errors.current}
+      />
+      <PasswordInput
+        id={id("next")}
+        label={t("users.password.new")}
+        autoComplete="new-password"
+        showStrength
+        value={v.next}
+        onChange={(x) => set("next", x)}
+        error={errors.next}
+        hint={t("users.password.rules")}
+      />
+      <PasswordInput
+        id={id("confirm")}
+        label={t("users.password.confirmNew")}
+        autoComplete="new-password"
+        value={v.confirm}
+        onChange={(x) => set("confirm", x)}
+        error={errors.confirm}
+      />
       <div className="flex flex-wrap justify-end gap-2 pt-3">
         {onCancel && (
           <Button type="button" variant="outline" onClick={onCancel} disabled={isPending}>

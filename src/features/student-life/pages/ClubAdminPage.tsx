@@ -46,7 +46,8 @@ export default function ClubAdminPage() {
       await decideMembership(membership.id, next, viewer);
       toast.success(t(`life.admin.done.${next}`, { name: membership.memberName, club: membership.clubName }));
     } catch (e) {
-      if (isApiError(e) && e.isConflict) setConflict({ message: e.message, conflicts: (e.details as { conflicts?: string[] } | undefined)?.conflicts ?? [] });
+      if (isApiError(e) && e.isConflict)
+        setConflict({ message: e.message, conflicts: (e.details as { conflicts?: string[] } | undefined)?.conflicts ?? [] });
       else toast.error(isApiError(e) ? (e.isUnavailable ? t("error.unavailable.title") : e.message) : t("error.generic"));
     } finally {
       setDecision(null);
@@ -58,7 +59,12 @@ export default function ClubAdminPage() {
 
   const columns = useMemo<Column<Membership>[]>(
     () => [
-      { key: "member", header: t("life.col.member"), sortValue: (m) => m.memberName, cell: (m) => <span className="font-medium">{m.memberName}</span> },
+      {
+        key: "member",
+        header: t("life.col.member"),
+        sortValue: (m) => m.memberName,
+        cell: (m) => <span className="font-medium">{m.memberName}</span>,
+      },
       { key: "profile", header: t("life.col.profile"), sortValue: (m) => m.memberRole, cell: (m) => t(ROLE_LABEL[m.memberRole]) },
       { key: "club", header: t("life.col.club"), sortValue: (m) => m.clubName, cell: (m) => m.clubName },
       { key: "date", header: t("life.col.requested"), sortValue: (m) => m.requestedAt, cell: (m) => formatDateTime(m.requestedAt) },
@@ -69,10 +75,24 @@ export default function ClubAdminPage() {
         cell: (m) =>
           m.status === "pending" ? (
             <div className="flex gap-1">
-              <Button variant="ghost" size="icon" aria-label={`${t("life.admin.confirm")} — ${m.memberName}, ${m.clubName}`} title={t("life.admin.confirm")} className="text-green-800 hover:bg-green-50" onClick={() => setDecision({ membership: m, status: "confirmed" })}>
+              <Button
+                variant="ghost"
+                size="icon"
+                aria-label={`${t("life.admin.confirm")} — ${m.memberName}, ${m.clubName}`}
+                title={t("life.admin.confirm")}
+                className="text-green-800 hover:bg-green-50"
+                onClick={() => setDecision({ membership: m, status: "confirmed" })}
+              >
                 <Check aria-hidden="true" />
               </Button>
-              <Button variant="ghost" size="icon" aria-label={`${t("life.admin.refuse")} — ${m.memberName}, ${m.clubName}`} title={t("life.admin.refuse")} className="text-red-700 hover:bg-red-50" onClick={() => setDecision({ membership: m, status: "refused" })}>
+              <Button
+                variant="ghost"
+                size="icon"
+                aria-label={`${t("life.admin.refuse")} — ${m.memberName}, ${m.clubName}`}
+                title={t("life.admin.refuse")}
+                className="text-red-700 hover:bg-red-50"
+                onClick={() => setDecision({ membership: m, status: "refused" })}
+              >
                 <X aria-hidden="true" />
               </Button>
             </div>
@@ -143,7 +163,13 @@ export default function ClubAdminPage() {
                     <EmptyState icon={ClipboardList} title={t("life.admin.empty")} />
                   </Card>
                 ) : (
-                  <DataTable caption={t("life.admin.caption")} columns={columns} data={rows} rowKey={(m) => m.id} emptyTitle={t("life.admin.noMatch")} />
+                  <DataTable
+                    caption={t("life.admin.caption")}
+                    columns={columns}
+                    data={rows}
+                    rowKey={(m) => m.id}
+                    emptyTitle={t("life.admin.noMatch")}
+                  />
                 )}
               </>
             );
@@ -181,7 +207,11 @@ export default function ClubAdminPage() {
         onOpenChange={(o) => !o && !busy && setDecision(null)}
         loading={busy}
         destructive={decision?.status === "refused"}
-        title={decision ? t(`life.admin.confirmTitle.${decision.status}`, { name: decision.membership.memberName, club: decision.membership.clubName }) : ""}
+        title={
+          decision
+            ? t(`life.admin.confirmTitle.${decision.status}`, { name: decision.membership.memberName, club: decision.membership.clubName })
+            : ""
+        }
         description={decision ? t(`life.admin.confirmBody.${decision.status}`) : undefined}
         confirmLabel={decision ? t(decision.status === "confirmed" ? "life.admin.confirm" : "life.admin.refuse") : undefined}
         onConfirm={confirm}

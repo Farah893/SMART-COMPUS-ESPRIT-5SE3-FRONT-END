@@ -36,7 +36,8 @@ function bookById(id: string): Book {
 }
 
 const activeLoans = (bookId?: string) => db.loans.filter((l) => !l.returnedAt && (!bookId || l.bookId === bookId));
-const waitingQueue = (bookId: string) => db.reservations.filter((r) => r.bookId === bookId && r.status === "waiting").sort((a, b) => a.createdAt.localeCompare(b.createdAt));
+const waitingQueue = (bookId: string) =>
+  db.reservations.filter((r) => r.bookId === bookId && r.status === "waiting").sort((a, b) => a.createdAt.localeCompare(b.createdAt));
 const heldCount = (bookId: string) => db.reservations.filter((r) => r.bookId === bookId && r.status === "ready").length;
 /** Exemplaires empruntables tout de suite (ni sortis, ni gardés pour une réservation prête). */
 const availableCopies = (b: Book) => Math.max(0, b.copies - activeLoans(b.id).length - heldCount(b.id));
@@ -58,7 +59,9 @@ function withState(b: Book, viewerId: string): BookView {
     available: availableCopies(b),
     waiting: queue.length,
     myLoanId: loan?.id,
-    myReservation: mine ? { id: mine.id, status: mine.status, position: mine.status === "waiting" ? queue.findIndex((r) => r.id === mine.id) + 1 : undefined } : undefined,
+    myReservation: mine
+      ? { id: mine.id, status: mine.status, position: mine.status === "waiting" ? queue.findIndex((r) => r.id === mine.id) + 1 : undefined }
+      : undefined,
   };
 }
 
@@ -73,7 +76,10 @@ export const listBooks = (filters: BookFilters, viewer: Viewer, signal?: AbortSi
       const q = normalize(filters.q?.trim() ?? "");
       return clone(
         db.books
-          .filter((b) => (!filters.category || b.category === filters.category) && (!q || normalize(`${b.title} ${b.author} ${b.isbn}`).includes(q)))
+          .filter(
+            (b) =>
+              (!filters.category || b.category === filters.category) && (!q || normalize(`${b.title} ${b.author} ${b.isbn}`).includes(q)),
+          )
           .map((b) => withState(b, viewer.id))
           .filter((b) => !filters.availableOnly || b.available > 0),
       );
@@ -100,8 +106,14 @@ export const createBook = (input: BookInput, viewer: Viewer) =>
       const dup = db.books.find((b) => b.isbn.replace(/\D/g, "") === digits);
       if (dup) throw conflict("Cet ISBN existe déjà dans le catalogue", "ISBN_EXISTS", [`${dup.title} — ${dup.isbn}`]);
       const created: Book = {
-        id: `b${++db.seq}`, title: input.title.trim(), author: input.author.trim(), isbn: input.isbn.trim(), category: input.category,
-        year: input.year, copies: input.copies, description: input.description.trim(),
+        id: `b${++db.seq}`,
+        title: input.title.trim(),
+        author: input.author.trim(),
+        isbn: input.isbn.trim(),
+        category: input.category,
+        year: input.year,
+        copies: input.copies,
+        description: input.description.trim(),
       };
       db.books.unshift(created);
       return clone(created);
@@ -124,19 +136,36 @@ export const borrowBook = (bookId: string, viewer: Viewer) =>
       if (mine.some((l) => l.bookId === bookId)) throw conflict("Vous avez déjà emprunté cet ouvrage", "ALREADY_BORROWED");
       const late = mine.map(decorate).filter((l) => l.status === "overdue");
       if (late.length) {
-        throw conflict("Vous avez des prêts en retard", "HAS_OVERDUE", late.map((l) => `${l.bookTitle} — ${l.daysLate} jour(s) de retard`));
+        throw conflict(
+          "Vous avez des prêts en retard",
+          "HAS_OVERDUE",
+          late.map((l) => `${l.bookTitle} — ${l.daysLate} jour(s) de retard`),
+        );
       }
       const rules = LOAN_RULES[viewer.role];
-      if (mine.length >= rules.limit) throw conflict(`Limite de ${rules.limit} prêts simultanés atteinte`, "LOAN_LIMIT", mine.map((l) => bookById(l.bookId).title));
+      if (mine.length >= rules.limit)
+        throw conflict(
+          `Limite de ${rules.limit} prêts simultanés atteinte`,
+          "LOAN_LIMIT",
+          mine.map((l) => bookById(l.bookId).title),
+        );
       const ready = db.reservations.find((r) => r.bookId === bookId && r.memberId === viewer.id && r.status === "ready");
       if (!ready && availableCopies(book) <= 0) {
-        throw conflict("Aucun exemplaire n'est disponible", "BOOK_UNAVAILABLE", [`${book.title} — 0/${book.copies} exemplaire(s) disponible(s)`]);
+        throw conflict("Aucun exemplaire n'est disponible", "BOOK_UNAVAILABLE", [
+          `${book.title} — 0/${book.copies} exemplaire(s) disponible(s)`,
+        ]);
       }
       if (ready) db.reservations.splice(db.reservations.indexOf(ready), 1);
 
       const created: StoredLoan = {
-        id: `l-${++db.seq}`, bookId, borrowerId: viewer.id, borrowerName: viewer.name, borrowerRole: viewer.role,
-        borrowedAt: todayISO(), dueDate: addDays(rules.days), renewals: 0,
+        id: `l-${++db.seq}`,
+        bookId,
+        borrowerId: viewer.id,
+        borrowerName: viewer.name,
+        borrowerRole: viewer.role,
+        borrowedAt: todayISO(),
+        dueDate: addDays(rules.days),
+        renewals: 0,
       };
       db.loans.unshift(created);
       publishDomainEvent(SERVICE, "LivreEmprunté", `${viewer.name} · ${book.title}`);
@@ -171,9 +200,15 @@ export const renewLoan = (id: string, viewer: Viewer) =>
       if (!l) throw new ApiError(404, "Prêt introuvable");
       if (l.borrowerId !== viewer.id) throw new ApiError(403, "Ce prêt n'est pas le vôtre");
       if (l.returnedAt) throw conflict("Ce prêt est déjà terminé", "ALREADY_RETURNED");
-      if (decorate(l).status === "overdue") throw conflict("Un prêt en retard ne peut pas être prolongé", "OVERDUE", [`${bookById(l.bookId).title} — à rendre depuis le ${l.dueDate}`]);
+      if (decorate(l).status === "overdue")
+        throw conflict("Un prêt en retard ne peut pas être prolongé", "OVERDUE", [
+          `${bookById(l.bookId).title} — à rendre depuis le ${l.dueDate}`,
+        ]);
       if (l.renewals >= MAX_RENEWALS) throw conflict(`Prolongation limitée à ${MAX_RENEWALS} fois`, "RENEWAL_LIMIT");
-      if (waitingQueue(l.bookId).length) throw conflict("Cet ouvrage est réservé par un autre lecteur", "BOOK_RESERVED", [`${bookById(l.bookId).title} — ${waitingQueue(l.bookId).length} réservation(s) en attente`]);
+      if (waitingQueue(l.bookId).length)
+        throw conflict("Cet ouvrage est réservé par un autre lecteur", "BOOK_RESERVED", [
+          `${bookById(l.bookId).title} — ${waitingQueue(l.bookId).length} réservation(s) en attente`,
+        ]);
       l.dueDate = shiftDate(l.dueDate, LOAN_RULES[viewer.role].days);
       l.renewals += 1;
       return clone(decorate(l));
@@ -216,10 +251,20 @@ export const reserveBook = (bookId: string, viewer: Viewer) =>
     mock: () => {
       svc();
       const book = bookById(bookId);
-      if (activeLoans(bookId).some((l) => l.borrowerId === viewer.id)) throw conflict("Vous avez déjà emprunté cet ouvrage", "ALREADY_BORROWED");
-      if (db.reservations.some((r) => r.bookId === bookId && r.memberId === viewer.id)) throw conflict("Vous avez déjà réservé cet ouvrage", "ALREADY_RESERVED");
+      if (activeLoans(bookId).some((l) => l.borrowerId === viewer.id))
+        throw conflict("Vous avez déjà emprunté cet ouvrage", "ALREADY_BORROWED");
+      if (db.reservations.some((r) => r.bookId === bookId && r.memberId === viewer.id))
+        throw conflict("Vous avez déjà réservé cet ouvrage", "ALREADY_RESERVED");
       if (availableCopies(book) > 0) throw conflict("Un exemplaire est disponible : empruntez-le directement", "BOOK_AVAILABLE");
-      const created: BookReservation = { id: `r-${++db.seq}`, bookId, bookTitle: book.title, memberId: viewer.id, memberName: viewer.name, status: "waiting", createdAt: db.now() };
+      const created: BookReservation = {
+        id: `r-${++db.seq}`,
+        bookId,
+        bookTitle: book.title,
+        memberId: viewer.id,
+        memberName: viewer.name,
+        status: "waiting",
+        createdAt: db.now(),
+      };
       db.reservations.push(created);
       return clone({ ...created, position: waitingQueue(bookId).findIndex((r) => r.id === created.id) + 1 });
     },

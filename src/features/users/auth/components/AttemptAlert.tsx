@@ -4,8 +4,7 @@ import { useT } from "@/shared/i18n";
 import { cn } from "@/shared/lib/utils";
 
 type AttemptAlertProps =
-  | { kind: "error"; message: string }
-  | { kind: "warning" | "locked"; attempts: number; max: number; message?: string };
+  { kind: "error"; message: string } | { kind: "warning" | "locked"; attempts: number; max: number; message?: string };
 
 /** Alerte de connexion : erreur simple, compteur d'échecs (« n/5 ») ou compte suspendu. */
 export function AttemptAlert(props: AttemptAlertProps) {
@@ -29,7 +28,9 @@ export function AttemptAlert(props: AttemptAlertProps) {
         ) : (
           <>
             <p className="font-semibold">{locked ? t("users.lock.title", { max: props.max }) : props.message}</p>
-            <p className="text-sm">{locked ? t("users.lock.description") : t("users.lock.remaining", { remaining: props.max - props.attempts })}</p>
+            <p className="text-sm">
+              {locked ? t("users.lock.description") : t("users.lock.remaining", { remaining: props.max - props.attempts })}
+            </p>
             <div className="flex items-center gap-3">
               <div
                 role="progressbar"

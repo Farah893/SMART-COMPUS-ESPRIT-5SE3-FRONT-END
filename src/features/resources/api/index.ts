@@ -37,7 +37,9 @@ const fmt = (r: { start: string; end: string }) => `${r.start}–${r.end}`;
 
 /** Réservations confirmées qui chevauchent le créneau demandé (seules elles bloquent la salle). */
 function confirmedConflicts(roomId: string, date: string, slot: { start: string; end: string }, ignoreId?: string) {
-  return db.reservations.filter((r) => r.id !== ignoreId && r.roomId === roomId && r.date === date && r.status === "confirmed" && overlaps(r, slot));
+  return db.reservations.filter(
+    (r) => r.id !== ignoreId && r.roomId === roomId && r.date === date && r.status === "confirmed" && overlaps(r, slot),
+  );
 }
 
 const conflictError = (roomName: string, date: string, clashes: Reservation[]) =>
@@ -119,19 +121,34 @@ export const createReservation = (input: ReservationInput, viewer: Viewer) =>
       svc(viewer);
       const room = roomById(input.roomId);
       if (input.date < todayISO()) throw new ApiError(422, "La date ne peut pas être dans le passé");
-      if (toMinutes(input.start) < OPEN_HOUR * 60 || toMinutes(input.end) > CLOSE_HOUR * 60 || toMinutes(input.end) <= toMinutes(input.start)) {
+      if (
+        toMinutes(input.start) < OPEN_HOUR * 60 ||
+        toMinutes(input.end) > CLOSE_HOUR * 60 ||
+        toMinutes(input.end) <= toMinutes(input.start)
+      ) {
         throw new ApiError(422, `Le créneau doit tenir entre ${OPEN_HOUR}:00 et ${CLOSE_HOUR}:00`);
       }
-      if (input.attendees > room.capacity) throw new ApiError(422, `${room.name} accueille au maximum ${room.capacity} personnes`, { code: "OVER_CAPACITY" });
+      if (input.attendees > room.capacity)
+        throw new ApiError(422, `${room.name} accueille au maximum ${room.capacity} personnes`, { code: "OVER_CAPACITY" });
       const clashes = confirmedConflicts(room.id, input.date, input);
       if (clashes.length) throw conflictError(room.name, input.date, clashes);
 
       const admin = viewer.role === "admin";
       const created: Reservation = {
-        id: `rs-${++db.seq}`, roomId: room.id, roomName: room.name, building: room.building,
-        requesterId: viewer.id, requesterName: viewer.name,
-        date: input.date, start: input.start, end: input.end, attendees: input.attendees, purpose: input.purpose.trim(),
-        status: admin ? "confirmed" : "pending", requestedAt: db.now(), decidedAt: admin ? db.now() : undefined,
+        id: `rs-${++db.seq}`,
+        roomId: room.id,
+        roomName: room.name,
+        building: room.building,
+        requesterId: viewer.id,
+        requesterName: viewer.name,
+        date: input.date,
+        start: input.start,
+        end: input.end,
+        attendees: input.attendees,
+        purpose: input.purpose.trim(),
+        status: admin ? "confirmed" : "pending",
+        requestedAt: db.now(),
+        decidedAt: admin ? db.now() : undefined,
       };
       db.reservations.unshift(created);
       publishDomainEvent(SERVICE, admin ? "RéservationConfirmée" : "RéservationCréée", `${room.name} · ${input.date} ${fmt(input)}`);
@@ -155,7 +172,8 @@ export const decideReservation = (id: string, status: Exclude<ReservationStatus,
       }
       r.status = status;
       r.decidedAt = db.now();
-      if (status === "confirmed") publishDomainEvent(SERVICE, "RéservationConfirmée", `${r.requesterName} · ${r.roomName} · ${r.date} ${fmt(r)}`);
+      if (status === "confirmed")
+        publishDomainEvent(SERVICE, "RéservationConfirmée", `${r.requesterName} · ${r.roomName} · ${r.date} ${fmt(r)}`);
       return clone(r);
     },
   });

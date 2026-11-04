@@ -23,5 +23,7 @@ export function AvailabilityBadge({ book, className }: { book: BookView; classNa
     label = t("lib.avail.available", { free: book.available, copies: book.copies });
   }
 
-  return <span className={cn("inline-flex items-center rounded-full border px-2.5 py-0.5 text-xs font-semibold", cls, className)}>{label}</span>;
+  return (
+    <span className={cn("inline-flex items-center rounded-full border px-2.5 py-0.5 text-xs font-semibold", cls, className)}>{label}</span>
+  );
 }

@@ -50,7 +50,9 @@ export default function ForgotPasswordPage() {
             {t("users.forgot.sentBody", { email })}
           </p>
           <Button asChild size="lg" className="w-full">
-            <Link to={`/reinitialiser-mot-de-passe?token=${token}&email=${encodeURIComponent(email.trim().toLowerCase())}`}>{t("users.forgot.openLink")}</Link>
+            <Link to={`/reinitialiser-mot-de-passe?token=${token}&email=${encodeURIComponent(email.trim().toLowerCase())}`}>
+              {t("users.forgot.openLink")}
+            </Link>
           </Button>
           <CountdownButton
             variant="outline"

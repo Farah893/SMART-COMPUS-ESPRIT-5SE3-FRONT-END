@@ -8,7 +8,11 @@ export const clubSchema = z.object({
   category: z.enum(CATEGORIES, "life.err.category"),
   description: z.string().trim().min(10, "life.err.descriptionShort").max(300, "life.err.descriptionLong"),
   meetingPlace: z.string().trim().min(2, "life.err.placeShort").max(60, "life.err.placeLong"),
-  maxMembers: z.number({ error: "life.err.maxMembers" }).int("life.err.maxMembers").min(5, "life.err.maxMembers").max(500, "life.err.maxMembers"),
+  maxMembers: z
+    .number({ error: "life.err.maxMembers" })
+    .int("life.err.maxMembers")
+    .min(5, "life.err.maxMembers")
+    .max(500, "life.err.maxMembers"),
 });
 
 export const eventSchema = z

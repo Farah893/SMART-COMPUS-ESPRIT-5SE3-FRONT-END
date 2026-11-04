@@ -16,12 +16,12 @@ cp .env.example .env     # configuration locale (facultatif : les valeurs par d�
 npm run dev              # http://localhost:5173
 ```
 
-| Commande | Rôle |
-|---|---|
-| `npm run dev` | Serveur de développement |
+| Commande            | Rôle                                                   |
+| ------------------- | ------------------------------------------------------ |
+| `npm run dev`       | Serveur de développement                               |
 | `npm run typecheck` | Vérifie les types TypeScript (doit passer sans erreur) |
-| `npm run build` | Vérification + build de production dans `dist/` |
-| `npm run preview` | Sert le build de production |
+| `npm run build`     | Vérification + build de production dans `dist/`        |
+| `npm run preview`   | Sert le build de production                            |
 
 > Un seul `npm run dev` à la fois. Si la page reste blanche après avoir déplacé des fichiers, arrêtez le serveur (Ctrl+C) et relancez-le.
 
@@ -31,31 +31,31 @@ Au départ, personne n'est connecté : la page publique d'accueil s'affiche sur 
 
 La page de connexion propose un encadré orange **« Mode démo »** avec trois boutons (Étudiant, Enseignant, Administrateur) qui ouvrent directement une session, sans mot de passe. On peut aussi saisir un compte fictif :
 
-| Rôle | E-mail (domaine par défaut `smartcampus.tn`) | Mot de passe |
-|---|---|---|
-| Étudiant | `yasmine.bensalah@smartcampus.tn` | `Campus2026!` |
-| Enseignant | `karim.trabelsi@smartcampus.tn` | `Campus2026!` |
-| Administrateur | `sonia.gharbi@smartcampus.tn` | `Campus2026!` |
+| Rôle           | E-mail (domaine par défaut `smartcampus.tn`) | Mot de passe  |
+| -------------- | -------------------------------------------- | ------------- |
+| Étudiant       | `yasmine.bensalah@smartcampus.tn`            | `Campus2026!` |
+| Enseignant     | `karim.trabelsi@smartcampus.tn`              | `Campus2026!` |
+| Administrateur | `sonia.gharbi@smartcampus.tn`                | `Campus2026!` |
 
 Le code de vérification d'e-mail (inscription) est `123456`.
 
 **Parcours utiles**
 
-- **Créer un enseignant** : se connecter en administrateur → *Utilisateurs* → *Créer un compte*. Un mot de passe temporaire est généré (en démo, il s'affiche dans la fenêtre de confirmation). À sa première connexion, l'enseignant doit choisir un nouveau mot de passe, différent du temporaire.
+- **Créer un enseignant** : se connecter en administrateur → _Utilisateurs_ → _Créer un compte_. Un mot de passe temporaire est généré (en démo, il s'affiche dans la fenêtre de confirmation). À sa première connexion, l'enseignant doit choisir un nouveau mot de passe, différent du temporaire.
 - **Inscription publique** : `/inscription` crée toujours un compte **étudiant**.
-- **Profil** : *Mon profil* (menu en haut à droite) → modifier ses informations, ajouter une photo, changer son mot de passe.
-- **Conflits (409)** : réserver l'Amphi A demain entre 14h et 16h (enseignant) ; adhérer au Club Théâtre (complet) ; emprunter *Clean Architecture* (étudiant).
+- **Profil** : _Mon profil_ (menu en haut à droite) → modifier ses informations, ajouter une photo, changer son mot de passe.
+- **Conflits (409)** : réserver l'Amphi A demain entre 14h et 16h (enseignant) ; adhérer au Club Théâtre (complet) ; emprunter _Clean Architecture_ (étudiant).
 - **Panne simulée** : le bouton ambre « Mode démo » de la barre du haut permet de mettre un module en panne (503) sans affecter les autres.
 
 > Les données fictives sont **en mémoire** : elles reviennent à zéro quand on recharge la page. Seules les photos de profil et la session restent dans le navigateur.
 
 ## Configuration (`.env`)
 
-| Variable | Défaut | Rôle |
-|---|---|---|
-| `VITE_USE_MOCKS` | `true` | `true` : données fictives. `false` : appelle le vrai back-end |
+| Variable            | Défaut                      | Rôle                                                          |
+| ------------------- | --------------------------- | ------------------------------------------------------------- |
+| `VITE_USE_MOCKS`    | `true`                      | `true` : données fictives. `false` : appelle le vrai back-end |
 | `VITE_API_BASE_URL` | `http://localhost:8080/api` | Adresse de l'API Gateway (utilisée si `VITE_USE_MOCKS=false`) |
-| `VITE_EMAIL_DOMAIN` | `smartcampus.tn` | Domaine d'e-mail accepté (ex. `gmail.com` pour des tests) |
+| `VITE_EMAIL_DOMAIN` | `smartcampus.tn`            | Domaine d'e-mail accepté (ex. `gmail.com` pour des tests)     |
 
 Le fichier `.env` est propre à chaque poste et n'est **pas** versionné ; le modèle est `.env.example`. Après modification, relancer `npm run dev`.
 
@@ -118,21 +118,21 @@ git add . && git commit -m "library: ajoute la page des emprunts"
 git push -u origin feature/<module>-<sujet>
 ```
 
-Ensuite, ouvrir une **Pull Request** vers `main` sur GitHub ; un autre membre la relit et l'approuve avant la fusion (*Merge*).
+Ensuite, ouvrir une **Pull Request** vers `main` sur GitHub ; un autre membre la relit et l'approuve avant la fusion (_Merge_).
 
 **Mettre en place la protection (une seule fois, par le propriétaire du dépôt)**
 
-GitHub → *Settings* → *Rules* → *Rulesets* → *New ruleset* → *New branch ruleset* :
+GitHub → _Settings_ → _Rules_ → _Rulesets_ → _New ruleset_ → _New branch ruleset_ :
 
 1. **Ruleset name** : `protect-main` · **Enforcement status** : `Active`.
-2. **Target branches** → *Add target* → *Include default branch* (`main`).
+2. **Target branches** → _Add target_ → _Include default branch_ (`main`).
 3. Cocher :
    - **Restrict deletions** : `main` ne peut pas être supprimée ;
    - **Block force pushes** : pas de `git push --force` ;
-   - **Require a pull request before merging** : 1 approbation minimum, et *Dismiss stale approvals* ;
+   - **Require a pull request before merging** : 1 approbation minimum, et _Dismiss stale approvals_ ;
    - **Require status checks to pass** (si une CI `typecheck` / `build` existe).
 4. **Bypass list** : laisser vide pour que la règle s'applique à tous.
-5. *Create*.
+5. _Create_.
 
 Résultat : un `git push origin main` direct est refusé ; seule la fusion d'une PR approuvée modifie `main`.
 

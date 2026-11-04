@@ -20,27 +20,27 @@ library/
 
 ## Pages (front)
 
-| Route | Accès | Écran |
-|---|---|---|
-| `/bibliotheque` | tous | Catalogue : recherche, catégorie, disponibles uniquement |
-| `/bibliotheque/livres/:id` | tous | Fiche : résumé, exemplaires, emprunter ou réserver |
-| `/bibliotheque/mes-prets` | tous | Prêts en cours, retards, prolongation, réservations, historique |
-| `/bibliotheque/gestion` | admin | Tous les prêts, enregistrer un retour, ajouter un ouvrage |
+| Route                      | Accès | Écran                                                           |
+| -------------------------- | ----- | --------------------------------------------------------------- |
+| `/bibliotheque`            | tous  | Catalogue : recherche, catégorie, disponibles uniquement        |
+| `/bibliotheque/livres/:id` | tous  | Fiche : résumé, exemplaires, emprunter ou réserver              |
+| `/bibliotheque/mes-prets`  | tous  | Prêts en cours, retards, prolongation, réservations, historique |
+| `/bibliotheque/gestion`    | admin | Tous les prêts, enregistrer un retour, ajouter un ouvrage       |
 
 ## Routes de l'API
 
-| Route | Qui | Corps → Réponse | Erreurs |
-|---|---|---|---|
-| `GET /books?q=&category=&availableOnly=` | tous | `BookView[]` (avec `available`, `waiting`, `myLoanId`, `myReservation`) | — |
-| `GET /books/{id}` | tous | `BookView` | 404 |
-| `POST /books` | admin | `{title,author,isbn,category,year,copies,description}` | 403 · 409 `ISBN_EXISTS` |
-| `POST /loans` | tous | `{bookId}` → `Loan` | 409 `ALREADY_BORROWED` · `HAS_OVERDUE` · `LOAN_LIMIT` · `BOOK_UNAVAILABLE` |
-| `GET /loans/me` | tous | `{loans, reservations, limit}` | — |
-| `PUT /loans/{id}/renew` | emprunteur | — → `Loan` | 403 · 409 `OVERDUE` / `RENEWAL_LIMIT` / `BOOK_RESERVED` |
-| `GET /loans` | admin | `Loan[]` (retards d'abord) | 403 |
-| `PUT /loans/{id}/return` | admin | — → `Loan` | 403 · 404 · 409 `ALREADY_RETURNED` |
-| `POST /books/{id}/reservations` | tous | — → `BookReservation` (rang dans la file) | 409 `ALREADY_BORROWED` / `ALREADY_RESERVED` / `BOOK_AVAILABLE` |
-| `DELETE /reservations/{id}` | propriétaire | annule la réservation | 403 · 404 |
+| Route                                    | Qui          | Corps → Réponse                                                         | Erreurs                                                                    |
+| ---------------------------------------- | ------------ | ----------------------------------------------------------------------- | -------------------------------------------------------------------------- |
+| `GET /books?q=&category=&availableOnly=` | tous         | `BookView[]` (avec `available`, `waiting`, `myLoanId`, `myReservation`) | —                                                                          |
+| `GET /books/{id}`                        | tous         | `BookView`                                                              | 404                                                                        |
+| `POST /books`                            | admin        | `{title,author,isbn,category,year,copies,description}`                  | 403 · 409 `ISBN_EXISTS`                                                    |
+| `POST /loans`                            | tous         | `{bookId}` → `Loan`                                                     | 409 `ALREADY_BORROWED` · `HAS_OVERDUE` · `LOAN_LIMIT` · `BOOK_UNAVAILABLE` |
+| `GET /loans/me`                          | tous         | `{loans, reservations, limit}`                                          | —                                                                          |
+| `PUT /loans/{id}/renew`                  | emprunteur   | — → `Loan`                                                              | 403 · 409 `OVERDUE` / `RENEWAL_LIMIT` / `BOOK_RESERVED`                    |
+| `GET /loans`                             | admin        | `Loan[]` (retards d'abord)                                              | 403                                                                        |
+| `PUT /loans/{id}/return`                 | admin        | — → `Loan`                                                              | 403 · 404 · 409 `ALREADY_RETURNED`                                         |
+| `POST /books/{id}/reservations`          | tous         | — → `BookReservation` (rang dans la file)                               | 409 `ALREADY_BORROWED` / `ALREADY_RESERVED` / `BOOK_AVAILABLE`             |
+| `DELETE /reservations/{id}`              | propriétaire | annule la réservation                                                   | 403 · 404                                                                  |
 
 ## Événements de domaine publiés
 

@@ -48,7 +48,8 @@ export default function UsersListPage() {
 
   const { data, error, isLoading, refetch } = useUsers({ q, role, status });
 
-  const errorToast = (e: unknown) => toast.error(isApiError(e) ? (e.isUnavailable ? t("error.unavailable.title") : e.message) : t("error.generic"));
+  const errorToast = (e: unknown) =>
+    toast.error(isApiError(e) ? (e.isUnavailable ? t("error.unavailable.title") : e.message) : t("error.generic"));
 
   async function onRoleChange(account: UserAccount, next: Role) {
     try {
@@ -126,7 +127,12 @@ export default function UsersListPage() {
           </div>
         ),
       },
-      { key: "last", header: t("users.profile.lastLogin"), sortValue: (u) => u.lastLoginAt ?? "", cell: (u) => (u.lastLoginAt ? formatDateTime(u.lastLoginAt) : "—") },
+      {
+        key: "last",
+        header: t("users.profile.lastLogin"),
+        sortValue: (u) => u.lastLoginAt ?? "",
+        cell: (u) => (u.lastLoginAt ? formatDateTime(u.lastLoginAt) : "—"),
+      },
       {
         key: "actions",
         header: t("users.col.actions"),
@@ -170,7 +176,11 @@ export default function UsersListPage() {
   if (error && !data) {
     return (
       <Card>
-        <EmptyState title={t("error.generic")} description={error.message} action={<Button onClick={refetch}>{t("common.retry")}</Button>} />
+        <EmptyState
+          title={t("error.generic")}
+          description={error.message}
+          action={<Button onClick={refetch}>{t("common.retry")}</Button>}
+        />
       </Card>
     );
   }
@@ -193,8 +203,18 @@ export default function UsersListPage() {
             {t("users.search.label")}
           </label>
           <div className="relative">
-            <Search className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" aria-hidden="true" />
-            <Input id="users-search" type="search" className="pl-9" placeholder={t("users.search.placeholder")} value={search} onChange={(e) => setSearch(e.target.value)} />
+            <Search
+              className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground"
+              aria-hidden="true"
+            />
+            <Input
+              id="users-search"
+              type="search"
+              className="pl-9"
+              placeholder={t("users.search.placeholder")}
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+            />
           </div>
         </div>
         <div className="w-full sm:w-52">

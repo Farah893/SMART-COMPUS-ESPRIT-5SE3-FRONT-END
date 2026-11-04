@@ -41,7 +41,13 @@ export default function RegisterPage() {
       return focusFirstInvalid(formRef.current);
     }
     try {
-      const acct = await mutate({ firstName: r.data.firstName, lastName: r.data.lastName, email: r.data.email, role: "student", password: r.data.password });
+      const acct = await mutate({
+        firstName: r.data.firstName,
+        lastName: r.data.lastName,
+        email: r.data.email,
+        role: "student",
+        password: r.data.password,
+      });
       navigate(`/verification-email?email=${encodeURIComponent(acct.email)}`);
     } catch (e) {
       if (isApiError(e) && e.isConflict) {
@@ -58,10 +64,30 @@ export default function RegisterPage() {
         <div className={formError ? "pt-4" : undefined}>
           <div className="grid gap-x-4 sm:grid-cols-2">
             <Field id="reg-first" label={t("users.field.firstName")} required error={err(errors.firstName)}>
-              <input id="reg-first" name="given-name" autoComplete="given-name" required value={v.firstName} onChange={(e) => set("firstName", e.target.value)} aria-invalid={errors.firstName ? true : undefined} aria-describedby={messageId("reg-first")} className={inputClass(Boolean(errors.firstName))} />
+              <input
+                id="reg-first"
+                name="given-name"
+                autoComplete="given-name"
+                required
+                value={v.firstName}
+                onChange={(e) => set("firstName", e.target.value)}
+                aria-invalid={errors.firstName ? true : undefined}
+                aria-describedby={messageId("reg-first")}
+                className={inputClass(Boolean(errors.firstName))}
+              />
             </Field>
             <Field id="reg-last" label={t("users.field.lastName")} required error={err(errors.lastName)}>
-              <input id="reg-last" name="family-name" autoComplete="family-name" required value={v.lastName} onChange={(e) => set("lastName", e.target.value)} aria-invalid={errors.lastName ? true : undefined} aria-describedby={messageId("reg-last")} className={inputClass(Boolean(errors.lastName))} />
+              <input
+                id="reg-last"
+                name="family-name"
+                autoComplete="family-name"
+                required
+                value={v.lastName}
+                onChange={(e) => set("lastName", e.target.value)}
+                aria-invalid={errors.lastName ? true : undefined}
+                aria-describedby={messageId("reg-last")}
+                className={inputClass(Boolean(errors.lastName))}
+              />
             </Field>
           </div>
           <EmailField
@@ -84,8 +110,25 @@ export default function RegisterPage() {
               )
             }
           />
-          <PasswordInput id="reg-password" label={t("users.field.password")} autoComplete="new-password" showStrength value={v.password} onChange={(x) => set("password", x)} error={err(errors.password)} hint={t("users.password.rules")} />
-          <PasswordInput id="reg-confirm" name="confirm-password" label={t("users.field.confirmPassword")} autoComplete="new-password" value={v.confirm} onChange={(x) => set("confirm", x)} error={err(errors.confirm)} />
+          <PasswordInput
+            id="reg-password"
+            label={t("users.field.password")}
+            autoComplete="new-password"
+            showStrength
+            value={v.password}
+            onChange={(x) => set("password", x)}
+            error={err(errors.password)}
+            hint={t("users.password.rules")}
+          />
+          <PasswordInput
+            id="reg-confirm"
+            name="confirm-password"
+            label={t("users.field.confirmPassword")}
+            autoComplete="new-password"
+            value={v.confirm}
+            onChange={(x) => set("confirm", x)}
+            error={err(errors.confirm)}
+          />
         </div>
         <Button type="submit" size="lg" className="w-full" disabled={isPending} aria-busy={isPending || undefined}>
           {isPending ? t("users.pending") : t("users.register.submit")}

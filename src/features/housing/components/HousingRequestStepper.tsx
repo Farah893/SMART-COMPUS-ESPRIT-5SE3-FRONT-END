@@ -29,7 +29,21 @@ interface Values {
 
 type Errors = Partial<Record<keyof Values, string>>;
 
-function Field({ id, label, error, hint, optional, children }: { id: string; label: string; error?: string; hint?: string; optional?: boolean; children: ReactNode }) {
+function Field({
+  id,
+  label,
+  error,
+  hint,
+  optional,
+  children,
+}: {
+  id: string;
+  label: string;
+  error?: string;
+  hint?: string;
+  optional?: boolean;
+  children: ReactNode;
+}) {
   const t = useT();
   return (
     <div className="space-y-1.5">
@@ -75,7 +89,14 @@ export function HousingRequestStepper({ residences, initialResidenceId, onDone }
 
   const open = (id?: string) => residences.find((r) => r.id === id && r.occupied < r.capacity)?.id ?? "";
   const [step, setStep] = useState(0);
-  const [values, setValues] = useState<Values>({ residenceId: open(initialResidenceId), roomType: "double", entryDate: addDays(30), durationMonths: 9, accessibility: false, notes: "" });
+  const [values, setValues] = useState<Values>({
+    residenceId: open(initialResidenceId),
+    roomType: "double",
+    entryDate: addDays(30),
+    durationMonths: 9,
+    accessibility: false,
+    notes: "",
+  });
   const [errors, setErrors] = useState<Errors>({});
   const [conflict, setConflict] = useState<{ message: string; conflicts: string[] }>();
   const [serviceError, setServiceError] = useState<string>();
@@ -157,7 +178,13 @@ export function HousingRequestStepper({ residences, initialResidenceId, onDone }
             {serviceError}
           </p>
         )}
-        {conflict && <ConflictAlert title={t("housing.conflictTitle")} description={`${conflict.message}. ${t("housing.conflictHint")}`} conflicts={conflict.conflicts} />}
+        {conflict && (
+          <ConflictAlert
+            title={t("housing.conflictTitle")}
+            description={`${conflict.message}. ${t("housing.conflictHint")}`}
+            conflicts={conflict.conflicts}
+          />
+        )}
 
         {step === 0 && (
           <fieldset aria-describedby={errors.residenceId ? id("residenceId-error") : undefined}>
@@ -176,10 +203,22 @@ export function HousingRequestStepper({ residences, initialResidenceId, onDone }
                     )}
                   >
                     {/* eslint-disable-next-line jsx-a11y/role-supports-aria-props -- aria-invalid signale l'erreur du groupe de choix aux lecteurs d'écran */}
-                    <input type="radio" name="residence" className="sr-only" disabled={full} checked={selected} onChange={() => set("residenceId", r.id)} aria-invalid={errors.residenceId ? true : undefined} />
+                    <input
+                      type="radio"
+                      name="residence"
+                      className="sr-only"
+                      disabled={full}
+                      checked={selected}
+                      onChange={() => set("residenceId", r.id)}
+                      aria-invalid={errors.residenceId ? true : undefined}
+                    />
                     <span className="flex items-start justify-between gap-2">
                       <span className="font-semibold">{r.name}</span>
-                      {full && <span className="rounded-full border border-red-200 bg-red-100 px-2 py-0.5 text-xs font-semibold text-red-800">{t("housing.residence.full")}</span>}
+                      {full && (
+                        <span className="rounded-full border border-red-200 bg-red-100 px-2 py-0.5 text-xs font-semibold text-red-800">
+                          {t("housing.residence.full")}
+                        </span>
+                      )}
                     </span>
                     <span className="text-xs text-muted-foreground">
                       {t("housing.residence.walk", { count: r.walkMinutes })} · {t("housing.residence.rent", { amount: r.monthlyRent })}
@@ -201,7 +240,12 @@ export function HousingRequestStepper({ residences, initialResidenceId, onDone }
         {step === 1 && (
           <div className="grid gap-4 sm:grid-cols-3">
             <Field id={id("roomType")} label={t("housing.field.roomType")} error={errors.roomType}>
-              <Select id={id("roomType")} value={values.roomType} onChange={(e) => set("roomType", e.target.value as RoomType)} {...invalid("roomType")}>
+              <Select
+                id={id("roomType")}
+                value={values.roomType}
+                onChange={(e) => set("roomType", e.target.value as RoomType)}
+                {...invalid("roomType")}
+              >
                 {ROOM_TYPES.map((r) => (
                   <option key={r} value={r}>
                     {t(`housing.roomType.${r}`)}
@@ -210,10 +254,22 @@ export function HousingRequestStepper({ residences, initialResidenceId, onDone }
               </Select>
             </Field>
             <Field id={id("entryDate")} label={t("housing.field.entryDate")} error={errors.entryDate}>
-              <Input id={id("entryDate")} type="date" min={todayISO()} value={values.entryDate} onChange={(e) => set("entryDate", e.target.value)} {...invalid("entryDate")} />
+              <Input
+                id={id("entryDate")}
+                type="date"
+                min={todayISO()}
+                value={values.entryDate}
+                onChange={(e) => set("entryDate", e.target.value)}
+                {...invalid("entryDate")}
+              />
             </Field>
             <Field id={id("durationMonths")} label={t("housing.field.duration")} error={errors.durationMonths}>
-              <Select id={id("durationMonths")} value={values.durationMonths} onChange={(e) => set("durationMonths", Number(e.target.value))} {...invalid("durationMonths")}>
+              <Select
+                id={id("durationMonths")}
+                value={values.durationMonths}
+                onChange={(e) => set("durationMonths", Number(e.target.value))}
+                {...invalid("durationMonths")}
+              >
                 {DURATIONS.map((d) => (
                   <option key={d} value={d}>
                     {t("housing.field.durationOption", { count: d })}
@@ -227,7 +283,12 @@ export function HousingRequestStepper({ residences, initialResidenceId, onDone }
         {step === 2 && (
           <div className="space-y-4">
             <label className="flex cursor-pointer items-center gap-3 text-sm font-medium">
-              <input type="checkbox" className="size-4 accent-[hsl(var(--primary))]" checked={values.accessibility} onChange={(e) => set("accessibility", e.target.checked)} />
+              <input
+                type="checkbox"
+                className="size-4 accent-[hsl(var(--primary))]"
+                checked={values.accessibility}
+                onChange={(e) => set("accessibility", e.target.checked)}
+              />
               {t("housing.field.accessibility")}
             </label>
             <Field id={id("notes")} label={t("housing.field.notes")} error={errors.notes} hint={t("housing.field.notesHint")} optional>
@@ -238,7 +299,10 @@ export function HousingRequestStepper({ residences, initialResidenceId, onDone }
                 value={values.notes}
                 onChange={(e) => set("notes", e.target.value)}
                 {...invalid("notes", t("housing.field.notesHint"))}
-                className={cn("flex w-full rounded-lg border border-input bg-card px-3 py-2 text-sm placeholder:text-muted-foreground", errors.notes && "border-red-600")}
+                className={cn(
+                  "flex w-full rounded-lg border border-input bg-card px-3 py-2 text-sm placeholder:text-muted-foreground",
+                  errors.notes && "border-red-600",
+                )}
               />
             </Field>
           </div>

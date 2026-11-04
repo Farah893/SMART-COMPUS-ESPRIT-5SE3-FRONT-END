@@ -19,27 +19,27 @@ academic/
 
 ## Pages (front)
 
-| Route | Accès | Écran |
-|---|---|---|
-| `/academique` | tous | Catalogue des cours, recherche, filtre par département |
-| `/academique/cours/:id` | tous | Syllabus, enseignant, séances |
-| `/academique/emploi-du-temps` | tous | Étudiant : cours validés · enseignant : ses cours · admin : tous |
-| `/academique/notes` | tous | Étudiant : mes notes · enseignant : saisie et publication |
-| `/academique/inscriptions` | étudiant, admin | Suivi des demandes · validation (admin) |
+| Route                         | Accès           | Écran                                                            |
+| ----------------------------- | --------------- | ---------------------------------------------------------------- |
+| `/academique`                 | tous            | Catalogue des cours, recherche, filtre par département           |
+| `/academique/cours/:id`       | tous            | Syllabus, enseignant, séances                                    |
+| `/academique/emploi-du-temps` | tous            | Étudiant : cours validés · enseignant : ses cours · admin : tous |
+| `/academique/notes`           | tous            | Étudiant : mes notes · enseignant : saisie et publication        |
+| `/academique/inscriptions`    | étudiant, admin | Suivi des demandes · validation (admin)                          |
 
 ## Routes de l'API
 
-| Route | Qui | Corps → Réponse | Erreurs |
-|---|---|---|---|
-| `GET /courses?q=&department=&teacherId=` | tous | `CourseView[]` (avec `myEnrollment`) | — |
-| `GET /courses/{id}` | tous | `CourseView` | 404 |
-| `POST /enrollments` | étudiant | `{courseId}` → `Enrollment` (en attente) | 409 `ALREADY_ENROLLED` · `COURSE_FULL` · `SCHEDULE_CONFLICT` (liste `conflicts`) |
-| `GET /enrollments` | étudiant (les siennes), admin (toutes) | `Enrollment[]` | 403 enseignant |
-| `PUT /enrollments/{id}/status` | admin | `{status: validated\|refused}` | 403 · 404 · 409 `ALREADY_DECIDED` / `COURSE_FULL` |
-| `GET /timetable` | tous | `TimetableEntry[]` selon le rôle | — |
-| `GET /grades/me` | étudiant | `{items, average, creditsEarned, creditsTotal}` (notes publiées seulement) | — |
-| `GET /courses/{id}/grades` | enseignant du cours, admin | `{course, entries[]}` | 403 · 404 |
-| `PUT /courses/{id}/grades` | enseignant du cours, admin | `{values: {studentId: note\|null}, publish}` | 403 · 422 note hors 0–20 |
+| Route                                    | Qui                                    | Corps → Réponse                                                            | Erreurs                                                                          |
+| ---------------------------------------- | -------------------------------------- | -------------------------------------------------------------------------- | -------------------------------------------------------------------------------- |
+| `GET /courses?q=&department=&teacherId=` | tous                                   | `CourseView[]` (avec `myEnrollment`)                                       | —                                                                                |
+| `GET /courses/{id}`                      | tous                                   | `CourseView`                                                               | 404                                                                              |
+| `POST /enrollments`                      | étudiant                               | `{courseId}` → `Enrollment` (en attente)                                   | 409 `ALREADY_ENROLLED` · `COURSE_FULL` · `SCHEDULE_CONFLICT` (liste `conflicts`) |
+| `GET /enrollments`                       | étudiant (les siennes), admin (toutes) | `Enrollment[]`                                                             | 403 enseignant                                                                   |
+| `PUT /enrollments/{id}/status`           | admin                                  | `{status: validated\|refused}`                                             | 403 · 404 · 409 `ALREADY_DECIDED` / `COURSE_FULL`                                |
+| `GET /timetable`                         | tous                                   | `TimetableEntry[]` selon le rôle                                           | —                                                                                |
+| `GET /grades/me`                         | étudiant                               | `{items, average, creditsEarned, creditsTotal}` (notes publiées seulement) | —                                                                                |
+| `GET /courses/{id}/grades`               | enseignant du cours, admin             | `{course, entries[]}`                                                      | 403 · 404                                                                        |
+| `PUT /courses/{id}/grades`               | enseignant du cours, admin             | `{values: {studentId: note\|null}, publish}`                               | 403 · 422 note hors 0–20                                                         |
 
 ## Événements de domaine publiés
 

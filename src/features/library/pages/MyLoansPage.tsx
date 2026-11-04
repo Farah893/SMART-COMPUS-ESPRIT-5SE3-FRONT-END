@@ -33,7 +33,8 @@ export default function MyLoansPage() {
       const updated = await renewLoan(loan.id, viewer);
       toast.success(t("lib.loan.renewedOk", { date: formatDay(updated.dueDate) }));
     } catch (e) {
-      if (isApiError(e) && e.isConflict) setConflict({ loan, message: e.message, conflicts: (e.details as { conflicts?: string[] } | undefined)?.conflicts ?? [] });
+      if (isApiError(e) && e.isConflict)
+        setConflict({ loan, message: e.message, conflicts: (e.details as { conflicts?: string[] } | undefined)?.conflicts ?? [] });
       else toast.error(isApiError(e) ? (e.isUnavailable ? t("error.unavailable.title") : e.message) : t("error.generic"));
     } finally {
       setBusyId(undefined);
@@ -131,7 +132,11 @@ export default function MyLoansPage() {
                               <BookMarked className="size-4 shrink-0" aria-hidden="true" />
                               {r.bookTitle}
                             </h3>
-                            <p className="text-sm text-muted-foreground">{r.status === "ready" ? t("lib.mine.reservationReady") : t("lib.mine.reservationWaiting", { position: r.position ?? 1 })}</p>
+                            <p className="text-sm text-muted-foreground">
+                              {r.status === "ready"
+                                ? t("lib.mine.reservationReady")
+                                : t("lib.mine.reservationWaiting", { position: r.position ?? 1 })}
+                            </p>
                           </div>
                           <Button variant="outline" size="sm" asChild>
                             <Link to={`/bibliotheque/livres/${r.bookId}`} aria-label={`${t("lib.mine.openBook")} — ${r.bookTitle}`}>

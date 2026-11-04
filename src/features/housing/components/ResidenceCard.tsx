@@ -21,7 +21,11 @@ export function ResidenceCard({ residence, canRequest }: ResidenceCardProps) {
     <Card className="flex flex-col gap-4 p-5">
       <div className="flex items-start justify-between gap-3">
         <h3 className="text-base font-semibold leading-snug">{residence.name}</h3>
-        {full && <span className="shrink-0 rounded-full border border-red-200 bg-red-100 px-2.5 py-0.5 text-xs font-semibold text-red-800">{t("housing.residence.full")}</span>}
+        {full && (
+          <span className="shrink-0 rounded-full border border-red-200 bg-red-100 px-2.5 py-0.5 text-xs font-semibold text-red-800">
+            {t("housing.residence.full")}
+          </span>
+        )}
       </div>
 
       <ul className="space-y-1.5 text-sm text-muted-foreground">

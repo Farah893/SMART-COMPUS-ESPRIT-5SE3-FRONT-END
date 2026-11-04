@@ -14,7 +14,15 @@ interface CountdownButtonProps extends Omit<ButtonProps, "onClick" | "children">
 }
 
 /** Bouton d'action à débit limité : désactivé pendant le compte à rebours. */
-export function CountdownButton({ seconds = 60, startCounting = false, label, countdownLabel, onClick, disabled, ...props }: CountdownButtonProps) {
+export function CountdownButton({
+  seconds = 60,
+  startCounting = false,
+  label,
+  countdownLabel,
+  onClick,
+  disabled,
+  ...props
+}: CountdownButtonProps) {
   const [remaining, setRemaining] = useState(startCounting ? seconds : 0);
   const [busy, setBusy] = useState(false);
 

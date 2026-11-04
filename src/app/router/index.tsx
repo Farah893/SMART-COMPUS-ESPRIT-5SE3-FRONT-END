@@ -7,7 +7,15 @@ import { ModuleBoundary } from "@/shared/components/common/ModuleBoundary";
 import { Skeleton } from "@/shared/components/ui/skeleton";
 import { useAuth } from "@/shared/auth/AuthContext";
 import type { ModuleDef } from "@/shared/types/module";
-import { ChangePasswordPage, ForgotPasswordPage, LoginPage, ProfilePage, RegisterPage, ResetPasswordPage, VerifyEmailPage } from "@/features/users";
+import {
+  ChangePasswordPage,
+  ForgotPasswordPage,
+  LoginPage,
+  ProfilePage,
+  RegisterPage,
+  ResetPasswordPage,
+  VerifyEmailPage,
+} from "@/features/users";
 import { ProtectedRoute } from "./ProtectedRoute";
 import { ROUTES } from "./routes";
 

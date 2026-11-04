@@ -55,10 +55,23 @@ export default function BookDetailPage() {
             <p className="text-sm text-muted-foreground">
               {t("lib.book.isbn", { isbn: book.isbn })} · {t("lib.book.copies", { count: book.copies })}
             </p>
-            <CapacityGauge used={book.copies - book.available} capacity={book.copies} label={t("lib.avail.available", { free: book.available, copies: book.copies })} className="max-w-sm" />
-            {book.available === 0 && book.waiting > 0 && <p className="text-sm text-muted-foreground">{t("lib.avail.queue", { count: book.waiting })}</p>}
+            <CapacityGauge
+              used={book.copies - book.available}
+              capacity={book.copies}
+              label={t("lib.avail.available", { free: book.available, copies: book.copies })}
+              className="max-w-sm"
+            />
+            {book.available === 0 && book.waiting > 0 && (
+              <p className="text-sm text-muted-foreground">{t("lib.avail.queue", { count: book.waiting })}</p>
+            )}
 
-            <BookActions book={book} busy={pendingId === book.id} onBorrow={(x) => void borrow(x)} onReserve={(x) => void reserve(x)} onCancel={(x) => void cancel(x)} />
+            <BookActions
+              book={book}
+              busy={pendingId === book.id}
+              onBorrow={(x) => void borrow(x)}
+              onReserve={(x) => void reserve(x)}
+              onCancel={(x) => void cancel(x)}
+            />
           </Card>
         )}
       </QueryBoundary>

@@ -42,7 +42,11 @@ export default function RolesMatrixPage() {
   if (error) {
     return (
       <Card>
-        <EmptyState title={t("error.generic")} description={error.message} action={<Button onClick={refetch}>{t("common.retry")}</Button>} />
+        <EmptyState
+          title={t("error.generic")}
+          description={error.message}
+          action={<Button onClick={refetch}>{t("common.retry")}</Button>}
+        />
       </Card>
     );
   }
@@ -81,7 +85,11 @@ export default function RolesMatrixPage() {
             {groups.map((group) => (
               <Fragment key={group}>
                 <tr className="bg-slate-50">
-                  <th scope="colgroup" colSpan={ROLES.length + 1} className="sticky left-0 px-4 py-2 text-xs font-semibold uppercase tracking-wide text-muted-foreground">
+                  <th
+                    scope="colgroup"
+                    colSpan={ROLES.length + 1}
+                    className="sticky left-0 px-4 py-2 text-xs font-semibold uppercase tracking-wide text-muted-foreground"
+                  >
                     {group}
                   </th>
                 </tr>

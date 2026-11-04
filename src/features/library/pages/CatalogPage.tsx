@@ -37,8 +37,18 @@ export default function CatalogPage() {
             {t("lib.search.label")}
           </label>
           <div className="relative">
-            <Search className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" aria-hidden="true" />
-            <Input id="book-search" type="search" className="pl-9" placeholder={t("lib.search.placeholder")} value={search} onChange={(e) => setSearch(e.target.value)} />
+            <Search
+              className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground"
+              aria-hidden="true"
+            />
+            <Input
+              id="book-search"
+              type="search"
+              className="pl-9"
+              placeholder={t("lib.search.placeholder")}
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+            />
           </div>
         </div>
         <div className="w-full sm:w-52">
@@ -55,7 +65,12 @@ export default function CatalogPage() {
           </Select>
         </div>
         <label className="flex cursor-pointer items-center gap-2 text-sm font-medium">
-          <input type="checkbox" className="size-4 accent-[hsl(var(--primary))]" checked={availableOnly} onChange={(e) => setAvailableOnly(e.target.checked)} />
+          <input
+            type="checkbox"
+            className="size-4 accent-[hsl(var(--primary))]"
+            checked={availableOnly}
+            onChange={(e) => setAvailableOnly(e.target.checked)}
+          />
           {t("lib.filter.availableOnly")}
         </label>
       </div>
@@ -85,7 +100,14 @@ export default function CatalogPage() {
               </p>
               <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
                 {books.map((b) => (
-                  <BookCard key={b.id} book={b} busy={pendingId === b.id} onBorrow={(x) => void borrow(x)} onReserve={(x) => void reserve(x)} onCancel={(x) => void cancel(x)} />
+                  <BookCard
+                    key={b.id}
+                    book={b}
+                    busy={pendingId === b.id}
+                    onBorrow={(x) => void borrow(x)}
+                    onReserve={(x) => void reserve(x)}
+                    onCancel={(x) => void cancel(x)}
+                  />
                 ))}
               </div>
             </>

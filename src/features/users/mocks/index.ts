@@ -15,11 +15,17 @@ const emailOf = (first: string, last: string) =>
   `${normalize(first)}.${normalize(last)}`.replace(/[\s']/g, "") + `@${INSTITUTIONAL_DOMAIN}`;
 
 function mk(
-  id: string, firstName: string, lastName: string, role: Role,
+  id: string,
+  firstName: string,
+  lastName: string,
+  role: Role,
   opts: { status?: AccountStatus; failed?: number; created?: number; last?: number | null; phone?: string; email?: string } = {},
 ): UserAccount {
   return {
-    id, firstName, lastName, role,
+    id,
+    firstName,
+    lastName,
+    role,
     email: opts.email ?? emailOf(firstName, lastName),
     phone: opts.phone,
     status: opts.status ?? "active",
@@ -78,9 +84,18 @@ const GRANTS: Record<Role, string[]> = {
 };
 
 const buildMatrix = (): PermissionMatrix["matrix"] =>
-  Object.fromEntries(ROLES.map((r) => [r, Object.fromEntries(PERMISSIONS.map((p) => [p.key, GRANTS[r].includes(p.key)]))])) as PermissionMatrix["matrix"];
+  Object.fromEntries(
+    ROLES.map((r) => [r, Object.fromEntries(PERMISSIONS.map((p) => [p.key, GRANTS[r].includes(p.key)]))]),
+  ) as PermissionMatrix["matrix"];
 
-const DEVICES = ["Chrome 130 · Windows 11", "Safari 18 · iPhone", "Firefox 131 · Ubuntu", "Edge 130 · Windows 10", "Application mobile · Android 15", "Chrome 130 · macOS"];
+const DEVICES = [
+  "Chrome 130 · Windows 11",
+  "Safari 18 · iPhone",
+  "Firefox 131 · Ubuntu",
+  "Edge 130 · Windows 10",
+  "Application mobile · Android 15",
+  "Chrome 130 · macOS",
+];
 const IPS = ["41.226.12.", "197.27.54.", "196.203.9.", "41.62.101.", "160.159.33."];
 
 /** Historique déterministe (pseudo-aléatoire figé) : ~4 connexions par compte, échecs récents pour les comptes suspendus. */
@@ -92,7 +107,10 @@ function seedHistory(users: UserAccount[]): LoginEvent[] {
     for (let k = 0; k < count; k++) {
       const hoursAgo = (u.lastLoginAt ? (NOW - new Date(u.lastLoginAt).getTime()) / H : 24) + k * (17 + ((i * 7) % 23));
       events.push({
-        id: `h-${++n}`, userId: u.id, userName: `${u.firstName} ${u.lastName}`, date: iso(hoursAgo),
+        id: `h-${++n}`,
+        userId: u.id,
+        userName: `${u.firstName} ${u.lastName}`,
+        date: iso(hoursAgo),
         ip: `${IPS[(i + k) % IPS.length]}${10 + ((i * 13 + k * 29) % 200)}`,
         device: DEVICES[(i * 3 + k) % DEVICES.length]!,
         success: !(k === 2 && i % 5 === 0),
@@ -101,8 +119,13 @@ function seedHistory(users: UserAccount[]): LoginEvent[] {
     if (u.status === "suspended" || u.failedAttempts > 0) {
       for (let f = 0; f < u.failedAttempts; f++) {
         events.push({
-          id: `h-${++n}`, userId: u.id, userName: `${u.firstName} ${u.lastName}`, date: iso(2 + (u.failedAttempts - f) * 0.1),
-          ip: `${IPS[i % IPS.length]}${40 + i}`, device: DEVICES[i % DEVICES.length]!, success: false,
+          id: `h-${++n}`,
+          userId: u.id,
+          userName: `${u.firstName} ${u.lastName}`,
+          date: iso(2 + (u.failedAttempts - f) * 0.1),
+          ip: `${IPS[i % IPS.length]}${40 + i}`,
+          device: DEVICES[i % DEVICES.length]!,
+          success: false,
         });
       }
     }

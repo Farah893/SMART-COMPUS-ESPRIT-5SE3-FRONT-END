@@ -78,7 +78,8 @@ export const fr = {
   "soon.backHome": "Retour à l'accueil",
 
   "error.403.title": "Accès refusé",
-  "error.403.description": "Votre rôle actuel ({role}) ne vous permet pas d'accéder à cette page. Contactez un administrateur si vous pensez qu'il s'agit d'une erreur.",
+  "error.403.description":
+    "Votre rôle actuel ({role}) ne vous permet pas d'accéder à cette page. Contactez un administrateur si vous pensez qu'il s'agit d'une erreur.",
   "error.404.title": "Page introuvable",
   "error.404.description": "La page que vous cherchez n'existe pas ou a été déplacée.",
   "error.409.title": "Conflit détecté",

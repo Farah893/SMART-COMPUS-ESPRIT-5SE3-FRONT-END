@@ -32,12 +32,23 @@ export const login = (email: string, password: string) =>
           acct.status = "suspended";
           throw new ApiError(423, "Compte suspendu", { code: "ACCOUNT_LOCKED", failedAttempts: acct.failedAttempts, max: MAX_ATTEMPTS });
         }
-        throw new ApiError(401, "Identifiants invalides", { code: "INVALID_CREDENTIALS", failedAttempts: acct.failedAttempts, max: MAX_ATTEMPTS });
+        throw new ApiError(401, "Identifiants invalides", {
+          code: "INVALID_CREDENTIALS",
+          failedAttempts: acct.failedAttempts,
+          max: MAX_ATTEMPTS,
+        });
       }
       acct.failedAttempts = 0;
       acct.lastLoginAt = db.now();
       logLogin(acct, true);
-      const user = { id: acct.id, name: fullName(acct), email: acct.email, role: acct.role, avatarUrl: acct.avatarUrl, mustChangePassword: acct.mustChangePassword };
+      const user = {
+        id: acct.id,
+        name: fullName(acct),
+        email: acct.email,
+        role: acct.role,
+        avatarUrl: acct.avatarUrl,
+        mustChangePassword: acct.mustChangePassword,
+      };
       return { token: fakeJwt(user), user };
     },
   });

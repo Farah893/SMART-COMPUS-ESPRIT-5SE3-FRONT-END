@@ -81,7 +81,11 @@ export default function LoansAdminPage() {
         cell: (l) => (
           <div>
             <p>{formatDay(l.dueDate)}</p>
-            {l.daysLate > 0 && <p className="text-xs font-semibold text-red-700">{l.status === "returned" ? t("lib.loan.lateReturned", { count: l.daysLate }) : t("lib.loan.late", { count: l.daysLate })}</p>}
+            {l.daysLate > 0 && (
+              <p className="text-xs font-semibold text-red-700">
+                {l.status === "returned" ? t("lib.loan.lateReturned", { count: l.daysLate }) : t("lib.loan.late", { count: l.daysLate })}
+              </p>
+            )}
           </div>
         ),
       },
@@ -93,7 +97,14 @@ export default function LoansAdminPage() {
           l.status === "returned" ? (
             <span className="text-xs text-muted-foreground">{l.returnedAt ? formatDay(l.returnedAt) : "—"}</span>
           ) : (
-            <Button variant="ghost" size="icon" aria-label={`${t("lib.admin.return")} — ${l.bookTitle}, ${l.borrowerName}`} title={t("lib.admin.return")} className="text-green-800 hover:bg-green-50" onClick={() => setReturning(l)}>
+            <Button
+              variant="ghost"
+              size="icon"
+              aria-label={`${t("lib.admin.return")} — ${l.bookTitle}, ${l.borrowerName}`}
+              title={t("lib.admin.return")}
+              className="text-green-800 hover:bg-green-50"
+              onClick={() => setReturning(l)}
+            >
               <Undo2 aria-hidden="true" />
             </Button>
           ),
@@ -152,7 +163,13 @@ export default function LoansAdminPage() {
                   <EmptyState icon={BookOpen} title={t("lib.admin.empty")} />
                 </Card>
               ) : (
-                <DataTable caption={t("lib.admin.caption")} columns={columns} data={rows} rowKey={(l) => l.id} emptyTitle={t("lib.admin.noMatch")} />
+                <DataTable
+                  caption={t("lib.admin.caption")}
+                  columns={columns}
+                  data={rows}
+                  rowKey={(l) => l.id}
+                  emptyTitle={t("lib.admin.noMatch")}
+                />
               )}
             </>
           );

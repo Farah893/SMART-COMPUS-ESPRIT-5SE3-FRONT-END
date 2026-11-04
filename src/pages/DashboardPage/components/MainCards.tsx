@@ -21,10 +21,7 @@ export function ItemRows({ title, items }: { title: string; items: DashboardData
         <ul className="divide-y">
           {items.map((item) => (
             <li key={item.id}>
-              <Link
-                to={getModule(item.module).path}
-                className="-mx-2 flex items-center gap-3 rounded-lg px-2 py-3 hover:bg-secondary/60"
-              >
+              <Link to={getModule(item.module).path} className="-mx-2 flex items-center gap-3 rounded-lg px-2 py-3 hover:bg-secondary/60">
                 <span aria-hidden="true" className={cn("size-2.5 shrink-0 rounded-full", TONES[item.tone].dot)} />
                 <span className="min-w-0 flex-1">
                   <span className="block truncate text-sm font-medium">{item.title}</span>

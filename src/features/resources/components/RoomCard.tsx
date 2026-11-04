@@ -39,7 +39,12 @@ export function RoomCard({ room, onShowAvailability }: RoomCardProps) {
       <CapacityGauge used={room.bookedHoursToday} capacity={room.openHours} label={t("resources.room.occupancy")} />
 
       <div className="mt-auto flex flex-wrap gap-2">
-        <Button variant="outline" size="sm" onClick={() => onShowAvailability(room)} aria-label={`${t("resources.room.availability")} — ${room.name}`}>
+        <Button
+          variant="outline"
+          size="sm"
+          onClick={() => onShowAvailability(room)}
+          aria-label={`${t("resources.room.availability")} — ${room.name}`}
+        >
           {t("resources.room.availability")}
         </Button>
         <Button size="sm" asChild>

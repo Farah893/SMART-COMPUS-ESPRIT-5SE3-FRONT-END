@@ -32,7 +32,13 @@ export default function VerifyEmailPage() {
         navigate("/connexion", { replace: true });
       } catch (e) {
         setCode("");
-        setError(isApiError(e) && e.status === 400 ? t("users.verify.badCode") : isApiError(e) && e.isUnavailable ? t("error.unavailable.title") : t("error.generic"));
+        setError(
+          isApiError(e) && e.status === 400
+            ? t("users.verify.badCode")
+            : isApiError(e) && e.isUnavailable
+              ? t("error.unavailable.title")
+              : t("error.generic"),
+        );
         setChecking(false);
       }
     },
@@ -70,7 +76,10 @@ export default function VerifyEmailPage() {
               }
             }}
           />
-          <Link to={`/inscription?email=${encodeURIComponent(email)}`} className="inline-block rounded text-sm font-medium text-primary underline-offset-4 hover:underline">
+          <Link
+            to={`/inscription?email=${encodeURIComponent(email)}`}
+            className="inline-block rounded text-sm font-medium text-primary underline-offset-4 hover:underline"
+          >
             {t("users.verify.changeEmail")}
           </Link>
         </div>
@@ -95,9 +104,9 @@ export default function VerifyEmailPage() {
             {error}
           </p>
           {USE_MOCKS && (
-
-            <p className="mt-2 rounded-lg border border-dashed border-amber-400 bg-amber-50 px-3 py-2 text-sm font-medium text-amber-950">{t("users.verify.demoHint", { code: DEMO_CODE })}</p>
-
+            <p className="mt-2 rounded-lg border border-dashed border-amber-400 bg-amber-50 px-3 py-2 text-sm font-medium text-amber-950">
+              {t("users.verify.demoHint", { code: DEMO_CODE })}
+            </p>
           )}
         </div>
       </div>

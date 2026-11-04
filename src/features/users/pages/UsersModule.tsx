@@ -9,7 +9,10 @@ import RolesMatrixPage from "./RolesMatrixPage";
 import LoginHistoryPage from "./LoginHistoryPage";
 
 const tab = ({ isActive }: { isActive: boolean }) =>
-  cn("whitespace-nowrap border-b-2 px-4 py-2.5 text-sm font-medium", isActive ? "border-navy text-navy" : "border-transparent text-slate-600 hover:text-foreground");
+  cn(
+    "whitespace-nowrap border-b-2 px-4 py-2.5 text-sm font-medium",
+    isActive ? "border-navy text-navy" : "border-transparent text-slate-600 hover:text-foreground",
+  );
 
 /** Module Utilisateurs (administrateur) : comptes, rôles et permissions, historique de connexion. */
 export default function UsersModule() {

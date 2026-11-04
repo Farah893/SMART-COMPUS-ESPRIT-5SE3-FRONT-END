@@ -56,7 +56,12 @@ function TicketForm({ residences, onCreated }: { residences: Residence[]; onCrea
   const viewer = useViewer();
   const formRef = useRef<HTMLFormElement>(null);
   const { mutate, isPending } = useMutation(createTicket);
-  const [values, setValues] = useState({ residenceId: residences[0]?.id ?? "", location: "", category: "" as TicketCategory | "", description: "" });
+  const [values, setValues] = useState({
+    residenceId: residences[0]?.id ?? "",
+    location: "",
+    category: "" as TicketCategory | "",
+    description: "",
+  });
   const [errors, setErrors] = useState<Errors>({});
   const [serviceError, setServiceError] = useState<string>();
 
@@ -101,7 +106,13 @@ function TicketForm({ residences, onCreated }: { residences: Residence[]; onCrea
         )}
         <div className="grid gap-4 sm:grid-cols-3">
           <Field id={id("residenceId")} label={t("housing.field.residence")} error={errors.residenceId}>
-            <Select id={id("residenceId")} value={values.residenceId} onChange={(e) => set("residenceId", e.target.value)} className={cn(errors.residenceId && "border-red-600")} {...a11y("residenceId")}>
+            <Select
+              id={id("residenceId")}
+              value={values.residenceId}
+              onChange={(e) => set("residenceId", e.target.value)}
+              className={cn(errors.residenceId && "border-red-600")}
+              {...a11y("residenceId")}
+            >
               <option value="">{t("housing.field.residencePlaceholder")}</option>
               {residences.map((r) => (
                 <option key={r.id} value={r.id}>
@@ -111,10 +122,23 @@ function TicketForm({ residences, onCreated }: { residences: Residence[]; onCrea
             </Select>
           </Field>
           <Field id={id("location")} label={t("housing.field.location")} error={errors.location} hint={t("housing.field.locationHint")}>
-            <Input id={id("location")} maxLength={70} value={values.location} onChange={(e) => set("location", e.target.value)} className={cn(errors.location && "border-red-600")} {...a11y("location", t("housing.field.locationHint"))} />
+            <Input
+              id={id("location")}
+              maxLength={70}
+              value={values.location}
+              onChange={(e) => set("location", e.target.value)}
+              className={cn(errors.location && "border-red-600")}
+              {...a11y("location", t("housing.field.locationHint"))}
+            />
           </Field>
           <Field id={id("category")} label={t("housing.field.category")} error={errors.category}>
-            <Select id={id("category")} value={values.category} onChange={(e) => set("category", e.target.value as TicketCategory)} className={cn(errors.category && "border-red-600")} {...a11y("category")}>
+            <Select
+              id={id("category")}
+              value={values.category}
+              onChange={(e) => set("category", e.target.value as TicketCategory)}
+              className={cn(errors.category && "border-red-600")}
+              {...a11y("category")}
+            >
               <option value="">{t("housing.field.categoryPlaceholder")}</option>
               {TICKET_CATEGORIES.map((c) => (
                 <option key={c} value={c}>
@@ -124,7 +148,12 @@ function TicketForm({ residences, onCreated }: { residences: Residence[]; onCrea
             </Select>
           </Field>
         </div>
-        <Field id={id("description")} label={t("housing.field.description")} error={errors.description} hint={t("housing.field.descriptionHint")}>
+        <Field
+          id={id("description")}
+          label={t("housing.field.description")}
+          error={errors.description}
+          hint={t("housing.field.descriptionHint")}
+        >
           <textarea
             id={id("description")}
             rows={3}
@@ -166,14 +195,21 @@ function TicketRow({ ticket, admin, onChanged }: { ticket: Ticket; admin: boolea
       <div className="flex flex-wrap items-start justify-between gap-3">
         <div className="min-w-0">
           <p className="text-xs font-semibold tracking-wide text-muted-foreground">{t(`housing.ticket.${ticket.category}`)}</p>
-          <h3 className="text-base font-semibold">{t("housing.maintenance.at", { residence: ticket.residenceName, location: ticket.location })}</h3>
+          <h3 className="text-base font-semibold">
+            {t("housing.maintenance.at", { residence: ticket.residenceName, location: ticket.location })}
+          </h3>
         </div>
         {admin ? (
           <div className="w-40">
             <label htmlFor={`st-${ticket.id}`} className="sr-only">
               {t("housing.maintenance.statusLabel", { location: ticket.location })}
             </label>
-            <Select id={`st-${ticket.id}`} value={ticket.status} disabled={pending} onChange={(e) => void change(e.target.value as TicketStatus)}>
+            <Select
+              id={`st-${ticket.id}`}
+              value={ticket.status}
+              disabled={pending}
+              onChange={(e) => void change(e.target.value as TicketStatus)}
+            >
               {STATUSES.map((s) => (
                 <option key={s} value={s}>
                   {t(`housing.ticketStatus.${s}`)}
@@ -186,7 +222,9 @@ function TicketRow({ ticket, admin, onChanged }: { ticket: Ticket; admin: boolea
         )}
       </div>
       <p className="text-sm">{ticket.description}</p>
-      <p className="text-xs text-muted-foreground">{t("housing.maintenance.by", { name: ticket.studentName, date: formatDateTime(ticket.createdAt) })}</p>
+      <p className="text-xs text-muted-foreground">
+        {t("housing.maintenance.by", { name: ticket.studentName, date: formatDateTime(ticket.createdAt) })}
+      </p>
     </Card>
   );
 }

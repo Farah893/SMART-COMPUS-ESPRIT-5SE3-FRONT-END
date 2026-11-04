@@ -17,9 +17,39 @@ interface Spec {
 }
 
 const SPECS: Spec[] = [
-  { id: "h1", name: "Résidence Les Oliviers", address: "12 avenue de l'Université", walkMinutes: 5, monthlyRent: 120, amenities: ["Wi-Fi", "Cuisine commune", "Salle d'étude", "Buanderie"], floors: 4, perFloor: 10, occupied: 54 },
-  { id: "h2", name: "Résidence El Manar", address: "3 rue des Jasmins", walkMinutes: 12, monthlyRent: 95, amenities: ["Wi-Fi", "Cuisine commune", "Parking vélos"], floors: 3, perFloor: 8, occupied: 22 },
-  { id: "h3", name: "Résidence Les Jasmins", address: "Campus nord, bloc E", walkMinutes: 2, monthlyRent: 140, amenities: ["Wi-Fi", "Salle de sport", "Salle d'étude", "Accès PMR"], floors: 2, perFloor: 6, occupied: 20 },
+  {
+    id: "h1",
+    name: "Résidence Les Oliviers",
+    address: "12 avenue de l'Université",
+    walkMinutes: 5,
+    monthlyRent: 120,
+    amenities: ["Wi-Fi", "Cuisine commune", "Salle d'étude", "Buanderie"],
+    floors: 4,
+    perFloor: 10,
+    occupied: 54,
+  },
+  {
+    id: "h2",
+    name: "Résidence El Manar",
+    address: "3 rue des Jasmins",
+    walkMinutes: 12,
+    monthlyRent: 95,
+    amenities: ["Wi-Fi", "Cuisine commune", "Parking vélos"],
+    floors: 3,
+    perFloor: 8,
+    occupied: 22,
+  },
+  {
+    id: "h3",
+    name: "Résidence Les Jasmins",
+    address: "Campus nord, bloc E",
+    walkMinutes: 2,
+    monthlyRent: 140,
+    amenities: ["Wi-Fi", "Salle de sport", "Salle d'étude", "Accès PMR"],
+    floors: 2,
+    perFloor: 6,
+    occupied: 20,
+  },
 ];
 
 /** Une chambre sur trois est individuelle, les autres sont doubles. Les lits sont occupés dans l'ordre des numéros. */
@@ -32,7 +62,15 @@ function buildRooms(spec: Spec): HousingRoom[] {
       const beds = type === "single" ? 1 : 2;
       const occupants = Math.min(beds, left);
       left -= occupants;
-      rooms.push({ id: `${spec.id}-${floor}${String(i + 1).padStart(2, "0")}`, residenceId: spec.id, number: `${floor}${String(i + 1).padStart(2, "0")}`, floor, type, beds, occupants });
+      rooms.push({
+        id: `${spec.id}-${floor}${String(i + 1).padStart(2, "0")}`,
+        residenceId: spec.id,
+        number: `${floor}${String(i + 1).padStart(2, "0")}`,
+        floor,
+        type,
+        beds,
+        occupants,
+      });
     }
   }
   return rooms;
@@ -54,12 +92,27 @@ const residenceName = (id: string) => SPECS.find((s) => s.id === id)!.name;
 
 let qid = 0;
 const request = (
-  studentId: string, residenceId: string, roomType: RoomType, status: RequestStatus, daysAgo: number,
+  studentId: string,
+  residenceId: string,
+  roomType: RoomType,
+  status: RequestStatus,
+  daysAgo: number,
   extra: Partial<HousingRequest> = {},
 ): HousingRequest => ({
-  id: `q-${++qid}`, studentId, studentName: STUDENTS[studentId]!, residenceId, residenceName: residenceName(residenceId), roomType,
-  entryDate: addDays(30), durationMonths: 9, accessibility: false, notes: "", status,
-  requestedAt: iso(daysAgo), decidedAt: status === "pending" ? undefined : iso(Math.max(0, daysAgo - 2)), ...extra,
+  id: `q-${++qid}`,
+  studentId,
+  studentName: STUDENTS[studentId]!,
+  residenceId,
+  residenceName: residenceName(residenceId),
+  roomType,
+  entryDate: addDays(30),
+  durationMonths: 9,
+  accessibility: false,
+  notes: "",
+  status,
+  requestedAt: iso(daysAgo),
+  decidedAt: status === "pending" ? undefined : iso(Math.max(0, daysAgo - 2)),
+  ...extra,
 });
 
 const seedRequests = (): HousingRequest[] => [
@@ -75,10 +128,25 @@ const seedRequests = (): HousingRequest[] => [
 
 let tid = 0;
 const ticket = (
-  studentId: string, residenceId: string, location: string, category: TicketCategory, description: string, status: TicketStatus, daysAgo: number,
+  studentId: string,
+  residenceId: string,
+  location: string,
+  category: TicketCategory,
+  description: string,
+  status: TicketStatus,
+  daysAgo: number,
 ): Ticket => ({
-  id: `t-${++tid}`, studentId, studentName: STUDENTS[studentId]!, residenceId, residenceName: residenceName(residenceId),
-  location, category, description, status, createdAt: iso(daysAgo), updatedAt: iso(status === "open" ? daysAgo : Math.max(0, daysAgo - 1)),
+  id: `t-${++tid}`,
+  studentId,
+  studentName: STUDENTS[studentId]!,
+  residenceId,
+  residenceName: residenceName(residenceId),
+  location,
+  category,
+  description,
+  status,
+  createdAt: iso(daysAgo),
+  updatedAt: iso(status === "open" ? daysAgo : Math.max(0, daysAgo - 1)),
 });
 
 const seedTickets = (): Ticket[] => [
