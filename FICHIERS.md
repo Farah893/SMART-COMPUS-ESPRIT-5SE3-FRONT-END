@@ -67,16 +67,13 @@ app  →  pages  →  features (les 6 modules)  →  shared
 | `architecture.md` | Principes d'architecture et plan des 6 modules. |
 | `FICHIERS.md`     | Ce document.                                    |
 
-### Dossiers d'outils (pas du code de l'application)
+### Dossiers générés (pas du code de l'application)
 
-| Dossier                            | À quoi il sert                                                                                                                                                                                                                                       |
-| ---------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `node_modules/`                    | Les dépendances téléchargées par `npm install`. Se régénère, jamais commité.                                                                                                                                                                         |
-| `dist/`                            | Le site compilé par `npm run build`. Se régénère, jamais commité.                                                                                                                                                                                    |
-| `.claude/skills/`                  | Compétences pour l'assistant IA : `impeccable` (design sans « AI slop »), `playwright-cli` (pilotage du navigateur), `gsap-*` (animations GSAP). Exclu de git **sur cette machine seulement** (`.git/info/exclude`), donc non partagé avec l'équipe. |
-| `.impeccable/`                     | Notes de critique de design générées par l'outil Impeccable.                                                                                                                                                                                         |
-| `.playwright/`, `.playwright-cli/` | Fichiers de travail de Playwright (captures, instantanés). Générés, ignorés par git pour `.playwright-cli`.                                                                                                                                          |
-| `e2e/`                             | Les tests de bout en bout (voir section 4).                                                                                                                                                                                                          |
+| Dossier         | À quoi il sert                                                               |
+| --------------- | ---------------------------------------------------------------------------- |
+| `node_modules/` | Les dépendances téléchargées par `npm install`. Se régénère, jamais commité. |
+| `dist/`         | Le site compilé par `npm run build`. Se régénère, jamais commité.            |
+| `e2e/`          | Les tests de bout en bout (voir section 4).                                  |
 
 ---
 
